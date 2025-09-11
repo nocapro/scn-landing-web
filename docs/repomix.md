@@ -16,7 +16,9 @@ src/
       TokenEconomics.tsx
       UseCases.tsx
     ui/
+      button.constants.ts
       button.tsx
+      button.types.ts
       card.tsx
       table.tsx
     CodeBlock.tsx
@@ -24,9 +26,12 @@ src/
     Header.tsx
     InlineCode.tsx
     Section.tsx
+  content/
+    sections.content.tsx
   hooks/
     useCopyToClipboard.hook.ts
   lib/
+    constants.ts
     utils.ts
   App.tsx
   index.css
@@ -50,672 +55,11 @@ vite.config.ts
 </svg>
 ```
 
-## File: src/components/sections/ContextCost.tsx
+## File: src/components/ui/button.constants.ts
 ```typescript
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { BrainCircuit, Workflow, Zap } from "lucide-react";
-import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
+import { cva } from "class-variance-authority"
 
-export const ContextCost = () => (
-  <Section id="section-1">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        The High Cost of Context
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
-        LLMs are powerful, but their attention is expensive and limited.
-        Traditional methods of providing context just don't scale.
-      </p>
-    </div>
-    <div className="grid md:grid-cols-3 gap-8">
-      <Card>
-        <CardHeader>
-          <Zap className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Token Limits</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Context windows are tiny. Pasting <InlineCode>/src</InlineCode>{" "}
-          consumes your entire budget before you've even asked a question.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <BrainCircuit className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Signal vs. Noise</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Models don't need semicolons, they need the dependency graph—what
-          talks to what, and who calls whom.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Workflow className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Broken Workflow</CardTitle>
-        </CardHeader>
-        <CardContent>
-          You don't need another IDE. You need a 1-second command that
-          turns <em>“here’s my repo”</em> into{" "}
-          <em>“here’s the summary”</em>.
-        </CardContent>
-      </Card>
-    </div>
-  </Section>
-);
-```
-
-## File: src/components/sections/Contribute.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
-
-export const Contribute = () => (
-  <Section id="section-9">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Contribute to SCN
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
-        Help us map the world's code. Add a language, improve heuristics,
-        or beat our performance benchmarks. All contributions are welcome.
-      </p>
-      <a
-        href="https://github.com/nocapro/scn-ts"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Button size="lg" variant="secondary">
-          <Github className="mr-2 h-4 w-4" /> View on GitHub
-        </Button>
-      </a>
-    </Card>
-  </Section>
-);
-```
-
-## File: src/components/sections/DesignDecisions.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Box,
-  GitMerge,
-  Hash,
-  Network,
-  Puzzle,
-  Scissors,
-  SlidersHorizontal,
-  Smile,
-} from "lucide-react";
-
-export const DesignDecisions = () => (
-  <Section id="section-7">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Design Decisions
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
-        Built on a foundation of modern, performant, and portable
-        technologies.
-      </p>
-    </div>
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <Card>
-        <CardHeader>
-          <GitMerge className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>tree-sitter</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Incremental, error-tolerant, multi-language parsing.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Box className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>WASM</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Same binary runs in browser, edge, or server.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Puzzle className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>No Bundler Magic</CardTitle>
-        </CardHeader>
-        <CardContent>
-          ES modules only, <InlineCode>?module</InlineCode> CDN link
-          works.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Scissors className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>No AST Dump</CardTitle>
-        </CardHeader>
-        <CardContent>
-          We throw away <em>statements</em> and keep{" "}
-          <em>symbols + edges</em>.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Network className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Topological Sort</CardTitle>
-        </CardHeader>
-        <CardContent>
-          GPT sees bottom-up dependencies, which reduces hallucination.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Smile className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Stable Icon Set</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Single Unicode char, token-efficient, and familiar to models.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Hash className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Hierarchical IDs</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Lets models reason about "file 3 symbol 2" without name clashes.
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <SlidersHorizontal className="h-8 w-8 text-primary mb-2" />
-          <CardTitle>Preset System</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Hard-coded filters so you don’t need a complex configuration.
-        </CardContent>
-      </Card>
-    </div>
-  </Section>
-);
-```
-
-## File: src/components/sections/Faq.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
-
-export const Faq = () => (
-  <Section id="section-6">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Frequently Asked Questions
-      </h2>
-    </div>
-    <div className="max-w-3xl mx-auto space-y-8">
-      <div className="border-t pt-4">
-        <p className="font-semibold text-lg">
-          Does GPT really understand the icons?
-        </p>
-        <p className="text-muted-foreground mt-1">
-          Yes. They are single Unicode chars and appear thousands of times
-          in training data (Unicode chess, cards, etc.). We
-          prompt-engineered once and never looked back.
-        </p>
-      </div>
-      <div className="border-t pt-4">
-        <p className="font-semibold text-lg">
-          Why not just <InlineCode>ctags</InlineCode> +{" "}
-          <InlineCode>grep</InlineCode>?
-        </p>
-        <p className="text-muted-foreground mt-1">
-          ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.
-        </p>
-      </div>
-      <div className="border-t pt-4">
-        <p className="font-semibold text-lg">
-          Will you break when TS 5.7 adds new syntax?
-        </p>
-        <p className="text-muted-foreground mt-1">
-          Only if the underlying tree-sitter grammar breaks, which is
-          usually fixed upstream within days. Our queries are tiny and easy to patch.
-        </p>
-      </div>
-      <div className="border-t pt-4">
-        <p className="font-semibold text-lg">
-          Is my proprietary code safe?
-        </p>
-        <p className="text-muted-foreground mt-1">
-          Everything runs locally on your machine. The WASM is loaded from
-          your domain; there is no telemetry and no cloud dependency.
-        </p>
-      </div>
-    </div>
-  </Section>
-);
-```
-
-## File: src/components/sections/Hero.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
-import { CodeBlock } from "@/components/CodeBlock";
-
-export const Hero = () => (
-  <section className="grid lg:grid-cols-2 gap-12 items-center py-24 sm:py-32">
-    <div className="text-center lg:text-left space-y-6">
-      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 opacity-0 animate-fade-in">
-        Understand any TypeScript repo in 400 tokens.
-      </h1>
-      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
-        SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
-        <br className="hidden md:block" />
-        Paste it in, and watch your AI refactor, review, or port code
-        without ever seeing the source.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
-        <a href="#section-5">
-          <Button size="lg">
-            Get Started <Terminal className="ml-2 h-4 w-4" />
-          </Button>
-        </a>
-        <a
-          href="https://pg.scn.noca.pro"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button variant="secondary" size="lg">
-            Live Playground <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </a>
-      </div>
-    </div>
-    <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
-      <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            BEFORE: 300+ tokens
-          </CardTitle>
-          <Zap className="h-5 w-5 text-destructive" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock
-            lang="typescript"
-            className="border-0 rounded-t-none bg-transparent p-4"
-          >{`export class ApiClient {
-  constructor(private apiKey: string) {}
-
-  async fetchUsers(page: number): Promise<User[]> {
-    const res = await fetch(\`/api/users?page=\${page}\`, {
-      headers: { 'X-API-KEY': this.apiKey }
-    });
-    if (!res.ok) throw new Error('API Error');
-    return res.json();
-  }
-}`}</CodeBlock>
-        </CardContent>
-      </Card>
-
-      <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
-        <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
-          <ArrowDown className="h-5 w-5" />
-        </div>
-      </div>
-
-      <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            AFTER: 38 tokens
-          </CardTitle>
-          <Zap className="h-5 w-5 text-primary" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock
-            lang="text"
-            className="border-0 rounded-t-none bg-transparent p-4"
-          >{`§1 src/api.ts
-+ ◇ ApiClient
-  - @ apiKey: #string
-  + o constructor
-  + ~ fetchUsers ...!
-    > User`}</CodeBlock>
-        </CardContent>
-      </Card>
-    </div>
-  </section>
-);
-```
-
-## File: src/components/sections/Playground.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-
-export const Playground = () => (
-  <Section id="section-4">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Live Demo Playground
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8">
-        Drag-and-drop a folder, move the slider, and watch the map
-        re-shape in real time.
-      </p>
-      <a
-        href="https://pg.scn.noca.pro"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Button size="lg">
-          Try the Playground <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </a>
-    </Card>
-  </Section>
-);
-```
-
-## File: src/components/sections/QuickStart.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { CodeBlock } from "@/components/CodeBlock";
-
-export const QuickStart = () => (
-  <Section id="section-5">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        CLI Quick Start
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2">
-        Get started in under a minute.
-      </p>
-    </div>
-    <CodeBlock>{`# global install
-npm i -g scn-ts            # or yarn/pnpm/bun
-
-# basic
-scn-ts "src/**/*.{ts,tsx}" --output map.scn
-
-# monorepo
-scn-ts "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
-
-# watch mode
-scn-ts "src/**/*" --watch --preset=minimal`}</CodeBlock>
-  </Section>
-);
-```
-
-## File: src/components/sections/Solution.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { CodeBlock } from "@/components/CodeBlock";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { InlineCode } from "@/components/InlineCode";
-
-export const Solution = () => (
-  <Section id="section-2">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        The Solution: Symbolic Context Notation
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
-        A zero-config, WASM-powered static analyzer that spits out a
-        dense, emoji-rich, token-counted summary of your project.
-      </p>
-    </div>
-    <CodeBlock>{`$ npx scn-ts "src/**/*.{ts,tsx}" --exclude="**/*.test.ts" --preset=compact`}</CodeBlock>
-    <Card className="mt-8">
-      <CardContent className="p-6">
-        <CodeBlock lang="text">{`§1 src/main.tsx
-  + ◇ App (1)
-  + ~ fetchUsers (2)
-    > 2, 3
-
-§2 src/services/api.ts
-  ~ getUser (1) ...!
-    < 1
-    > 3
-
-§3 src/types.ts
-  + {} User (1)
-    + @ id: #string
-    + @ name: #string`}</CodeBlock>
-      </CardContent>
-    </Card>
-    <div className="mt-8">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[150px]">Symbol</TableHead>
-            <TableHead>Meaning</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell>
-              <InlineCode>§</InlineCode>
-            </TableCell>
-            <TableCell>File header (id + path)</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <InlineCode>+ / -</InlineCode>
-            </TableCell>
-            <TableCell>Exported / Private symbol</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <InlineCode>◇ ~ {}</InlineCode>
-            </TableCell>
-            <TableCell>Class, Function, Interface, JSX element</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <InlineCode>&gt; / &lt;</InlineCode>
-            </TableCell>
-            <TableCell>Outgoing / Incoming call or import</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <InlineCode>... ! o</InlineCode>
-            </TableCell>
-            <TableCell>Async, Throws, Pure function</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  </Section>
-);
-```
-
-## File: src/components/sections/TokenEconomics.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-export const TokenEconomics = () => (
-  <Section id="section-3">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Token Economics
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2">
-        Fit 10x more context into every prompt.
-      </p>
-    </div>
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Representation</TableHead>
-              <TableHead>Tokens</TableHead>
-              <TableHead>% of 4k Window</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>Raw Source</TableCell>
-              <TableCell>18,700</TableCell>
-              <TableCell>467% ❌</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Minified</TableCell>
-              <TableCell>12,100</TableCell>
-              <TableCell>302% ❌</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>AST JSON</TableCell>
-              <TableCell>9,400</TableCell>
-              <TableCell>235% ❌</TableCell>
-            </TableRow>
-            <TableRow className="bg-primary/10 hover:bg-primary/20">
-              <TableCell className="font-bold text-primary">
-                SCN Compact
-              </TableCell>
-              <TableCell className="font-bold text-primary">
-                380
-              </TableCell>
-              <TableCell className="font-bold text-primary">
-                9% ✅
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  </Section>
-);
-```
-
-## File: src/components/sections/UseCases.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-export const UseCases = () => (
-  <Section id="section-8">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold tracking-tight">
-        Common Use-Cases
-      </h2>
-      <p className="text-lg text-muted-foreground mt-2">
-        From refactoring to on-boarding, scn-ts accelerates your
-        workflow.
-      </p>
-    </div>
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-1/3 sm:w-[200px]">
-                Scenario
-              </TableHead>
-              <TableHead>Example Prompt</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Refactor Epic</TableCell>
-              <TableCell>
-                <InlineCode>
-                  SCN + “move auth logic to new package”
-                </InlineCode>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Code Review</TableCell>
-              <TableCell>
-                <InlineCode>SCN + “any circular deps?”</InlineCode>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Add Feature</TableCell>
-              <TableCell>
-                <InlineCode>
-                  SCN + “add Stripe webhook handler following same
-                  pattern”
-                </InlineCode>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Migration</TableCell>
-              <TableCell>
-                <InlineCode>
-                  SCN + “convert from Express to Fastify”
-                </InlineCode>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">On-boarding</TableCell>
-              <TableCell>
-                <InlineCode>SCN + “explain data flow”</InlineCode>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  </Section>
-);
-```
-
-## File: src/components/ui/button.tsx
-```typescript
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-
-import { cn } from "@/lib/utils"
-
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
@@ -743,28 +87,19 @@ const buttonVariants = cva(
     },
   }
 )
+```
+
+## File: src/components/ui/button.types.ts
+```typescript
+import * as React from "react"
+import { type VariantProps } from "class-variance-authority"
+import { buttonVariants } from "./button.constants"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = "Button"
-
-export { Button, buttonVariants }
 ```
 
 ## File: src/components/ui/card.tsx
@@ -971,67 +306,6 @@ export {
 }
 ```
 
-## File: src/components/Footer.tsx
-```typescript
-export const Footer = () => (
-  <footer className="border-t">
-    <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
-      <p>MIT © 2025 SCN contributors</p>
-      <p className="text-sm mt-4 max-w-xl mx-auto">
-        SCN is the shared engine behind{" "}
-        <a
-          href="https://www.noca.pro"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-foreground hover:text-primary"
-        >
-          noca.pro
-        </a>{" "}
-        – a zero-friction, Visual Context Engineering platform with an AI-native patch engine.
-      </p>
-    </div>
-  </footer>
-);
-```
-
-## File: src/components/Header.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import { Github, MessageSquare } from "lucide-react";
-
-export const Header = () => (
-  <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
-      <a href="#" className="flex items-center space-x-2.5">
-        <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
-        <span className="font-bold">SCN</span>
-        <span className="text-xs font-medium border rounded-full px-2 py-0.5 border-primary/50 text-primary bg-primary/10">
-          Open Source
-        </span>
-      </a>
-      <div className="flex items-center gap-2">
-        <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm">
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Discord
-          </Button>
-        </a>
-        <a
-          href="https://github.com/nocapro/scn-ts"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button variant="outline" size="sm">
-            <Github className="h-4 w-4 mr-2" />
-            GitHub
-          </Button>
-        </a>
-      </div>
-    </div>
-  </header>
-);
-```
-
 ## File: src/components/InlineCode.tsx
 ```typescript
 export const InlineCode = ({ children }: { children: string }) => (
@@ -1063,6 +337,279 @@ export const Section = ({
 );
 ```
 
+## File: src/content/sections.content.tsx
+```typescript
+import {
+  Box,
+  BrainCircuit,
+  GitMerge,
+  Hash,
+  Network,
+  Puzzle,
+  Scissors,
+  SlidersHorizontal,
+  Smile,
+  Workflow,
+  Zap,
+} from "lucide-react";
+import { InlineCode } from "@/components/InlineCode";
+
+export const contextCostContent = {
+  title: "The High Cost of Context",
+  subtitle:
+    "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don't scale.",
+  cards: [
+    {
+      icon: Zap,
+      title: "Token Limits",
+      content: (
+        <>
+          Context windows are tiny. Pasting <InlineCode>/src</InlineCode>{" "}
+          consumes your entire budget before you've even asked a question.
+        </>
+      ),
+    },
+    {
+      icon: BrainCircuit,
+      title: "Signal vs. Noise",
+      content:
+        "Models don't need semicolons, they need the dependency graph—what talks to what, and who calls whom.",
+    },
+    {
+      icon: Workflow,
+      title: "Broken Workflow",
+      content: (
+        <>
+          You don't need another IDE. You need a 1-second command that turns{" "}
+          <em>“here’s my repo”</em> into <em>“here’s the summary”</em>.
+        </>
+      ),
+    },
+  ],
+};
+
+export const solutionContent = {
+  title: "The Solution: Symbolic Context Notation",
+  subtitle:
+    "A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.",
+  cliCommand: `npx scn-ts "src/**/*.{ts,tsx}" --exclude="**/*.test.ts" --preset=compact`,
+  exampleOutput: `§1 src/main.tsx
+  + ◇ App (1)
+  + ~ fetchUsers (2)
+    > 2, 3
+
+§2 src/services/api.ts
+  ~ getUser (1) ...!
+    < 1
+    > 3
+
+§3 src/types.ts
+  + {} User (1)
+    + @ id: #string
+    + @ name: #string`,
+  legend: [
+    { symbol: "§", meaning: "File header (id + path)" },
+    { symbol: "+ / -", meaning: "Exported / Private symbol" },
+    { symbol: "◇ ~ {}", meaning: "Class, Function, Interface, JSX element" },
+    { symbol: "> / <", meaning: "Outgoing / Incoming call or import" },
+    { symbol: "... ! o", meaning: "Async, Throws, Pure function" },
+  ],
+};
+
+export const tokenEconomicsContent = {
+  title: "Token Economics",
+  subtitle: "Fit 10x more context into every prompt.",
+  table: [
+    { representation: "Raw Source", tokens: "18,700", window: "467% ❌" },
+    { representation: "Minified", tokens: "12,100", window: "302% ❌" },
+    { representation: "AST JSON", tokens: "9,400", window: "235% ❌" },
+    {
+      representation: "SCN Compact",
+      tokens: "380",
+      window: "9% ✅",
+      highlight: true,
+    },
+  ],
+};
+
+export const playgroundContent = {
+  title: "Live Demo Playground",
+  subtitle:
+    "Drag-and-drop a folder, move the slider, and watch the map re-shape in real time.",
+  buttonText: "Try the Playground",
+};
+
+export const quickStartContent = {
+  title: "CLI Quick Start",
+  subtitle: "Get started in under a minute.",
+  code: `# global install
+npm i -g scn-ts            # or yarn/pnpm/bun
+
+# basic
+scn-ts "src/**/*.{ts,tsx}" --output map.scn
+
+# monorepo
+scn-ts "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
+
+# watch mode
+scn-ts "src/**/*" --watch --preset=minimal`,
+};
+
+export const faqContent = {
+  title: "Frequently Asked Questions",
+  questions: [
+    {
+      question: "Does GPT really understand the icons?",
+      answer:
+        "Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.). We prompt-engineered once and never looked back.",
+    },
+    {
+      question: (
+        <>
+          Why not just <InlineCode>ctags</InlineCode> +{" "}
+          <InlineCode>grep</InlineCode>?
+        </>
+      ),
+      answer:
+        "ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.",
+    },
+    {
+      question: "Will you break when TS 5.7 adds new syntax?",
+      answer:
+        "Only if the underlying tree-sitter grammar breaks, which is usually fixed upstream within days. Our queries are tiny and easy to patch.",
+    },
+    {
+      question: "Is my proprietary code safe?",
+      answer:
+        "Everything runs locally on your machine. The WASM is loaded from your domain; there is no telemetry and no cloud dependency.",
+    },
+  ],
+};
+
+export const designDecisionsContent = {
+  title: "Design Decisions",
+  subtitle:
+    "Built on a foundation of modern, performant, and portable technologies.",
+  cards: [
+    {
+      icon: GitMerge,
+      title: "tree-sitter",
+      content: "Incremental, error-tolerant, multi-language parsing.",
+    },
+    {
+      icon: Box,
+      title: "WASM",
+      content: "Same binary runs in browser, edge, or server.",
+    },
+    {
+      icon: Puzzle,
+      title: "No Bundler Magic",
+      content: (
+        <>
+          ES modules only, <InlineCode>?module</InlineCode> CDN link works.
+        </>
+      ),
+    },
+    {
+      icon: Scissors,
+      title: "No AST Dump",
+      content: (
+        <>
+          We throw away <em>statements</em> and keep <em>symbols + edges</em>.
+        </>
+      ),
+    },
+    {
+      icon: Network,
+      title: "Topological Sort",
+      content: "GPT sees bottom-up dependencies, which reduces hallucination.",
+    },
+    {
+      icon: Smile,
+      title: "Stable Icon Set",
+      content: "Single Unicode char, token-efficient, and familiar to models.",
+    },
+    {
+      icon: Hash,
+      title: "Hierarchical IDs",
+      content:
+        'Lets models reason about "file 3 symbol 2" without name clashes.',
+    },
+    {
+      icon: SlidersHorizontal,
+      title: "Preset System",
+      content: "Hard-coded filters so you don’t need a complex configuration.",
+    },
+  ],
+};
+
+export const useCasesContent = {
+  title: "Common Use-Cases",
+  subtitle:
+    "From refactoring to on-boarding, scn-ts accelerates your workflow.",
+  prompts: [
+    {
+      scenario: "Refactor Epic",
+      prompt: "SCN + “move auth logic to new package”",
+    },
+    { scenario: "Code Review", prompt: "SCN + “any circular deps?”" },
+    {
+      scenario: "Add Feature",
+      prompt: "SCN + “add Stripe webhook handler following same pattern”",
+    },
+    {
+      scenario: "Migration",
+      prompt: "SCN + “convert from Express to Fastify”",
+    },
+    { scenario: "On-boarding", prompt: "SCN + “explain data flow”" },
+  ],
+};
+
+export const contributeContent = {
+  title: "Contribute to SCN",
+  subtitle:
+    "Help us map the world's code. Add a language, improve heuristics, or beat our performance benchmarks. All contributions are welcome.",
+  buttonText: "View on GitHub",
+};
+
+export const heroContent = {
+  title: "Understand any TypeScript repo in 400 tokens.",
+  subtitle: (
+    <>
+      SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+      <br className="hidden md:block" />
+      Paste it in, and watch your AI refactor, review, or port code without
+      ever seeing the source.
+    </>
+  ),
+  getStartedButton: "Get Started",
+  playgroundButton: "Live Playground",
+  before: {
+    title: "BEFORE: 300+ tokens",
+    code: `export class ApiClient {
+  constructor(private apiKey: string) {}
+
+  async fetchUsers(page: number): Promise<User[]> {
+    const res = await fetch(\`/api/users?page=\${page}\`, {
+      headers: { 'X-API-KEY': this.apiKey }
+    });
+    if (!res.ok) throw new Error('API Error');
+    return res.json();
+  }
+}`,
+  },
+  after: {
+    title: "AFTER: 38 tokens",
+    code: `§1 src/api.ts
++ ◇ ApiClient
+  - @ apiKey: #string
+  + o constructor
+  + ~ fetchUsers ...!
+    > User`,
+  },
+};
+```
+
 ## File: src/hooks/useCopyToClipboard.hook.ts
 ```typescript
 import { useState, useCallback, useEffect } from "react";
@@ -1090,6 +637,14 @@ export const useCopyToClipboard = () => {
 
   return { isCopied, copyToClipboard };
 };
+```
+
+## File: src/lib/constants.ts
+```typescript
+export const GITHUB_URL = "https://github.com/nocapro/scn-ts";
+export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
+export const NOCAPRO_URL = "https://www.noca.pro";
+export const DISCORD_URL = "https://discord.gg/your-invite";
 ```
 
 ## File: src/lib/utils.ts
@@ -1228,6 +783,439 @@ export default defineConfig({
 })
 ```
 
+## File: src/components/sections/ContextCost.tsx
+```typescript
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Section } from "@/components/Section";
+import { contextCostContent } from "@/content/sections.content";
+
+export const ContextCost = () => (
+  <Section id="section-1">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {contextCostContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+        {contextCostContent.subtitle}
+      </p>
+    </div>
+    <div className="grid md:grid-cols-3 gap-8">
+      {contextCostContent.cards.map((card, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <card.icon className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>{card.title}</CardTitle>
+          </CardHeader>
+          <CardContent>{card.content}</CardContent>
+        </Card>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/Contribute.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+import { contributeContent } from "@/content/sections.content";
+import { GITHUB_URL } from "@/lib/constants";
+
+export const Contribute = () => (
+  <Section id="section-9">
+    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {contributeContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
+        {contributeContent.subtitle}
+      </p>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+        <Button size="lg" variant="secondary">
+          <Github className="mr-2 h-4 w-4" /> {contributeContent.buttonText}
+        </Button>
+      </a>
+    </Card>
+  </Section>
+);
+```
+
+## File: src/components/sections/DesignDecisions.tsx
+```typescript
+import { Section } from "@/components/Section";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { designDecisionsContent } from "@/content/sections.content";
+
+export const DesignDecisions = () => (
+  <Section id="section-7">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {designDecisionsContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+        {designDecisionsContent.subtitle}
+      </p>
+    </div>
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {designDecisionsContent.cards.map((card, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <card.icon className="h-8 w-8 text-primary mb-2" />
+            <CardTitle>{card.title}</CardTitle>
+          </CardHeader>
+          <CardContent>{card.content}</CardContent>
+        </Card>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/Faq.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { faqContent } from "@/content/sections.content";
+
+export const Faq = () => (
+  <Section id="section-6">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {faqContent.title}
+      </h2>
+    </div>
+    <div className="max-w-3xl mx-auto space-y-8">
+      {faqContent.questions.map((faq, index) => (
+        <div className="border-t pt-4" key={index}>
+          <p className="font-semibold text-lg">{faq.question}</p>
+          <p className="text-muted-foreground mt-1">{faq.answer}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/Hero.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
+import { heroContent } from "@/content/sections.content";
+import { PLAYGROUND_URL } from "@/lib/constants";
+
+export const Hero = () => (
+  <section className="grid lg:grid-cols-2 gap-12 items-center py-24 sm:py-32">
+    <div className="text-center lg:text-left space-y-6">
+      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 opacity-0 animate-fade-in">
+        {heroContent.title}
+      </h1>
+      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
+        {heroContent.subtitle}
+      </p>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
+        <a href="#section-5">
+          <Button size="lg">
+            {heroContent.getStartedButton}{" "}
+            <Terminal className="ml-2 h-4 w-4" />
+          </Button>
+        </a>
+        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+          <Button variant="secondary" size="lg">
+            {heroContent.playgroundButton}{" "}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </a>
+      </div>
+    </div>
+    <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
+      <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.before.title}
+          </CardTitle>
+          <Zap className="h-5 w-5 text-destructive" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock lang="typescript" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+        </CardContent>
+      </Card>
+
+      <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
+        <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
+          <ArrowDown className="h-5 w-5" />
+        </div>
+      </div>
+
+      <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.after.title}
+          </CardTitle>
+          <Zap className="h-5 w-5 text-primary" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock lang="text" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+);
+```
+
+## File: src/components/sections/Playground.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { playgroundContent } from "@/content/sections.content";
+import { PLAYGROUND_URL } from "@/lib/constants";
+
+export const Playground = () => (
+  <Section id="section-4">
+    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {playgroundContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2 mb-8">
+        {playgroundContent.subtitle}
+      </p>
+      <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+        <Button size="lg">
+          {playgroundContent.buttonText}{" "}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </a>
+    </Card>
+  </Section>
+);
+```
+
+## File: src/components/sections/QuickStart.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { CodeBlock } from "@/components/CodeBlock";
+import { quickStartContent } from "@/content/sections.content";
+
+export const QuickStart = () => (
+  <Section id="section-5">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {quickStartContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2">
+        {quickStartContent.subtitle}
+      </p>
+    </div>
+    <CodeBlock>{quickStartContent.code}</CodeBlock>
+  </Section>
+);
+```
+
+## File: src/components/sections/Solution.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { CodeBlock } from "@/components/CodeBlock";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { InlineCode } from "@/components/InlineCode";
+import { solutionContent } from "@/content/sections.content";
+
+export const Solution = () => (
+  <Section id="section-2">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {solutionContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
+        {solutionContent.subtitle}
+      </p>
+    </div>
+    <CodeBlock>{`$ ${solutionContent.cliCommand}`}</CodeBlock>
+    <Card className="mt-8">
+      <CardContent className="p-6">
+        <CodeBlock lang="text">{solutionContent.exampleOutput}</CodeBlock>
+      </CardContent>
+    </Card>
+    <div className="mt-8">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">Symbol</TableHead>
+            <TableHead>Meaning</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {solutionContent.legend.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <InlineCode>{item.symbol}</InlineCode>
+              </TableCell>
+              <TableCell>{item.meaning}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/TokenEconomics.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { tokenEconomicsContent } from "@/content/sections.content";
+import { cn } from "@/lib/utils";
+
+export const TokenEconomics = () => (
+  <Section id="section-3">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {tokenEconomicsContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2">
+        {tokenEconomicsContent.subtitle}
+      </p>
+    </div>
+    <Card>
+      <CardContent className="p-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Representation</TableHead>
+              <TableHead>Tokens</TableHead>
+              <TableHead>% of 4k Window</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {tokenEconomicsContent.table.map((row, index) => (
+              <TableRow
+                key={index}
+                className={cn(row.highlight && "bg-primary/10 hover:bg-primary/20")}
+              >
+                <TableCell className={cn(row.highlight && "font-bold text-primary")}>{row.representation}</TableCell>
+                <TableCell className={cn(row.highlight && "font-bold text-primary")}>{row.tokens}</TableCell>
+                <TableCell className={cn(row.highlight && "font-bold text-primary")}>{row.window}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  </Section>
+);
+```
+
+## File: src/components/sections/UseCases.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { InlineCode } from "@/components/InlineCode";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useCasesContent } from "@/content/sections.content";
+
+export const UseCases = () => (
+  <Section id="section-8">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {useCasesContent.title}
+      </h2>
+      <p className="text-lg text-muted-foreground mt-2">
+        {useCasesContent.subtitle}
+      </p>
+    </div>
+    <Card>
+      <CardContent className="p-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-1/3 sm:w-[200px]">Scenario</TableHead>
+              <TableHead>Example Prompt</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {useCasesContent.prompts.map((useCase, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{useCase.scenario}</TableCell>
+                <TableCell>
+                  <InlineCode>{useCase.prompt}</InlineCode>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  </Section>
+);
+```
+
+## File: src/components/ui/button.tsx
+```typescript
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "./button.constants"
+import type { ButtonProps } from "./button.types"
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
+```
+
 ## File: src/components/CodeBlock.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -1273,6 +1261,66 @@ export const CodeBlock = ({
     </div>
   );
 };
+```
+
+## File: src/components/Footer.tsx
+```typescript
+import { NOCAPRO_URL } from "@/lib/constants";
+
+export const Footer = () => (
+  <footer className="border-t">
+    <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
+      <p>MIT © 2025 SCN contributors</p>
+      <p className="text-sm mt-4 max-w-xl mx-auto">
+        SCN is the shared engine behind{" "}
+        <a
+          href={NOCAPRO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-foreground hover:text-primary"
+        >
+          noca.pro
+        </a>{" "}
+        – a zero-friction, Visual Context Engineering platform with an AI-native patch engine.
+      </p>
+    </div>
+  </footer>
+);
+```
+
+## File: src/components/Header.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import { Github, MessageSquare } from "lucide-react";
+import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
+
+export const Header = () => (
+  <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
+      <a href="#" className="flex items-center space-x-2.5">
+        <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
+        <span className="font-bold">SCN</span>
+        <span className="text-xs font-medium border rounded-full px-2 py-0.5 border-primary/50 text-primary bg-primary/10">
+          Open Source
+        </span>
+      </a>
+      <div className="flex items-center gap-2">
+        <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="sm">
+            <MessageSquare className="h-4 w-4 mr-2" />
+            Discord
+          </Button>
+        </a>
+        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="sm">
+            <Github className="h-4 w-4 mr-2" />
+            GitHub
+          </Button>
+        </a>
+      </div>
+    </div>
+  </header>
+);
 ```
 
 ## File: src/index.css
