@@ -2,6 +2,9 @@
 ```
 public/
   favicon.svg
+  robots.txt
+  site.webmanifest
+  sitemap.xml
 src/
   components/
     sections/
@@ -53,6 +56,48 @@ vite.config.ts
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="100" fill="hsl(263.4, 95.2%, 66.3%)">◮</text>
 </svg>
+```
+
+## File: public/robots.txt
+```
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+Sitemap: https://www.scn-ts.dev/sitemap.xml
+```
+
+## File: public/site.webmanifest
+```
+{
+  "name": "SCN-TS",
+  "short_name": "SCN-TS",
+  "description": "Symbolic Context Notation for TypeScript",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020817",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+```
+
+## File: public/sitemap.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.scn-ts.dev/</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
 ```
 
 ## File: src/components/ui/button.constants.ts
@@ -1414,9 +1459,54 @@ export const Header = () => (
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SCN – Symbolic Context Notation for TypeScript</title>
+
+    <!-- Primary Meta Tags -->
+    <title>SCN-TS | Symbolic Context Notation for TypeScript</title>
+    <meta name="description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+    <link rel="canonical" href="https://www.scn-ts.dev/" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.scn-ts.dev/" />
+    <meta property="og:title" content="SCN-TS: Understand any TypeScript repo in 400 tokens." />
+    <meta property="og:description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+    <meta property="og:image" content="https://www.scn-ts.dev/og.png" />
+    <meta property="og:site_name" content="SCN-TS" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.scn-ts.dev/" />
+    <meta property="twitter:title" content="SCN-TS: Understand any TypeScript repo in 400 tokens." />
+    <meta property="twitter:description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+    <meta property="twitter:image" content="https://www.scn-ts.dev/og.png" />
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SCN-TS",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "description": "A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.",
+      "url": "https://www.scn-ts.dev/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "SCN contributors"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -1428,7 +1518,7 @@ export const Header = () => (
 ## File: package.json
 ```json
 {
-  "name": "bun-react-template",
+  "name": "scn-landing-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",

@@ -51,7 +51,7 @@ export const solutionContent = {
   title: "The Solution: Symbolic Context Notation",
   subtitle:
     "A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.",
-  cliCommand: `npx scn-ts "src/**/*.{ts,tsx}" --exclude="**/*.test.ts" --preset=compact`,
+  cliCommand: `npx scn "src/**/*.{ts,tsx}" --exclude="**/*.test.ts" --preset=compact`,
   exampleOutput: `§1 src/main.tsx
   + ◇ App (1)
   + ~ fetchUsers (2)
@@ -102,16 +102,16 @@ export const quickStartContent = {
   title: "CLI Quick Start",
   subtitle: "Get started in under a minute.",
   code: `# global install
-npm i -g scn-ts            # or yarn/pnpm/bun
+npm i -g scn            # or yarn/pnpm/bun
 
 # basic
-scn-ts "src/**/*.{ts,tsx}" --output map.scn
+scn "src/**/*.{ts,tsx}" --output map.scn
 
 # monorepo
-scn-ts "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
+scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
 
 # watch mode
-scn-ts "src/**/*" --watch --preset=minimal`,
+scn "src/**/*" --watch --preset=minimal`,
 };
 
 export const faqContent = {
@@ -120,7 +120,7 @@ export const faqContent = {
     {
       question: "Does GPT really understand the icons?",
       answer:
-        "Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.). We prompt-engineered once and never looked back.",
+        "Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.).",
     },
     {
       question: (
@@ -133,7 +133,7 @@ export const faqContent = {
         "ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.",
     },
     {
-      question: "Will you break when TS 5.7 adds new syntax?",
+      question: "What happens when a language adds new syntax?",
       answer:
         "Only if the underlying tree-sitter grammar breaks, which is usually fixed upstream within days. Our queries are tiny and easy to patch.",
     },
@@ -205,7 +205,7 @@ export const designDecisionsContent = {
 export const useCasesContent = {
   title: "Common Use-Cases",
   subtitle:
-    "From refactoring to on-boarding, scn-ts accelerates your workflow.",
+    "From refactoring to on-boarding, SCN accelerates your workflow.",
   prompts: [
     {
       scenario: "Refactor Epic",
@@ -232,7 +232,7 @@ export const contributeContent = {
 };
 
 export const heroContent = {
-  title: "Understand any TypeScript repo in 400 tokens.",
+  title: "Understand any codebase in <1k tokens.",
   subtitle: (
     <>
       SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}

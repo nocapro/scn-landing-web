@@ -1,7 +1,7 @@
 {
-  "name": "SCN-TS",
-  "short_name": "SCN-TS",
-  "description": "Symbolic Context Notation for TypeScript",
+  "name": "SCN",
+  "short_name": "SCN",
+  "description": "Symbolic Context Notation for Code",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020817",
