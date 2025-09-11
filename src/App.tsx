@@ -16,10 +16,18 @@ import {
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
+  Box,
   BrainCircuit,
   Code,
   Copy,
+  GitMerge,
   Github,
+  Hash,
+  Network,
+  Puzzle,
+  Scissors,
+  SlidersHorizontal,
+  Smile,
   Terminal,
   Workflow,
   Zap,
@@ -380,6 +388,180 @@ scn-ts "src/**/*" --watch --preset=minimal`}</CodeBlock>
               </p>
             </div>
           </div>
+        </Section>
+
+        <Section id="section-7">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight">
+              Design Decisions
+            </h2>
+            <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+              Built on a foundation of modern, performant, and portable
+              technologies.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card>
+              <CardHeader>
+                <GitMerge className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>tree-sitter</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Incremental, error-tolerant, multi-language parsing.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Box className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>WASM</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Same binary runs in browser, edge, or server.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Puzzle className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>No Bundler Magic</CardTitle>
+              </CardHeader>
+              <CardContent>
+                ES modules only, <InlineCode>?module</InlineCode> CDN link
+                works.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Scissors className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>No AST Dump</CardTitle>
+              </CardHeader>
+              <CardContent>
+                We throw away <em>statements</em> and keep{" "}
+                <em>symbols + edges</em>.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Network className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Topological Sort</CardTitle>
+              </CardHeader>
+              <CardContent>
+                GPT sees bottom-up dependencies, which reduces hallucination.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Smile className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Stable Icon Set</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Single Unicode char, token-efficient, and familiar to models.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <Hash className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Hierarchical IDs</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Lets models reason about "file 3 symbol 2" without name clashes.
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <SlidersHorizontal className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Preset System</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Hard-coded filters so you don’t need a complex configuration.
+              </CardContent>
+            </Card>
+          </div>
+        </Section>
+
+        <Section id="section-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight">
+              Common Use-Cases
+            </h2>
+            <p className="text-lg text-muted-foreground mt-2">
+              From refactoring to on-boarding, scn-ts accelerates your
+              workflow.
+            </p>
+          </div>
+          <Card>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-1/3 sm:w-[200px]">
+                      Scenario
+                    </TableHead>
+                    <TableHead>Example Prompt</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">Refactor Epic</TableCell>
+                    <TableCell>
+                      <InlineCode>
+                        SCN + “move auth logic to new package”
+                      </InlineCode>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Code Review</TableCell>
+                    <TableCell>
+                      <InlineCode>SCN + “any circular deps?”</InlineCode>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Add Feature</TableCell>
+                    <TableCell>
+                      <InlineCode>
+                        SCN + “add Stripe webhook handler following same
+                        pattern”
+                      </InlineCode>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Migration</TableCell>
+                    <TableCell>
+                      <InlineCode>
+                        SCN + “convert from Express to Fastify”
+                      </InlineCode>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">On-boarding</TableCell>
+                    <TableCell>
+                      <InlineCode>SCN + “explain data flow”</InlineCode>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </Section>
+
+        <Section id="section-9">
+          <Card className="text-center p-8 md:p-12 bg-secondary/50">
+            <h2 className="text-3xl font-bold tracking-tight">
+              Contribute to scn-ts
+            </h2>
+            <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
+              Help us map the world's code. Add a language, improve heuristics,
+              or beat our performance benchmarks. All contributions are welcome.
+            </p>
+            <a
+              href="https://github.com/nocapro/scn-ts"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="lg" variant="secondary">
+                <Github className="mr-2 h-4 w-4" /> View on GitHub
+              </Button>
+            </a>
+          </Card>
         </Section>
       </main>
 
