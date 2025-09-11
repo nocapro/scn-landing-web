@@ -95,10 +95,13 @@ export default function App() {
       </div>
 
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+        <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
           <a href="#" className="flex items-center space-x-2.5">
             <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
             <span className="font-bold">SCN</span>
+            <span className="text-xs font-medium border rounded-full px-2 py-0.5 border-primary/50 text-primary bg-primary/10">
+              Open Source
+            </span>
           </a>
           <div className="flex items-center gap-2">
             <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
@@ -150,8 +153,8 @@ export default function App() {
               </a>
             </div>
           </div>
-          <div className="relative rounded-xl border p-4 lg:p-6 opacity-0 animate-fade-in [animation-delay:0.5s] bg-gradient-to-b from-secondary/30 to-background">
-            <Card className="bg-background/50 backdrop-blur-sm">
+          <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
+            <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
               <CardHeader className="flex-row items-center justify-between p-4">
                 <CardTitle className="text-base font-semibold text-muted-foreground">
                   BEFORE: 300+ tokens
@@ -176,13 +179,13 @@ export default function App() {
               </CardContent>
             </Card>
 
-            <div className="my-6 flex justify-center">
+            <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
               <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
                 <ArrowDown className="h-5 w-5" />
               </div>
             </div>
 
-            <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow">
+            <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
               <CardHeader className="flex-row items-center justify-between p-4">
                 <CardTitle className="text-base font-semibold text-muted-foreground">
                   AFTER: 38 tokens

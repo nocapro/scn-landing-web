@@ -25,6 +25,18 @@ Hero
 1. make the before after widget intuitive and amazing.
 2. add animations to hero components
 
+---
+
+Hero
+
+1. add cool entrance animation to the before after widget
+2. more height to header
+3. add emphazis UI that `Open Source` project
+
+---
+
+make the before after widget parallax scrollable
+
 === DONE
 
 make the hero more amazing

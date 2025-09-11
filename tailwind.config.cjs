@@ -82,12 +82,34 @@ module.exports = {
           "0%, 100%": { "box-shadow": "0 0 10px -5px hsl(var(--primary))" },
           "50%": { "box-shadow": "0 0 15px 0px hsl(var(--primary))" }
         },
+        "slide-in-from-top": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "slide-in-from-bottom": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "glow": "glow 4s ease-in-out infinite",
+        "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
+        "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
       },
     },
   },
