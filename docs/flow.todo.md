@@ -7,7 +7,7 @@ implement DRY
 1. extract out all constants to *.constant.ts files
 2. extract out all types to *.type.ts files
 
-===
+=== DONE
 
 tsx files only for renders, so
 
