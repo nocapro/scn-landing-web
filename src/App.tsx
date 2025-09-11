@@ -18,13 +18,13 @@ import {
   ArrowRight,
   Box,
   BrainCircuit,
-  Code,
   Copy,
   GitMerge,
   Github,
   Hash,
   Network,
   Puzzle,
+  MessageSquare,
   Scissors,
   SlidersHorizontal,
   Smile,
@@ -88,20 +88,28 @@ export default function App() {
 
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
-          <a href="#" className="flex items-center space-x-2">
-            <Code className="h-6 w-6" />
-            <span className="font-bold">scn-ts</span>
+          <a href="#" className="flex items-center space-x-2.5">
+            <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
+            <span className="font-bold">SCN</span>
           </a>
-          <a
-            href="https://github.com/nocapro/scn-ts"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" size="sm">
-              <Github className="h-4 w-4 mr-2" />
-              GitHub
-            </Button>
-          </a>
+          <div className="flex items-center gap-2">
+            <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Discord
+              </Button>
+            </a>
+            <a
+              href="https://github.com/nocapro/scn-ts"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" size="sm">
+                <Github className="h-4 w-4 mr-2" />
+                GitHub
+              </Button>
+            </a>
+          </div>
         </div>
       </header>
 
@@ -111,7 +119,7 @@ export default function App() {
             Understand any TypeScript repo in 400 tokens.
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-            scn-ts creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+            SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
             <br />
             Paste it in, and watch your AI refactor, review, or port code
             without ever seeing the source.
@@ -546,7 +554,7 @@ scn-ts "src/**/*" --watch --preset=minimal`}</CodeBlock>
         <Section id="section-9">
           <Card className="text-center p-8 md:p-12 bg-secondary/50">
             <h2 className="text-3xl font-bold tracking-tight">
-              Contribute to scn-ts
+              Contribute to SCN
             </h2>
             <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
               Help us map the world's code. Add a language, improve heuristics,
@@ -567,7 +575,7 @@ scn-ts "src/**/*" --watch --preset=minimal`}</CodeBlock>
 
       <footer className="border-t">
         <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
-          <p>MIT © 2025 scn-ts contributors</p>
+          <p>MIT © 2025 SCN contributors</p>
           <p className="text-sm mt-4 max-w-xl mx-auto">
             SCN is the shared engine behind{" "}
             <a

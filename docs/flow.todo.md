@@ -1,13 +1,14 @@
 ===
 
+make the hero more amazing
 
-===
+=== DONE
 
-1. change logo to this symbol
-2. the name is not scn-ts, it is SCN from Symbolic Context Notation
-3.
+1. change logo, recreate by using this ◮
+2. the name is not scn-ts, it is SCN
+3. improve header. also add discord
 
-===
+=== DONE
 
 add to landing page
 
