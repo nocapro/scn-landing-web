@@ -646,12 +646,34 @@ module.exports = {
           "0%, 100%": { "box-shadow": "0 0 10px -5px hsl(var(--primary))" },
           "50%": { "box-shadow": "0 0 15px 0px hsl(var(--primary))" }
         },
+        "slide-in-from-top": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(-20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "slide-in-from-bottom": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "glow": "glow 4s ease-in-out infinite",
+        "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
+        "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
       },
     },
   },
@@ -758,10 +780,13 @@ export default function App() {
       </div>
 
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+        <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
           <a href="#" className="flex items-center space-x-2.5">
             <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
             <span className="font-bold">SCN</span>
+            <span className="text-xs font-medium border rounded-full px-2 py-0.5 border-primary/50 text-primary bg-primary/10">
+              Open Source
+            </span>
           </a>
           <div className="flex items-center gap-2">
             <a href="https://discord.gg/your-invite" target="_blank" rel="noopener noreferrer">
@@ -813,8 +838,8 @@ export default function App() {
               </a>
             </div>
           </div>
-          <div className="relative rounded-xl border p-4 lg:p-6 opacity-0 animate-fade-in [animation-delay:0.5s] bg-gradient-to-b from-secondary/30 to-background">
-            <Card className="bg-background/50 backdrop-blur-sm">
+          <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
+            <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
               <CardHeader className="flex-row items-center justify-between p-4">
                 <CardTitle className="text-base font-semibold text-muted-foreground">
                   BEFORE: 300+ tokens
@@ -839,13 +864,13 @@ export default function App() {
               </CardContent>
             </Card>
 
-            <div className="my-6 flex justify-center">
+            <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
               <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
                 <ArrowDown className="h-5 w-5" />
               </div>
             </div>
 
-            <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow">
+            <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
               <CardHeader className="flex-row items-center justify-between p-4">
                 <CardTitle className="text-base font-semibold text-muted-foreground">
                   AFTER: 38 tokens

@@ -18,7 +18,11 @@ tsx files only for renders, so
 
 make the codebase radically DRY by splitting files into files
 
-===
+=== DONE
+
+add favicon
+
+=== DONE
 
 Hero
 
@@ -35,7 +39,11 @@ Hero
 
 ---
 
+hero section:
+
 make the before after widget parallax scrollable
+
+so on scroll, the left side of the screen is always visible fix position until before after widget finished bottom viewport
 
 === DONE
 
