@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import {
+  ArrowDown,
   ArrowRight,
   Box,
   BrainCircuit,
@@ -62,7 +63,7 @@ const CodeBlock = ({
   <div className="relative">
     <pre
       className={cn(
-        "bg-secondary p-4 rounded-lg overflow-x-auto text-sm font-mono border",
+        "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
         className
       )}
     >
@@ -149,17 +150,19 @@ export default function App() {
               </a>
             </div>
           </div>
-          <div className="relative rounded-xl bg-secondary border p-4 lg:p-6 space-y-4 opacity-0 animate-fade-in [animation-delay:0.4s]">
-            <div className="flex justify-between items-center">
-              <p className="font-semibold text-sm text-muted-foreground">
-                BEFORE: 300+ tokens
-              </p>
-              <Zap className="h-5 w-5 text-destructive" />
-            </div>
-            <CodeBlock
-              lang="typescript"
-              className="bg-background"
-            >{`export class ApiClient {
+          <div className="relative rounded-xl border p-4 lg:p-6 opacity-0 animate-fade-in [animation-delay:0.5s] bg-gradient-to-b from-secondary/30 to-background">
+            <Card className="bg-background/50 backdrop-blur-sm">
+              <CardHeader className="flex-row items-center justify-between p-4">
+                <CardTitle className="text-base font-semibold text-muted-foreground">
+                  BEFORE: 300+ tokens
+                </CardTitle>
+                <Zap className="h-5 w-5 text-destructive" />
+              </CardHeader>
+              <CardContent className="p-0">
+                <CodeBlock
+                  lang="typescript"
+                  className="border-0 rounded-t-none bg-transparent p-4"
+                >{`export class ApiClient {
   constructor(private apiKey: string) {}
 
   async fetchUsers(page: number): Promise<User[]> {
@@ -170,23 +173,34 @@ export default function App() {
     return res.json();
   }
 }`}</CodeBlock>
+              </CardContent>
+            </Card>
 
-            <div className="flex justify-between items-center pt-2">
-              <p className="font-semibold text-sm text-muted-foreground">
-                AFTER: 38 tokens
-              </p>
-              <Zap className="h-5 w-5 text-primary" />
+            <div className="my-6 flex justify-center">
+              <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
+                <ArrowDown className="h-5 w-5" />
+              </div>
             </div>
 
-            <CodeBlock
-              lang="text"
-              className="bg-background"
-            >{`§1 src/api.ts
+            <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow">
+              <CardHeader className="flex-row items-center justify-between p-4">
+                <CardTitle className="text-base font-semibold text-muted-foreground">
+                  AFTER: 38 tokens
+                </CardTitle>
+                <Zap className="h-5 w-5 text-primary" />
+              </CardHeader>
+              <CardContent className="p-0">
+                <CodeBlock
+                  lang="text"
+                  className="border-0 rounded-t-none bg-transparent p-4"
+                >{`§1 src/api.ts
 + ◇ ApiClient
   - @ apiKey: #string
   + o constructor
   + ~ fetchUsers ...!
     > User`}</CodeBlock>
+              </CardContent>
+            </Card>
           </div>
         </section>
 

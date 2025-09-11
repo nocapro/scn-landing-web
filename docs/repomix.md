@@ -439,89 +439,6 @@ export default defineConfig({
 </html>
 ```
 
-## File: tailwind.config.cjs
-```
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
-  prefix: "",
-  theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
-      fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "Helvetica", "Arial", "sans-serif", "'Apple Color Emoji'", "'Segoe UI Emoji'", "'Segoe UI Symbol'"],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
-      },
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
-    },
-  },
-  plugins: [require("tailwindcss-animate")],
-}
-```
-
 ## File: src/index.css
 ```css
 @tailwind base;
@@ -643,6 +560,100 @@ module.exports = {
 }
 ```
 
+## File: tailwind.config.cjs
+```
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      fontFamily: {
+        sans: ["-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "Helvetica", "Arial", "sans-serif", "'Apple Color Emoji'", "'Segoe UI Emoji'", "'Segoe UI Symbol'"],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+}
+```
+
 ## File: src/App.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -700,12 +711,19 @@ const Section = ({
 const CodeBlock = ({
   children,
   lang = "bash",
+  className,
 }: {
   children: string;
   lang?: string;
+  className?: string;
 }) => (
   <div className="relative">
-    <pre className="bg-secondary p-4 rounded-lg overflow-x-auto text-sm font-mono border">
+    <pre
+      className={cn(
+        "bg-secondary p-4 rounded-lg overflow-x-auto text-sm font-mono border",
+        className
+      )}
+    >
       <code className={`language-${lang}`}>{children.trim()}</code>
     </pre>
     <Button
@@ -761,27 +779,72 @@ export default function App() {
       </header>
 
       <main className="container max-w-5xl mx-auto px-4">
-        <section className="text-center py-24 sm:py-32">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
-            Understand any TypeScript repo in 400 tokens.
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-            SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
-            <br />
-            Paste it in, and watch your AI refactor, review, or port code
-            without ever seeing the source.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#section-5">
-              <Button size="lg">
-                Get Started <Terminal className="ml-2 h-4 w-4" />
-              </Button>
-            </a>
-            <a href="https://pg.scn.noca.pro" target="_blank" rel="noopener noreferrer">
-              <Button variant="secondary" size="lg">
-                Live Playground <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </a>
+        <section className="grid lg:grid-cols-2 gap-12 items-center py-24 sm:py-32">
+          <div className="text-center lg:text-left space-y-6">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 opacity-0 animate-fade-in">
+              Understand any TypeScript repo in 400 tokens.
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
+              SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+              <br className="hidden md:block" />
+              Paste it in, and watch your AI refactor, review, or port code
+              without ever seeing the source.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
+              <a href="#section-5">
+                <Button size="lg">
+                  Get Started <Terminal className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+              <a
+                href="https://pg.scn.noca.pro"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="secondary" size="lg">
+                  Live Playground <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+            </div>
+          </div>
+          <div className="relative rounded-xl bg-secondary border p-4 lg:p-6 space-y-4 opacity-0 animate-fade-in [animation-delay:0.4s]">
+            <div className="flex justify-between items-center">
+              <p className="font-semibold text-sm text-muted-foreground">
+                BEFORE: 300+ tokens
+              </p>
+              <Zap className="h-5 w-5 text-destructive" />
+            </div>
+            <CodeBlock
+              lang="typescript"
+              className="bg-background"
+            >{`export class ApiClient {
+  constructor(private apiKey: string) {}
+
+  async fetchUsers(page: number): Promise<User[]> {
+    const res = await fetch(\`/api/users?page=\${page}\`, {
+      headers: { 'X-API-KEY': this.apiKey }
+    });
+    if (!res.ok) throw new Error('API Error');
+    return res.json();
+  }
+}`}</CodeBlock>
+
+            <div className="flex justify-between items-center pt-2">
+              <p className="font-semibold text-sm text-muted-foreground">
+                AFTER: 38 tokens
+              </p>
+              <Zap className="h-5 w-5 text-primary" />
+            </div>
+
+            <CodeBlock
+              lang="text"
+              className="bg-background"
+            >{`§1 src/api.ts
++ ◇ ApiClient
+  - @ apiKey: #string
+  + o constructor
+  + ~ fetchUsers ...!
+    > User`}</CodeBlock>
           </div>
         </section>
 

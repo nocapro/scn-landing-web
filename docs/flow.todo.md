@@ -1,4 +1,31 @@
+extract out all string constants to *.content.ts files
+
 ===
+
+implement DRY
+
+1. extract out all constants to *.constant.ts files
+2. extract out all types to *.type.ts files
+
+===
+
+tsx files only for renders, so
+
+1. extract out all hooks to *.hook.ts files
+2. all state to *.store.ts files
+
+===
+
+make the codebase radically DRY by splitting files into files
+
+===
+
+Hero
+
+1. make the before after widget intuitive and amazing.
+2. add animations to hero components
+
+=== DONE
 
 make the hero more amazing
 
