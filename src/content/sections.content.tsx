@@ -232,7 +232,8 @@ export const contributeContent = {
 };
 
 export const heroContent = {
-  title: "Understand any codebase in <1k tokens.",
+  title: "Understand any codebase in",
+  highlightedTitle: "1k tokens.",
   subtitle: (
     <>
       SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}

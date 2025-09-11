@@ -1,3 +1,6 @@
+=== DONE
+
+about `Understand any codebase in <1k tokens.` please make the < symbol appear smaller and emphasis the `<1k tokens` part with catching UI
 
 === DONE
 

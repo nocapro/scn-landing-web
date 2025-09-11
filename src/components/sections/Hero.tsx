@@ -11,10 +11,18 @@ import { heroContent } from "@/content/sections.content";
 import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Hero = () => (
-  <section className="grid lg:grid-cols-2 gap-12 items-center py-24 sm:py-32">
+  <section className="grid lg:grid-cols-2 gap-12 items-center pt-12 pb-24 sm:pt-16 sm:pb-32">
     <div className="text-center lg:text-left space-y-6">
-      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 opacity-0 animate-fade-in">
-        {heroContent.title}
+      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter opacity-0 animate-fade-in">
+        <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+          {heroContent.title}
+        </span>{" "}
+        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 font-medium text-primary align-middle text-3xl md:text-5xl">
+          <span className="relative -top-[0.05em] text-2xl md:text-4xl">
+            &lt;
+          </span>
+          {heroContent.highlightedTitle}
+        </span>
       </h1>
       <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
         {heroContent.subtitle}
