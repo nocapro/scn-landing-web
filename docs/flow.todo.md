@@ -14,7 +14,7 @@ tsx files only for renders, so
 1. extract out all hooks to *.hook.ts files
 2. all state to *.store.ts files
 
-===
+=== DONE
 
 make the codebase radically DRY by splitting files into files
 

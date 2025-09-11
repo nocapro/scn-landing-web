@@ -1,5 +1,7 @@
 # Directory Structure
 ```
+public/
+  favicon.svg
 src/
   components/
     ui/
@@ -22,6 +24,13 @@ vite.config.ts
 ```
 
 # Files
+
+## File: public/favicon.svg
+```
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="100" fill="hsl(263.4, 95.2%, 66.3%)">◮</text>
+</svg>
+```
 
 ## File: src/components/ui/button.tsx
 ```typescript
@@ -423,22 +432,6 @@ export default defineConfig({
 })
 ```
 
-## File: index.html
-```html
-<!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SCN – Symbolic Context Notation for TypeScript</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-```
-
 ## File: src/index.css
 ```css
 @tailwind base;
@@ -522,6 +515,23 @@ export default defineConfig({
     -moz-osx-font-smoothing: grayscale;
   }
 }
+```
+
+## File: index.html
+```html
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SCN – Symbolic Context Notation for TypeScript</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
 ```
 
 ## File: package.json
