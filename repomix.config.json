@@ -34,8 +34,8 @@
     "tsconfig.json",
     "postcss.config.cjs",
     "tailwind.config.cjs",
-    "vite.config.ts"
-    // "docs/landing.copy.md"
+    "vite.config.ts",
+    "docs/landing.copy.md"
   ],
   "ignore": {
     "useGitignore": true,
