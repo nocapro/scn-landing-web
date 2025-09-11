@@ -24,6 +24,8 @@ src/
     Header.tsx
     InlineCode.tsx
     Section.tsx
+  hooks/
+    useCopyToClipboard.hook.ts
   lib/
     utils.ts
   App.tsx
@@ -969,42 +971,6 @@ export {
 }
 ```
 
-## File: src/components/CodeBlock.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Copy } from "lucide-react";
-
-export const CodeBlock = ({
-  children,
-  lang = "bash",
-  className,
-}: {
-  children: string;
-  lang?: string;
-  className?: string;
-}) => (
-  <div className="relative">
-    <pre
-      className={cn(
-        "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
-        className
-      )}
-    >
-      <code className={`language-${lang}`}>{children.trim()}</code>
-    </pre>
-    <Button
-      variant="ghost"
-      size="icon"
-      className="absolute top-2 right-2 h-8 w-8"
-      onClick={() => navigator.clipboard.writeText(children.trim())}
-    >
-      <Copy className="h-4 w-4" />
-    </Button>
-  </div>
-);
-```
-
 ## File: src/components/Footer.tsx
 ```typescript
 export const Footer = () => (
@@ -1095,6 +1061,35 @@ export const Section = ({
     {children}
   </section>
 );
+```
+
+## File: src/hooks/useCopyToClipboard.hook.ts
+```typescript
+import { useState, useCallback, useEffect } from "react";
+
+export const useCopyToClipboard = () => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyToClipboard = useCallback((text: string) => {
+    if (!text) {
+      return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      setIsCopied(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isCopied) {
+      const timer = setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isCopied]);
+
+  return { isCopied, copyToClipboard };
+};
 ```
 
 ## File: src/lib/utils.ts
@@ -1231,6 +1226,53 @@ export default defineConfig({
     },
   },
 })
+```
+
+## File: src/components/CodeBlock.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Check, Copy } from "lucide-react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
+
+export const CodeBlock = ({
+  children,
+  lang = "bash",
+  className,
+}: {
+  children: string;
+  lang?: string;
+  className?: string;
+}) => {
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
+  const textToCopy = children.trim();
+
+  return (
+    <div className="relative">
+      <pre
+        className={cn(
+          "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
+          className
+        )}
+      >
+        <code className={`language-${lang}`}>{textToCopy}</code>
+      </pre>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-2 right-2 h-8 w-8"
+        onClick={() => copyToClipboard(textToCopy)}
+        disabled={!textToCopy}
+      >
+        {isCopied ? (
+          <Check className="h-4 w-4 text-green-500" />
+        ) : (
+          <Copy className="h-4 w-4" />
+        )}
+      </Button>
+    </div>
+  );
+};
 ```
 
 ## File: src/index.css

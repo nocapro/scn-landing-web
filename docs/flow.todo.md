@@ -1,11 +1,12 @@
-extract out all string constants to *.content.ts files
 
-===
+=== DONE
 
 implement DRY
 
 1. extract out all constants to *.constant.ts files
 2. extract out all types to *.type.ts files
+3. extract out all string constants to *.content.ts files
+
 
 === DONE
 

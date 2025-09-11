@@ -1,3 +1,5 @@
+import { NOCAPRO_URL } from "@/lib/constants";
+
 export const Footer = () => (
   <footer className="border-t">
     <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
@@ -5,7 +7,7 @@ export const Footer = () => (
       <p className="text-sm mt-4 max-w-xl mx-auto">
         SCN is the shared engine behind{" "}
         <a
-          href="https://www.noca.pro"
+          href={NOCAPRO_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-foreground hover:text-primary"
