@@ -19,7 +19,11 @@ export const DesignDecisions = () => (
     </div>
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       {designDecisionsContent.cards.map((card, index) => (
-        <Card key={index}>
+        <Card
+          key={index}
+          className="animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+          style={{ animationDelay: `${index * 150}ms` }}
+        >
           <CardHeader>
             <card.icon className="mb-2 size-8 text-primary" />
             <CardTitle>{card.title}</CardTitle>

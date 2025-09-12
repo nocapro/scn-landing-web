@@ -12,6 +12,18 @@ export const QuickStart = () => (
         {quickStartContent.subtitle}
       </p>
     </div>
-    <CodeBlock>{quickStartContent.code}</CodeBlock>
+    <div className="grid gap-8 md:grid-cols-2">
+      {quickStartContent.steps.map((step) => (
+        <div key={step.title}>
+          <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
+          <CodeBlock>{step.command}</CodeBlock>
+          {step.description && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {step.description}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
   </Section>
 );

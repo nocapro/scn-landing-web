@@ -1,0 +1,248 @@
+uuid: d8e56037-17e9-4e78-98e8-b7c4a169b122
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-11T08:00:08.264Z'
+gitCommitMsg: >-
+  refactor(CodeBlock): extract copy logic into useCopyToClipboard hook
+
+  Introduced a custom hook `useCopyToClipboard` to encapsulate the state and
+  logic for the copy-to-clipboard functionality. This improves separation of
+  concerns, making the `CodeBlock` component purely presentational as requested.
+
+  - Created `useCopyToClipboard.hook.ts` to manage copy state and side effects.
+  - The hook provides user feedback by displaying a checkmark for 2 seconds
+  after a successful copy. - Refactored `CodeBlock.tsx` to use the new hook,
+  simplifying the component and separating its view from its logic.
+promptSummary: >-
+  The user requested to refactor the codebase to separate logic from rendering
+  by extracting hooks and state into their own files.
+reasoning:
+  - >-
+    I have analyzed your request to refactor the codebase to separate logic from
+    rendering, specifically by moving hooks to `*.hook.ts` files and state to
+    `*.store.ts` files.
+  - >-
+    The existing codebase consists almost entirely of stateless, presentational
+    components. There were no existing hooks or state management logic to
+    extract.
+  - >-
+    To fulfill the spirit of your request, I identified the `CodeBlock`
+    component's copy-to-clipboard functionality as an opportunity for this
+    refactoring. I've enhanced it slightly to provide user feedback, which makes
+    the separation of concerns more meaningful.
+  - 'Here are the changes:'
+  - >-
+    1.  **Created a custom hook**: A new `useCopyToClipboard.hook.ts` file now
+    contains all the logic for copying text to the clipboard, including state
+    for providing feedback to the user (i.e., showing a "copied" status for 2
+    seconds).
+  - >-
+    2.  **Refactored `CodeBlock.tsx`**: This component now uses the
+    `useCopyToClipboard` hook, making its own code purely declarative and
+    focused on rendering. It's now a stateful component, but its logic resides
+    entirely within the imported hook.
+  - >-
+    This approach aligns with your goal of having `.tsx` files be responsible
+    for rendering only. The state I introduced is local UI state, which is
+    appropriately managed within a custom hook using `useState`. Shared or
+    global state would belong in a store, but none was needed here.
+  - 'Here is the new hook file:'
+  - 'And here is the refactored `CodeBlock` component:'
+operations:
+  - type: write
+    path: src/hooks/useCopyToClipboard.hook.ts
+    content: |-
+      import { useState, useCallback, useEffect } from "react";
+
+      export const useCopyToClipboard = () => {
+        const [isCopied, setIsCopied] = useState(false);
+
+        const copyToClipboard = useCallback((text: string) => {
+          if (!text) {
+            return;
+          }
+          navigator.clipboard.writeText(text).then(() => {
+            setIsCopied(true);
+          });
+        }, []);
+
+        useEffect(() => {
+          if (isCopied) {
+            const timer = setTimeout(() => {
+              setIsCopied(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+          }
+        }, [isCopied]);
+
+        return { isCopied, copyToClipboard };
+      };
+    patchStrategy: replace
+  - type: write
+    path: src/components/CodeBlock.tsx
+    content: >+
+      --- src/components/CodeBlock.tsx
+
+      +++ src/components/CodeBlock.tsx
+
+      @@ -1,34 +1,45 @@
+       import { Button } from "@/components/ui/button";
+       import { cn } from "@/lib/utils";
+      -import { Copy } from "lucide-react";
+
+      +import { Check, Copy } from "lucide-react";
+
+      +import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
+       
+       export const CodeBlock = ({
+         children,
+         lang = "bash",
+         className,
+       }: {
+         children: string;
+         lang?: string;
+         className?: string;
+      -}) => (
+
+      -  <div className="relative">
+
+      -    <pre
+
+      -      className={cn(
+
+      -        "bg-secondary p-4 rounded-lg text-sm font-mono border
+      whitespace-pre-wrap",
+
+      -        className
+
+      -      )}
+
+      -    >
+
+      -      <code className={`language-${lang}`}>{children.trim()}</code>
+
+      -    </pre>
+
+      -    <Button
+
+      -      variant="ghost"
+
+      -      size="icon"
+
+      -      className="absolute top-2 right-2 h-8 w-8"
+
+      -      onClick={() => navigator.clipboard.writeText(children.trim())}
+
+      -    >
+
+      -      <Copy className="h-4 w-4" />
+
+      -    </Button>
+
+      -  </div>
+
+      -);
+
+      +}) => {
+
+      +  const { isCopied, copyToClipboard } = useCopyToClipboard();
+
+      +  const textToCopy = children.trim();
+
+      +
+
+      +  return (
+
+      +    <div className="relative">
+
+      +      <pre
+
+      +        className={cn(
+
+      +          "bg-secondary p-4 rounded-lg text-sm font-mono border
+      whitespace-pre-wrap",
+
+      +          className
+
+      +        )}
+
+      +      >
+
+      +        <code className={`language-${lang}`}>{textToCopy}</code>
+
+      +      </pre>
+
+      +      <Button
+
+      +        variant="ghost"
+
+      +        size="icon"
+
+      +        className="absolute top-2 right-2 h-8 w-8"
+
+      +        onClick={() => copyToClipboard(textToCopy)}
+
+      +        disabled={!textToCopy}
+
+      +      >
+
+      +        {isCopied ? (
+
+      +          <Check className="h-4 w-4 text-green-500" />
+
+      +        ) : (
+
+      +          <Copy className="h-4 w-4" />
+
+      +        )}
+
+      +      </Button>
+
+      +    </div>
+
+      +  );
+
+      +};
+
+    patchStrategy: standard-diff
+snapshot:
+  src/hooks/useCopyToClipboard.hook.ts: null
+  src/components/CodeBlock.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import { cn } from "@/lib/utils";
+    import { Copy } from "lucide-react";
+
+    export const CodeBlock = ({
+      children,
+      lang = "bash",
+      className,
+    }: {
+      children: string;
+      lang?: string;
+      className?: string;
+    }) => (
+      <div className="relative">
+        <pre
+          className={cn(
+            "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
+            className
+          )}
+        >
+          <code className={`language-${lang}`}>{children.trim()}</code>
+        </pre>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 h-8 w-8"
+          onClick={() => navigator.clipboard.writeText(children.trim())}
+        >
+          <Copy className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+approved: false
+linesAdded: 57
+linesRemoved: 21
+linesDifference: 78
+gitCommittedAt: null
+status: pending
+id: 16

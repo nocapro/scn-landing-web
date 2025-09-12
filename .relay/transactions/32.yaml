@@ -1,0 +1,1669 @@
+uuid: d03c94a9-d890-48e0-a7d1-0773d43c7b8d
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T01:24:06.410Z'
+gitCommitMsg: >-
+  feat(ui): enhance landing page with animations and improved components
+
+  This commit introduces a series of UI enhancements to the landing page: - Adds
+  manual syntax highlighting to the hero section's code examples for better
+  readability. - Replaces the static background with a dynamic, animated "smoky"
+  gradient. - Redesigns the "Quick Start" section with individual copy buttons
+  for each CLI command. - Implements entry and hover animations for cards in the
+  "Context Cost" and "Design Decisions" sections. - Replaces the "Use Cases"
+  table with a more interactive and visually appealing accordion component.
+promptSummary: >-
+  The user requested several UI enhancements for the landing page, including
+  syntax highlighting, an animated background, more interactive components with
+  animations, and layout improvements for better user experience.
+reasoning:
+  - >-
+    Here are the requested UI enhancements. I've improved several sections with
+    animations and better layouts, added syntax highlighting, and created a more
+    dynamic background.
+  - '### 1. Hero Section: Syntax Highlighting'
+  - >-
+    I've updated the `CodeBlock` component to support JSX for manual syntax
+    highlighting. This allows for colored code in the "before" and "after"
+    examples in the hero section. The necessary color variables and Tailwind
+    configuration have also been added.
+  - '### 2. Animated Smoky Background'
+  - >-
+    The background is now an animated gradient, providing a subtle, "smoky"
+    effect that is more dynamic than the previous static circles.
+  - '### 3. CLI Quick Start with Copy Buttons'
+  - >-
+    The "CLI Quick Start" section has been redesigned into a two-column grid.
+    Each command now has its own code block with a dedicated copy button, making
+    it easier for users to grab the commands they need.
+  - '### 4. Card Animations'
+  - >-
+    The cards in "The High Cost of Context" and "Design Decisions" sections now
+    have a staggered fade-in animation on load and a subtle scale and shadow
+    effect on hover, making the page feel more interactive and alive.
+  - '### 5. Improved "Common Use-Cases" Section'
+  - >-
+    I've replaced the plain table in the "Common Use-Cases" section with a more
+    engaging and user-friendly accordion layout. This makes the content easier
+    to digest and visually separates each use case.
+  - '---'
+operations:
+  - type: write
+    path: src/components/CodeBlock.tsx
+    content: >+
+      --- src/components/CodeBlock.tsx
+
+      +++ src/components/CodeBlock.tsx
+
+      @@ -4,34 +4,36 @@
+       
+       export const CodeBlock = ({
+         children,
+      +  rawString,
+         lang = "bash",
+         className,
+       }: {
+      -  children: string;
+
+      +  children: React.ReactNode;
+
+      +  rawString?: string;
+         lang?: string;
+         className?: string;
+       }) => {
+         const { isCopied, copyToClipboard } = useCopyToClipboard();
+      -  const textToCopy = children.trim();
+
+      +  const textToCopy = (
+
+      +    rawString ?? (typeof children === "string" ? children : "")
+
+      +  ).trim();
+       
+         return (
+           <div className="relative">
+             <pre
+               className={cn(
+      -          "rounded-lg border bg-secondary p-4 font-mono text-sm
+      whitespace-pre-wrap",
+
+      +          "whitespace-pre-wrap rounded-lg border bg-secondary p-4
+      font-mono text-sm",
+                 className
+               )}
+             >
+      -        <code className={`language-${lang}`}>{textToCopy}</code>
+
+      +        <code className={`language-${lang}`}>{children}</code>
+             </pre>
+      -      <Button
+
+      -        variant="ghost"
+
+      -        size="icon"
+
+      -        className="absolute right-2 top-2 size-8"
+
+      -        onClick={() => copyToClipboard(textToCopy)}
+
+      -        disabled={!textToCopy}
+
+      -      >
+
+      -        {isCopied ? (
+
+      -          <Check className="size-4 text-green-500" />
+
+      -        ) : (
+
+      -          <Copy className="size-4" />
+
+      -        )}
+
+      -      </Button>
+
+      +      {textToCopy && (
+
+      +        <Button
+
+      +          variant="ghost"
+
+      +          size="icon"
+
+      +          className="absolute right-2 top-2 size-8"
+
+      +          onClick={() => copyToClipboard(textToCopy)}
+
+      +        >
+
+      +          {isCopied ? (
+
+      +            <Check className="size-4 text-green-500" />
+
+      +          ) : (
+
+      +            <Copy className="size-4" />
+
+      +          )}
+
+      +        </Button>
+
+      +      )}
+           </div>
+         );
+       };
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/index.css
+    content: |+
+      --- src/index.css
+      +++ src/index.css
+      @@ -20,6 +20,13 @@
+           --ring: 263.4 95.2% 66.3%;
+        
+           --radius: 0.5rem;
+      +
+      +    --syntax-keyword: 213 94% 68%; /* blue-400 */
+      +    --syntax-string: 93 54% 54%; /* green-600 */
+      +    --syntax-class: 44 98% 61%; /* yellow-400 */
+      +    --syntax-number: 161 67% 53%; /* teal-500 */
+      +    --syntax-comment: 220 9% 55%; /* slate-500 */
+         }
+        
+         .dark {
+      @@ -48,6 +55,12 @@
+           --border: 215 27.9% 16.9%;
+           --input: 215 27.9% 16.9%;
+           --ring: 263.4 95.2% 66.3%;
+      +
+      +    --syntax-keyword: 213 94% 68%; /* blue-400 */
+      +    --syntax-string: 93 34% 64%; /* green-400 */
+      +    --syntax-class: 44 98% 61%; /* yellow-400 */
+      +    --syntax-number: 161 67% 63%; /* teal-400 */
+      +    --syntax-comment: 220 14% 45%; /* slate-600 */
+         }
+       }
+        
+
+    patchStrategy: standard-diff
+  - type: write
+    path: tailwind.config.cjs
+    content: |+
+      --- tailwind.config.cjs
+      +++ tailwind.config.cjs
+      @@ -38,6 +38,13 @@
+                 DEFAULT: "hsl(var(--card))",
+                 foreground: "hsl(var(--card-foreground))",
+               },
+      +        syntax: {
+      +          keyword: "hsl(var(--syntax-keyword))",
+      +          string: "hsl(var(--syntax-string))",
+      +          class: "hsl(var(--syntax-class))",
+      +          number: "hsl(var(--syntax-number))",
+      +          comment: "hsl(var(--syntax-comment))",
+      +        },
+             },
+             borderRadius: {
+               lg: "var(--radius)",
+      @@ -75,6 +82,11 @@
+                   transform: "translateY(0)",
+                 },
+               },
+      +        "background-pan": {
+      +          "0%": { backgroundPosition: "0% 50%" },
+      +          "50%": { backgroundPosition: "100% 50%" },
+      +          "100%": { backgroundPosition: "0% 50%" },
+      +        },
+             },
+             animation: {
+               "accordion-down": "accordion-down 0.2s ease-out",
+      @@ -84,6 +96,7 @@
+               "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
+               "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+               "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+      +        "background-pan": "background-pan 15s ease-in-out infinite",
+             },
+           },
+         },
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/content/sections.content.tsx
+    content: |
+      <<<<<<< SEARCH
+      export const heroContent = {
+        title: "Understand any codebase in",
+        highlightedTitle: "1k tokens.",
+        subtitle: (
+          <>
+            SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+            <br className="hidden md:block" />
+            Paste it in, and watch your AI refactor, review, or port code without
+            ever seeing the source.
+          </>
+        ),
+        getStartedButton: "Get Started",
+        playgroundButton: "Live Playground",
+        before: {
+          title: "BEFORE: 300+ tokens",
+          code: `export class ApiClient {
+        constructor(private apiKey: string) {}
+
+        async fetchUsers(page: number): Promise<User[]> {
+          const res = await fetch(\`/api/users?page=\${page}\`, {
+            headers: { 'X-API-KEY': this.apiKey }
+          });
+          if (!res.ok) throw new Error("API Error");
+          return res.json();
+        }
+      }`,
+        },
+        after: {
+          title: "AFTER: 38 tokens",
+          code: `§1 src/api.ts
+      + ◇ ApiClient
+        - @ apiKey: #string
+        + o constructor
+        + ~ fetchUsers ...!
+          > User`,
+        },
+      };
+      =======
+      export const heroContent = {
+        title: "Understand any codebase in",
+        highlightedTitle: "1k tokens.",
+        subtitle: (
+          <>
+            SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+            <br className="hidden md:block" />
+            Paste it in, and watch your AI refactor, review, or port code without
+            ever seeing the source.
+          </>
+        ),
+        getStartedButton: "Get Started",
+        playgroundButton: "Live Playground",
+        before: {
+          title: "BEFORE: 300+ tokens",
+          rawCode: `export class ApiClient {
+        constructor(private apiKey: string) {}
+
+        async fetchUsers(page: number): Promise<User[]> {
+          const res = await fetch(\`/api/users?page=\${page}\`, {
+            headers: { 'X-API-KEY': this.apiKey }
+          });
+          if (!res.ok) throw new Error("API Error");
+          return res.json();
+        }
+      }`,
+          code: (
+            <>
+              <span className="text-syntax-keyword">export</span>{" "}
+              <span className="text-syntax-keyword">class</span>{" "}
+              <span className="text-syntax-class">ApiClient</span> {"{"}
+              {"\n"}
+              {"  "}
+              <span className="text-syntax-keyword">constructor</span>
+              (
+              <span className="text-syntax-keyword">private</span> apiKey:{" "}
+              <span className="text-syntax-class">string</span>) {"{}"}
+              {"\n\n"}
+              {"  "}
+              <span className="text-syntax-keyword">async</span>{" "}
+              <span className="text-syntax-function">fetchUsers</span>
+              (page: <span className="text-syntax-class">number</span>
+              ): <span className="text-syntax-class">Promise</span>
+              &lt;
+              <span className="text-syntax-class">User</span>[]&gt; {"{"}
+              {"\n"}
+              {"    "}
+              <span className="text-syntax-keyword">const</span> res ={" "}
+              <span className="text-syntax-keyword">await</span>{" "}
+              <span className="text-syntax-function">fetch</span>(
+              <span className="text-syntax-string">
+                {`\`/api/users?page=\${page}\``}
+              </span>
+              , {"{"}
+              {"\n"}
+              {"      "}headers: {"{"}{" "}
+              <span className="text-syntax-string">{`'X-API-KEY'`}</span>:{" "}
+              <span className="text-syntax-keyword">this</span>.apiKey {"}"}
+              {"\n"}
+              {"    "}
+              {"}"});{"\n"}
+              {"    "}
+              <span className="text-syntax-keyword">if</span> (!res.ok){" "}
+              <span className="text-syntax-keyword">throw</span>{" "}
+              <span className="text-syntax-keyword">new</span>{" "}
+              <span className="text-syntax-class">Error</span>(
+              <span className="text-syntax-string">{`"API Error"`}</span>);
+              {"\n"}
+              {"    "}
+              <span className="text-syntax-keyword">return</span> res.
+              <span className="text-syntax-function">json</span>();
+              {"\n"}
+              {"  "}
+              {"}"}
+              {"\n"}
+              {"}"}
+            </>
+          ),
+        },
+        after: {
+          title: "AFTER: 38 tokens",
+          rawCode: `§1 src/api.ts
+      + ◇ ApiClient
+        - @ apiKey: #string
+        + o constructor
+        + ~ fetchUsers ...!
+          > User`,
+          code: (
+            <>
+              <span className="text-syntax-comment">§1 src/api.ts</span>
+              {"\n"}
+              <span className="text-syntax-keyword">+</span> ◇{" "}
+              <span className="text-syntax-class">ApiClient</span>
+              {"\n"}
+              {"  "}
+              <span className="text-syntax-keyword">-</span> @ apiKey:{" "}
+              <span className="text-syntax-class">#string</span>
+              {"\n"}
+              {"  "}
+              <span className="text-syntax-keyword">+</span> o constructor
+              {"\n"}
+              {"  "}
+              <span className="text-syntax-keyword">+</span> ~{" "}
+              <span className="text-syntax-function">fetchUsers</span> ...!
+              {"\n"}
+              {"    "}
+              <span className="text-syntax-keyword">{">"}</span>{" "}
+              <span className="text-syntax-class">User</span>
+            </>
+          ),
+        },
+      };
+      >>>>>>> REPLACE
+    patchStrategy: search-replace
+  - type: write
+    path: src/components/sections/Hero.tsx
+    content: >+
+      --- src/components/sections/Hero.tsx
+
+      +++ src/components/sections/Hero.tsx
+
+      @@ -51,7 +51,11 @@
+                 <Zap className="size-5 text-destructive" />
+               </CardHeader>
+               <CardContent className="p-0">
+      -          <CodeBlock lang="typescript" className="rounded-t-none border-0
+      bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+
+      +          <CodeBlock
+
+      +            lang="typescript"
+
+      +            className="rounded-t-none border-0 bg-transparent p-4"
+
+      +            rawString={heroContent.before.rawCode}
+
+      +          >{heroContent.before.code}</CodeBlock>
+               </CardContent>
+             </Card>
+       
+      @@ -69,7 +73,11 @@
+                 <Zap className="size-5 text-primary" />
+               </CardHeader>
+               <CardContent className="p-0">
+      -          <CodeBlock lang="text" className="rounded-t-none border-0
+      bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+
+      +          <CodeBlock
+
+      +            lang="text"
+
+      +            className="rounded-t-none border-0 bg-transparent p-4"
+
+      +            rawString={heroContent.after.rawCode}
+
+      +          >{heroContent.after.code}</CodeBlock>
+               </CardContent>
+             </Card>
+           </div>
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/App.tsx
+    content: >+
+      --- src/App.tsx
+
+      +++ src/App.tsx
+
+      @@ -11,10 +11,9 @@
+       export default function App() {
+         return (
+           <div className="relative min-h-screen w-full overflow-x-hidden">
+      -      <div className="absolute inset-0 -z-10 size-full bg-background">
+
+      -        <div className="absolute right-0 top-0 size-[500px]
+      translate-x-[-20%] translate-y-[20%] rounded-full bg-primary/20 opacity-50
+      blur-[80px]"></div>
+
+      -        <div className="absolute bottom-0 left-0 size-[500px]
+      translate-x-[20%] translate-y-[-10%] rounded-full bg-secondary opacity-50
+      blur-[80px]"></div>
+
+      +      <div className="absolute inset-0 -z-10 size-full bg-background">
+
+      +        <div className="absolute inset-0 size-full animate-background-pan
+      bg-[200%_200%] bg-gradient-to-tr from-primary/10 via-secondary/10
+      to-primary/10" />
+             </div>
+       
+             <Header />
+       
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/content/sections.content.tsx
+    content: >+
+      --- src/content/sections.content.tsx
+
+      +++ src/content/sections.content.tsx
+
+      @@ -87,19 +87,29 @@
+         buttonText: "Try the Playground",
+       };
+       
+       export const quickStartContent = {
+         title: "CLI Quick Start",
+         subtitle: "Get started in under a minute.",
+      -  code: `# global install
+
+      -npm i -g scn            # or yarn/pnpm/bun
+
+      -
+
+      -# basic
+
+      -scn "src/**/*.{ts,tsx}" --output map.scn
+
+      -
+
+      -# monorepo
+
+      -scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
+
+      -
+
+      -# watch mode
+
+      -scn "src/**/*" --watch --preset=minimal`,
+
+      +  steps: [
+
+      +    {
+
+      +      title: "Global Install",
+
+      +      command: "npm i -g scn",
+
+      +      description: "(or yarn/pnpm/bun)",
+
+      +    },
+
+      +    {
+
+      +      title: "Basic Usage",
+
+      +      command: 'scn "src/**/*.{ts,tsx}" --output map.scn',
+
+      +    },
+
+      +    {
+
+      +      title: "Monorepo",
+
+      +      command:
+
+      +        'scn "apps/*/src/**/*" --exclude="**/*.stories.tsx"
+      --max-workers=8',
+
+      +    },
+
+      +    {
+
+      +      title: "Watch Mode",
+
+      +      command: 'scn "src/**/*" --watch --preset=minimal',
+
+      +    },
+
+      +  ],
+       };
+       
+       export const faqContent = {
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/sections/QuickStart.tsx
+    content: |+
+      --- src/components/sections/QuickStart.tsx
+      +++ src/components/sections/QuickStart.tsx
+      @@ -10,7 +10,21 @@
+               {quickStartContent.subtitle}
+             </p>
+           </div>
+      -    <CodeBlock>{quickStartContent.code}</CodeBlock>
+      +    <div className="grid gap-8 md:grid-cols-2">
+      +      {quickStartContent.steps.map((step) => (
+      +        <div key={step.title}>
+      +          <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
+      +          <CodeBlock>{step.command}</CodeBlock>
+      +          {step.description && (
+      +            <p className="mt-2 text-sm text-muted-foreground">
+      +              {step.description}
+      +            </p>
+      +          )}
+      +        </div>
+      +      ))}
+      +    </div>
+         </Section>
+       );
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/sections/ContextCost.tsx
+    content: >+
+      --- src/components/sections/ContextCost.tsx
+
+      +++ src/components/sections/ContextCost.tsx
+
+      @@ -14,7 +14,12 @@
+           </div>
+           <div className="grid gap-8 md:grid-cols-3">
+             {contextCostContent.cards.map((card, index) => (
+      -        <Card key={index}>
+
+      +        <Card
+
+      +          key={index}
+
+      +          className="animate-fade-in opacity-0 transition-all
+      duration-300 hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+
+      +          style={{ animationDelay: `${index * 150}ms` }}
+
+      +        >
+                 <CardHeader>
+                   <card.icon className="mb-2 size-8 text-primary" />
+                   <CardTitle>{card.title}</CardTitle>
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/sections/DesignDecisions.tsx
+    content: >+
+      --- src/components/sections/DesignDecisions.tsx
+
+      +++ src/components/sections/DesignDecisions.tsx
+
+      @@ -14,7 +14,12 @@
+           </div>
+           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+             {designDecisionsContent.cards.map((card, index) => (
+      -        <Card key={index}>
+
+      +        <Card
+
+      +          key={index}
+
+      +          className="animate-fade-in opacity-0 transition-all
+      duration-300 hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+
+      +          style={{ animationDelay: `${index * 150}ms` }}
+
+      +        >
+                 <CardHeader>
+                   <card.icon className="mb-2 size-8 text-primary" />
+                   <CardTitle>{card.title}</CardTitle>
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/ui/accordion.tsx
+    content: |-
+      "use client"
+
+      import * as React from "react"
+      import * as AccordionPrimitive from "@radix-ui/react-accordion"
+      import { ChevronDown } from "lucide-react"
+
+      import { cn } from "@/lib/utils"
+
+      const Accordion = AccordionPrimitive.Root
+
+      const AccordionItem = React.forwardRef<
+        React.ElementRef<typeof AccordionPrimitive.Item>,
+        React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
+      >(({ className, ...props }, ref) => (
+        <AccordionPrimitive.Item
+          ref={ref}
+          className={cn("border-b", className)}
+          {...props}
+        />
+      ))
+      AccordionItem.displayName = "AccordionItem"
+
+      const AccordionTrigger = React.forwardRef<
+        React.ElementRef<typeof AccordionPrimitive.Trigger>,
+        React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+      >(({ className, children, ...props }, ref) => (
+        <AccordionPrimitive.Header className="flex">
+          <AccordionPrimitive.Trigger
+            ref={ref}
+            className={cn(
+              "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+              className
+            )}
+            {...props}
+          >
+            {children}
+            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+          </AccordionPrimitive.Trigger>
+        </AccordionPrimitive.Header>
+      ))
+      AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
+
+      const AccordionContent = React.forwardRef<
+        React.ElementRef<typeof AccordionPrimitive.Content>,
+        React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+      >(({ className, children, ...props }, ref) => (
+        <AccordionPrimitive.Content
+          ref={ref}
+          className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+          {...props}
+        >
+          <div className={cn("pb-4 pt-0", className)}>{children}</div>
+        </AccordionPrimitive.Content>
+      ))
+      AccordionContent.displayName = AccordionPrimitive.Content.displayName
+
+      export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+    patchStrategy: replace
+  - type: write
+    path: src/components/sections/UseCases.tsx
+    content: >+
+      --- src/components/sections/UseCases.tsx
+
+      +++ src/components/sections/UseCases.tsx
+
+      @@ -1,16 +1,15 @@
+       import { Section } from "@/components/Section";
+      -import { InlineCode } from "@/components/InlineCode";
+
+      -import { Card, CardContent } from "@/components/ui/card";
+
+      +import { Card } from "@/components/ui/card";
+
+      +import { useCasesContent } from "@/content/sections.content";
+
+      +import { Code2 } from "lucide-react";
+       import {
+      -  Table,
+
+      -  TableBody,
+
+      -  TableCell,
+
+      -  TableHead,
+
+      -  TableHeader,
+
+      -  TableRow,
+
+      -} from "@/components/ui/table";
+
+      -import { useCasesContent } from "@/content/sections.content";
+
+      +  Accordion,
+
+      +  AccordionContent,
+
+      +  AccordionItem,
+
+      +  AccordionTrigger,
+
+      +} from "@/components/ui/accordion";
+       
+       export const UseCases = () => (
+         <Section id="section-8">
+      @@ -21,28 +20,29 @@
+             <p className="mt-2 text-lg text-muted-foreground">
+               {useCasesContent.subtitle}
+             </p>
+           </div>
+      -    <Card>
+
+      -      <CardContent className="p-0">
+
+      -        <Table>
+
+      -          <TableHeader>
+
+      -            <TableRow>
+
+      -              <TableHead className="w-1/3
+      sm:w-[200px]">Scenario</TableHead>
+
+      -              <TableHead>Example Prompt</TableHead>
+
+      -            </TableRow>
+
+      -          </TableHeader>
+
+      -          <TableBody>
+
+      -            {useCasesContent.prompts.map((useCase, index) => (
+
+      -              <TableRow key={index}>
+
+      -                <TableCell
+      className="font-medium">{useCase.scenario}</TableCell>
+
+      -                <TableCell>
+
+      -                  <InlineCode>{useCase.prompt}</InlineCode>
+
+      -                </TableCell>
+
+      -              </TableRow>
+
+      -            ))}
+
+      -          </TableBody>
+
+      -        </Table>
+
+      -      </CardContent>
+
+      -    </Card>
+
+      +    <div className="mx-auto max-w-3xl">
+
+      +      <Card>
+
+      +        <Accordion type="single" collapsible className="w-full">
+
+      +          {useCasesContent.prompts.map((useCase, index) => (
+
+      +            <AccordionItem value={`item-${index}`} key={index}>
+
+      +              <AccordionTrigger className="px-6 text-left
+      hover:no-underline">
+
+      +                <span className="text-lg
+      font-semibold">{useCase.scenario}</span>
+
+      +              </AccordionTrigger>
+
+      +              <AccordionContent className="px-6 pb-6">
+
+      +                <div className="flex items-start gap-4 rounded-md
+      bg-secondary p-4">
+
+      +                  <Code2 className="mt-1 size-5 shrink-0 text-primary" />
+
+      +                  <code className="font-mono
+      text-sm">{useCase.prompt}</code>
+
+      +                </div>
+
+      +              </AccordionContent>
+
+      +            </AccordionItem>
+
+      +          ))}
+
+      +        </Accordion>
+
+      +      </Card>
+
+      +    </div>
+         </Section>
+       );
+
+    patchStrategy: standard-diff
+  - type: write
+    path: package.json
+    content: |+
+      --- package.json
+      +++ package.json
+      @@ -10,6 +10,7 @@
+           "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+         },
+         "dependencies": {
+      +    "@radix-ui/react-accordion": "^1.2.0",
+           "@radix-ui/react-label": "^2.1.7",
+           "@radix-ui/react-select": "^2.2.5",
+           "@radix-ui/react-slot": "^1.2.3",
+
+    patchStrategy: standard-diff
+snapshot:
+  src/components/ui/accordion.tsx: null
+  src/components/CodeBlock.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import { cn } from "@/lib/utils";
+    import { Check, Copy } from "lucide-react";
+    import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
+
+    export const CodeBlock = ({
+      children,
+      lang = "bash",
+      className,
+    }: {
+      children: string;
+      lang?: string;
+      className?: string;
+    }) => {
+      const { isCopied, copyToClipboard } = useCopyToClipboard();
+      const textToCopy = children.trim();
+
+      return (
+        <div className="relative">
+          <pre
+            className={cn(
+              "rounded-lg border bg-secondary p-4 font-mono text-sm whitespace-pre-wrap",
+              className
+            )}
+          >
+            <code className={`language-${lang}`}>{textToCopy}</code>
+          </pre>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-2 size-8"
+            onClick={() => copyToClipboard(textToCopy)}
+            disabled={!textToCopy}
+          >
+            {isCopied ? (
+              <Check className="size-4 text-green-500" />
+            ) : (
+              <Copy className="size-4" />
+            )}
+          </Button>
+        </div>
+      );
+    };
+  src/index.css: |-
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+     
+    @layer base {
+      :root {
+        --background: 0 0% 100%; /* white */
+        --foreground: 224 71.4% 4.1%; /* near-black */
+     
+        --card: 0 0% 100%;
+        --card-foreground: 224 71.4% 4.1%;
+     
+        --popover: 0 0% 100%;
+        --popover-foreground: 224 71.4% 4.1%;
+     
+        --primary: 262.1 83.3% 57.8%; /* vivid violet */
+        --primary-foreground: 0 0% 98%; /* near-white */
+     
+        --secondary: 220 14.3% 95.9%;
+        --secondary-foreground: 220.9 39.3% 11%;
+     
+        --muted: 220 14.3% 95.9%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+     
+        --accent: 220 14.3% 95.9%;
+        --accent-foreground: 220.9 39.3% 11%;
+     
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+     
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        --ring: 263.4 95.2% 66.3%;
+     
+        --radius: 0.5rem;
+      }
+     
+      .dark {
+        --background: 224 71.4% 4.1%;
+        --foreground: 0 0% 98%;
+     
+        --card: 224 71.4% 4.1%;
+        --card-foreground: 0 0% 98%;
+     
+        --popover: 224 71.4% 4.1%;
+        --popover-foreground: 0 0% 98%;
+     
+        --primary: 263.4 95.2% 66.3%;
+        --primary-foreground: 224 71.4% 4.1%;
+     
+        --secondary: 215 27.9% 16.9%;
+        --secondary-foreground: 0 0% 98%;
+     
+        --muted: 215 27.9% 16.9%;
+        --muted-foreground: 215 20.2% 65.1%;
+     
+        --accent: 215 27.9% 16.9%;
+        --accent-foreground: 0 0% 98%;
+     
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+     
+        --border: 215 27.9% 16.9%;
+        --input: 215 27.9% 16.9%;
+        --ring: 263.4 95.2% 66.3%;
+      }
+    }
+     
+    @layer base {
+      html {
+        @apply scroll-smooth;
+      }
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background text-foreground;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+  tailwind.config.cjs: |-
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      darkMode: ["class"],
+      content: [
+        './index.html',
+        './src/**/*.{js,ts,jsx,tsx}',
+      ],
+      prefix: "",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          fontFamily: {
+            sans: ["-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "Helvetica", "Arial", "sans-serif", "'Apple Color Emoji'", "'Segoe UI Emoji'", "'Segoe UI Symbol'"],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+          },
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: {
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
+            },
+            secondary: {
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
+            },
+            destructive: {
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
+            },
+            muted: {
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
+            },
+            accent: {
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
+            },
+            popover: {
+              DEFAULT: "hsl(var(--popover))",
+              foreground: "hsl(var(--popover-foreground))",
+            },
+            card: {
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
+            },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+          keyframes: {
+            "accordion-down": {
+              from: { height: "0" },
+              to: { height: "var(--radix-accordion-content-height)" },
+            },
+            "accordion-up": {
+              from: { height: "var(--radix-accordion-content-height)" },
+              to: { height: "0" },
+            },
+            "fade-in": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(10px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+            "glow": {
+              "0%, 100%": { "box-shadow": "0 0 10px -5px hsl(var(--primary))" },
+              "50%": { "box-shadow": "0 0 15px 0px hsl(var(--primary))" }
+            },
+            "slide-in-from-top": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(-20px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+            "slide-in-from-bottom": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(20px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+          },
+          animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            "fade-in": "fade-in 0.5s ease-out forwards",
+            "glow": "glow 4s ease-in-out infinite",
+            "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
+            "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+            "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+          },
+        },
+      },
+      plugins: [require("tailwindcss-animate")],
+    }
+  src/content/sections.content.tsx: |
+    import {
+      Box,
+      BrainCircuit,
+      GitMerge,
+      Hash,
+      Network,
+      Puzzle,
+      Scissors,
+      SlidersHorizontal,
+      Smile,
+      Workflow,
+      Zap,
+    } from "lucide-react";
+    import { InlineCode } from "@/components/InlineCode";
+
+    export const contextCostContent = {
+      title: "The High Cost of Context",
+      subtitle:
+        "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don&apos;t scale.",
+      cards: [
+        {
+          icon: Zap,
+          title: "Token Limits",
+          content: (
+            <>
+              Context windows are tiny. Pasting <InlineCode>/src</InlineCode>{" "}
+              consumes your entire budget before you&apos;ve even asked a question.
+            </>
+          ),
+        },
+        {
+          icon: BrainCircuit,
+          title: "Signal vs. Noise",
+          content: (
+            <>
+              Models don&apos;t need semicolons, they need the dependency graph—what
+              talks to what, and who calls whom.
+            </>
+          ),
+        },
+        {
+          icon: Workflow,
+          title: "Broken Workflow",
+          content: (
+            <>
+              You don&apos;t need another IDE. You need a 1-second command that
+              turns{" "}
+              <em>“here’s my repo”</em> into <em>“here’s the summary”</em>.
+            </>
+          ),
+        },
+      ],
+    };
+
+    export const solutionContent = {
+      title: "The Solution: Symbolic Context Notation",
+      subtitle:
+        "A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.",
+      cliCommand: `npx scn "src/**/*.{ts,tsx}" --exclude="**/*.test.ts" --preset=compact`,
+      exampleOutput: `§1 src/main.tsx
+      + ◇ App (1)
+      + ~ fetchUsers (2)
+        > 2, 3
+
+    §2 src/services/api.ts
+      ~ getUser (1) ...!
+        < 1
+        > 3
+
+    §3 src/types.ts
+      + {} User (1)
+        + @ id: #string
+        + @ name: #string`,
+      legend: [
+        { symbol: "§", meaning: "File header (id + path)" },
+        { symbol: "+ / -", meaning: "Exported / Private symbol" },
+        { symbol: "◇ ~ {}", meaning: "Class, Function, Interface, JSX element" },
+        { symbol: "> / <", meaning: "Outgoing / Incoming call or import" },
+        { symbol: "... ! o", meaning: "Async, Throws, Pure function" },
+      ],
+    };
+
+    export const tokenEconomicsContent = {
+      title: "Token Economics",
+      subtitle: "Fit 10x more context into every prompt.",
+      table: [
+        { representation: "Raw Source", tokens: "18,700", window: "467% ❌" },
+        { representation: "Minified", tokens: "12,100", window: "302% ❌" },
+        { representation: "AST JSON", tokens: "9,400", window: "235% ❌" },
+        {
+          representation: "SCN Compact",
+          tokens: "380",
+          window: "9% ✅",
+          highlight: true,
+        },
+      ],
+    };
+
+    export const playgroundContent = {
+      title: "Live Demo Playground",
+      subtitle:
+        "Drag-and-drop a folder, move the slider, and watch the map re-shape in real time.",
+      buttonText: "Try the Playground",
+    };
+
+    export const quickStartContent = {
+      title: "CLI Quick Start",
+      subtitle: "Get started in under a minute.",
+      code: `# global install
+    npm i -g scn            # or yarn/pnpm/bun
+
+    # basic
+    scn "src/**/*.{ts,tsx}" --output map.scn
+
+    # monorepo
+    scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
+
+    # watch mode
+    scn "src/**/*" --watch --preset=minimal`,
+    };
+
+    export const faqContent = {
+      title: "Frequently Asked Questions",
+      questions: [
+        {
+          question: "Does GPT really understand the icons?",
+          answer:
+            "Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.).",
+        },
+        {
+          question: (
+            <>
+              Why not just <InlineCode>ctags</InlineCode> +{" "}
+              <InlineCode>grep</InlineCode>?
+            </>
+          ),
+          answer:
+            "ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.",
+        },
+        {
+          question: "What happens when a language adds new syntax?",
+          answer:
+            "Only if the underlying tree-sitter grammar breaks, which is usually fixed upstream within days. Our queries are tiny and easy to patch.",
+        },
+        {
+          question: "Is my proprietary code safe?",
+          answer:
+            "Everything runs locally on your machine. The WASM is loaded from your domain; there is no telemetry and no cloud dependency.",
+        },
+      ],
+    };
+
+    export const designDecisionsContent = {
+      title: "Design Decisions",
+      subtitle:
+        "Built on a foundation of modern, performant, and portable technologies.",
+      cards: [
+        {
+          icon: GitMerge,
+          title: "tree-sitter",
+          content: "Incremental, error-tolerant, multi-language parsing.",
+        },
+        {
+          icon: Box,
+          title: "WASM",
+          content: "Same binary runs in browser, edge, or server.",
+        },
+        {
+          icon: Puzzle,
+          title: "No Bundler Magic",
+          content: (
+            <>
+              ES modules only, <InlineCode>?module</InlineCode> CDN link works.
+            </>
+          ),
+        },
+        {
+          icon: Scissors,
+          title: "No AST Dump",
+          content: (
+            <>
+              We throw away <em>statements</em> and keep <em>symbols + edges</em>.
+            </>
+          ),
+        },
+        {
+          icon: Network,
+          title: "Topological Sort",
+          content: "GPT sees bottom-up dependencies, which reduces hallucination.",
+        },
+        {
+          icon: Smile,
+          title: "Stable Icon Set",
+          content: "Single Unicode char, token-efficient, and familiar to models.",
+        },
+        {
+          icon: Hash,
+          title: "Hierarchical IDs",
+          content:
+            'Lets models reason about "file 3 symbol 2" without name clashes.',
+        },
+        {
+          icon: SlidersHorizontal,
+          title: "Preset System",
+          content: "Hard-coded filters so you don’t need a complex configuration.",
+        },
+      ],
+    };
+
+    export const useCasesContent = {
+      title: "Common Use-Cases",
+      subtitle:
+        "From refactoring to on-boarding, SCN accelerates your workflow.",
+      prompts: [
+        {
+          scenario: "Refactor Epic",
+          prompt: "SCN + “move auth logic to new package”",
+        },
+        { scenario: "Code Review", prompt: "SCN + “any circular deps?”" },
+        {
+          scenario: "Add Feature",
+          prompt: "SCN + “add Stripe webhook handler following same pattern”",
+        },
+        {
+          scenario: "Migration",
+          prompt: "SCN + “convert from Express to Fastify”",
+        },
+        { scenario: "On-boarding", prompt: "SCN + “explain data flow”" },
+      ],
+    };
+
+    export const contributeContent = {
+      title: "Contribute to SCN",
+      subtitle:
+        "Help us map the world's code. Add a language, improve heuristics, or beat our performance benchmarks. All contributions are welcome.",
+      buttonText: "View on GitHub",
+    };
+
+    export const heroContent = {
+      title: "Understand any codebase in",
+      highlightedTitle: "1k tokens.",
+      subtitle: (
+        <>
+          SCN creates a dense, token-efficient cheat-sheet for your LLM.{" "}
+          <br className="hidden md:block" />
+          Paste it in, and watch your AI refactor, review, or port code without
+          ever seeing the source.
+        </>
+      ),
+      getStartedButton: "Get Started",
+      playgroundButton: "Live Playground",
+      before: {
+        title: "BEFORE: 300+ tokens",
+        code: `export class ApiClient {
+      constructor(private apiKey: string) {}
+
+      async fetchUsers(page: number): Promise<User[]> {
+        const res = await fetch(\`/api/users?page=\${page}\`, {
+          headers: { 'X-API-KEY': this.apiKey }
+        });
+        if (!res.ok) throw new Error("API Error");
+        return res.json();
+      }
+    }`,
+      },
+      after: {
+        title: "AFTER: 38 tokens",
+        code: `§1 src/api.ts
+    + ◇ ApiClient
+      - @ apiKey: #string
+      + o constructor
+      + ~ fetchUsers ...!
+        > User`,
+      },
+    };
+  src/components/sections/Hero.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import {
+      Card,
+      CardContent,
+      CardHeader,
+      CardTitle,
+    } from "@/components/ui/card";
+    import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+    import { CodeBlock } from "@/components/CodeBlock";
+    import { heroContent } from "@/content/sections.content";
+    import { PLAYGROUND_URL } from "@/lib/constants";
+
+    export const Hero = () => (
+      <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
+        <div className="space-y-6 text-center lg:text-left">
+          <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
+            <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+              {heroContent.title}
+            </span>{" "}
+            <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
+              <span className="relative top-[-0.05em] text-2xl md:text-4xl">
+                &lt;
+              </span>
+              {heroContent.highlightedTitle}
+            </span>
+          </h1>
+          <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
+            {heroContent.subtitle}
+          </p>
+          <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+            <a href="#section-5">
+              <Button size="lg">
+                {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
+              </Button>
+            </a>
+            <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="lg">
+                {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
+              </Button>
+            </a>
+          </div>
+        </div>
+        <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
+          <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.before.title}
+              </CardTitle>
+              <Zap className="size-5 text-destructive" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock lang="typescript" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+            </CardContent>
+          </Card>
+
+          <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+            <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <ArrowDown className="size-5" />
+            </div>
+          </div>
+
+          <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.after.title}
+              </CardTitle>
+              <Zap className="size-5 text-primary" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock lang="text" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    );
+  src/App.tsx: |-
+    import { Contribute } from "./components/sections/Contribute";
+    import { ContextCost } from "./components/sections/ContextCost";
+    import { DesignDecisions } from "./components/sections/DesignDecisions";
+    import { Faq } from "./components/sections/Faq";
+    import { Footer } from "./components/Footer";
+    import { Header } from "./components/Header";
+    import { Hero } from "./components/sections/Hero";
+    import { Playground } from "./components/sections/Playground";
+    import { QuickStart } from "./components/sections/QuickStart";
+    import { Solution } from "./components/sections/Solution";
+    import { TokenEconomics } from "./components/sections/TokenEconomics";
+    import { UseCases } from "./components/sections/UseCases";
+
+    export default function App() {
+      return (
+        <div className="relative min-h-screen w-full overflow-x-hidden">
+          <div className="absolute inset-0 -z-10 size-full bg-background">
+            <div className="absolute right-0 top-0 size-[500px] translate-x-[-20%] translate-y-[20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
+            <div className="absolute bottom-0 left-0 size-[500px] translate-x-[20%] translate-y-[-10%] rounded-full bg-secondary opacity-50 blur-[80px]"></div>
+          </div>
+
+          <Header />
+
+          <main className="container mx-auto max-w-5xl px-4">
+            <Hero />
+            <ContextCost />
+            <Solution />
+            <TokenEconomics />
+            <Playground />
+            <QuickStart />
+            <Faq />
+            <DesignDecisions />
+            <UseCases />
+            <Contribute />
+          </main>
+
+          <Footer />
+        </div>
+      );
+    }
+  src/components/sections/QuickStart.tsx: |-
+    import { Section } from "@/components/Section";
+    import { CodeBlock } from "@/components/CodeBlock";
+    import { quickStartContent } from "@/content/sections.content";
+
+    export const QuickStart = () => (
+      <Section id="section-5">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            {quickStartContent.title}
+          </h2>
+          <p className="mt-2 text-lg text-muted-foreground">
+            {quickStartContent.subtitle}
+          </p>
+        </div>
+        <CodeBlock>{quickStartContent.code}</CodeBlock>
+      </Section>
+    );
+  src/components/sections/ContextCost.tsx: |-
+    import {
+      Card,
+      CardContent,
+      CardHeader,
+      CardTitle,
+    } from "@/components/ui/card";
+    import { Section } from "@/components/Section";
+    import { contextCostContent } from "@/content/sections.content";
+
+    export const ContextCost = () => (
+      <Section id="section-1">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            {contextCostContent.title}
+          </h2>
+          <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
+            {contextCostContent.subtitle}
+          </p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-3">
+          {contextCostContent.cards.map((card, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <card.icon className="mb-2 size-8 text-primary" />
+                <CardTitle>{card.title}</CardTitle>
+              </CardHeader>
+              <CardContent>{card.content}</CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+    );
+  src/components/sections/DesignDecisions.tsx: |-
+    import { Section } from "@/components/Section";
+    import {
+      Card,
+      CardContent,
+      CardHeader,
+      CardTitle,
+    } from "@/components/ui/card";
+    import { designDecisionsContent } from "@/content/sections.content";
+
+    export const DesignDecisions = () => (
+      <Section id="section-7">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            {designDecisionsContent.title}
+          </h2>
+          <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
+            {designDecisionsContent.subtitle}
+          </p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {designDecisionsContent.cards.map((card, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <card.icon className="mb-2 size-8 text-primary" />
+                <CardTitle>{card.title}</CardTitle>
+              </CardHeader>
+              <CardContent>{card.content}</CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+    );
+  src/components/sections/UseCases.tsx: |-
+    import { Section } from "@/components/Section";
+    import { InlineCode } from "@/components/InlineCode";
+    import { Card, CardContent } from "@/components/ui/card";
+    import {
+      Table,
+      TableBody,
+      TableCell,
+      TableHead,
+      TableHeader,
+      TableRow,
+    } from "@/components/ui/table";
+    import { useCasesContent } from "@/content/sections.content";
+
+    export const UseCases = () => (
+      <Section id="section-8">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight">
+            {useCasesContent.title}
+          </h2>
+          <p className="mt-2 text-lg text-muted-foreground">
+            {useCasesContent.subtitle}
+          </p>
+        </div>
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-1/3 sm:w-[200px]">Scenario</TableHead>
+                  <TableHead>Example Prompt</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {useCasesContent.prompts.map((useCase, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{useCase.scenario}</TableCell>
+                    <TableCell>
+                      <InlineCode>{useCase.prompt}</InlineCode>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </Section>
+    );
+  package.json: |
+    {
+      "name": "scn-landing-web",
+      "version": "0.1.0",
+      "private": true,
+      "type": "module",
+      "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+      },
+      "dependencies": {
+        "@radix-ui/react-label": "^2.1.7",
+        "@radix-ui/react-select": "^2.2.5",
+        "@radix-ui/react-slot": "^1.2.3",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.525.0",
+        "react": "^19",
+        "react-dom": "^19"
+      },
+      "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
+        "@typescript-eslint/parser": "^7.18.0",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "@types/bun": "latest",
+        "@vitejs/plugin-react": "^4.3.1",
+        "autoprefixer": "^10.4.19",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-jsx-a11y": "^6.9.0",
+        "eslint-plugin-react": "^7.35.0",
+        "eslint-plugin-react-hooks": "^4.6.2",
+        "eslint-plugin-react-refresh": "^0.4.9",
+        "eslint-plugin-tailwindcss": "^3.17.4",
+        "postcss": "^8.4.39",
+        "tailwindcss": "^3.4.4",
+        "tailwindcss-animate": "^1.0.7",
+        "vite": "^5.4.1"
+      }
+    }
+approved: false
+linesAdded: 360
+linesRemoved: 82
+linesDifference: 442
+gitCommittedAt: null
+status: pending
+id: 32

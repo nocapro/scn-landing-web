@@ -80,40 +80,6 @@ Sitemap: https://www.scn-ts.dev/sitemap.xml
 </urlset>
 ```
 
-## File: src/components/ui/button.constants.ts
-```typescript
-import { cva } from "class-variance-authority"
-
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "size-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-```
-
 ## File: src/components/ui/button.types.ts
 ```typescript
 import * as React from "react"
@@ -125,91 +91,6 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
-```
-
-## File: src/components/ui/card.tsx
-```typescript
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
-
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
-
-const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, children, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </h3>
-));
-CardTitle.displayName = "CardTitle"
-
-const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 ```
 
 ## File: src/components/ui/table.tsx
@@ -342,35 +223,6 @@ export const InlineCode = ({ children }: { children: string }) => (
 );
 ```
 
-## File: src/hooks/useCopyToClipboard.hook.ts
-```typescript
-import { useState, useCallback, useEffect } from "react";
-
-export const useCopyToClipboard = () => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const copyToClipboard = useCallback((text: string) => {
-    if (!text) {
-      return;
-    }
-    void navigator.clipboard.writeText(text).then(() => {
-      setIsCopied(true);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (isCopied) {
-      const timer = setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isCopied]);
-
-  return { isCopied, copyToClipboard };
-};
-```
-
 ## File: src/lib/utils.ts
 ```typescript
 import { type ClassValue, clsx } from "clsx";
@@ -451,46 +303,6 @@ module.exports = {
 }
 ```
 
-## File: tsconfig.json
-```json
-{
-  "compilerOptions": {
-    // Environment setup & latest features
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
-
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  },
-
-  "exclude": ["dist", "node_modules"]
-}
-```
-
 ## File: vite.config.ts
 ```typescript
 import path from "path"
@@ -527,6 +339,281 @@ export default defineConfig({
 }
 ```
 
+## File: src/components/ui/button.constants.ts
+```typescript
+import { cva } from "class-variance-authority"
+
+export const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+```
+
+## File: src/components/ui/card.tsx
+```typescript
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, children, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </h3>
+));
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+```
+
+## File: src/components/Section.tsx
+```typescript
+import { cn } from "@/lib/utils";
+
+export const Section = ({
+  id,
+  className,
+  children,
+}: {
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <section
+    id={id}
+    className={cn("border-t py-20 sm:py-28", className)}
+  >
+    {children}
+  </section>
+);
+```
+
+## File: src/hooks/useCopyToClipboard.hook.ts
+```typescript
+import { useState, useCallback, useEffect } from "react";
+
+export const useCopyToClipboard = () => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyToClipboard = useCallback((text: string) => {
+    if (!text) {
+      return;
+    }
+    void navigator.clipboard.writeText(text).then(() => {
+      setIsCopied(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isCopied) {
+      const timer = setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isCopied]);
+
+  return { isCopied, copyToClipboard };
+};
+```
+
+## File: src/lib/constants.ts
+```typescript
+export const GITHUB_URL = "https://github.com/nocapro/scn";
+export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
+export const NOCAPRO_URL = "https://www.noca.pro";
+export const DISCORD_URL = "https://discord.gg/your-invite";
+```
+
+## File: tsconfig.json
+```json
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noPropertyAccessFromIndexSignature": false
+  },
+
+  "exclude": ["dist", "node_modules"]
+}
+```
+
+## File: src/components/sections/Solution.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { CodeBlock } from "@/components/CodeBlock";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { InlineCode } from "@/components/InlineCode";
+import { solutionContent } from "@/content/sections.content";
+
+export const Solution = () => (
+  <Section id="section-2">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {solutionContent.title}
+      </h2>
+      <p className="mx-auto mt-2 max-w-3xl text-lg text-muted-foreground">
+        {solutionContent.subtitle}
+      </p>
+    </div>
+    <CodeBlock>{`$ ${solutionContent.cliCommand}`}</CodeBlock>
+    <Card className="mt-8">
+      <CardContent className="p-6">
+        <CodeBlock lang="text">{solutionContent.exampleOutput}</CodeBlock>
+      </CardContent>
+    </Card>
+    <div className="mt-8">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">Symbol</TableHead>
+            <TableHead>Meaning</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {solutionContent.legend.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <InlineCode>{item.symbol}</InlineCode>
+              </TableCell>
+              <TableCell>{item.meaning}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </Section>
+);
+```
+
 ## File: src/components/ui/button.tsx
 ```typescript
 import * as React from "react"
@@ -552,34 +639,114 @@ Button.displayName = "Button"
 export { Button }
 ```
 
-## File: src/components/Section.tsx
+## File: src/components/Footer.tsx
 ```typescript
-import { cn } from "@/lib/utils";
+import { NOCAPRO_URL } from "@/lib/constants";
 
-export const Section = ({
-  id,
-  className,
-  children,
-}: {
-  id: string;
-  className?: string;
-  children: React.ReactNode;
-}) => (
-  <section
-    id={id}
-    className={cn("border-t py-20 sm:py-28", className)}
-  >
-    {children}
-  </section>
+export const Footer = () => (
+  <footer className="border-t">
+    <div className="container mx-auto max-w-5xl px-4 py-8 text-center text-muted-foreground">
+      <p>MIT © 2025 SCN contributors</p>
+      <p className="mx-auto mt-4 max-w-xl text-sm">
+        SCN is the shared engine behind{" "}
+        <a
+          href={NOCAPRO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-foreground hover:text-primary"
+        >
+          noca.pro
+        </a>{" "}
+        – a zero-friction, Visual Context Engineering platform with an AI-native patch engine.
+      </p>
+    </div>
+  </footer>
 );
 ```
 
-## File: src/lib/constants.ts
-```typescript
-export const GITHUB_URL = "https://github.com/nocapro/scn";
-export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
-export const NOCAPRO_URL = "https://www.noca.pro";
-export const DISCORD_URL = "https://discord.gg/your-invite";
+## File: src/index.css
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* white */
+    --foreground: 224 71.4% 4.1%; /* near-black */
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+ 
+    --primary: 262.1 83.3% 57.8%; /* vivid violet */
+    --primary-foreground: 0 0% 98%; /* near-white */
+ 
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+ 
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 263.4 95.2% 66.3%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 263.4 95.2% 66.3%;
+    --primary-foreground: 224 71.4% 4.1%;
+ 
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 95.2% 66.3%;
+  }
+}
+ 
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 ```
 
 ## File: src/components/sections/ContextCost.tsx
@@ -717,11 +884,11 @@ import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Playground = () => (
   <Section id="section-4">
-    <Card className="p-8 text-center bg-secondary/50 md:p-12">
+    <Card className="bg-secondary/50 p-8 text-center md:p-12">
       <h2 className="text-3xl font-bold tracking-tight">
         {playgroundContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8">
+      <p className="mb-8 mt-2 text-lg text-muted-foreground">
         {playgroundContent.subtitle}
       </p>
       <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
@@ -751,62 +918,6 @@ export const QuickStart = () => (
       </p>
     </div>
     <CodeBlock>{quickStartContent.code}</CodeBlock>
-  </Section>
-);
-```
-
-## File: src/components/sections/Solution.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { CodeBlock } from "@/components/CodeBlock";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { InlineCode } from "@/components/InlineCode";
-import { solutionContent } from "@/content/sections.content";
-
-export const Solution = () => (
-  <Section id="section-2">
-    <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold tracking-tight">
-        {solutionContent.title}
-      </h2>
-      <p className="mx-auto mt-2 max-w-3xl text-lg text-muted-foreground">
-        {solutionContent.subtitle}
-      </p>
-    </div>
-    <CodeBlock>{`$ ${solutionContent.cliCommand}`}</CodeBlock>
-    <Card className="mt-8">
-      <CardContent className="p-6">
-        <CodeBlock lang="text">{solutionContent.exampleOutput}</CodeBlock>
-      </CardContent>
-    </Card>
-    <div className="mt-8">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[150px]">Symbol</TableHead>
-            <TableHead>Meaning</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {solutionContent.legend.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <InlineCode>{item.symbol}</InlineCode>
-              </TableCell>
-              <TableCell>{item.meaning}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
   </Section>
 );
 ```
@@ -963,31 +1074,6 @@ export const CodeBlock = ({
 };
 ```
 
-## File: src/components/Footer.tsx
-```typescript
-import { NOCAPRO_URL } from "@/lib/constants";
-
-export const Footer = () => (
-  <footer className="border-t">
-    <div className="container mx-auto max-w-5xl px-4 py-8 text-center text-muted-foreground">
-      <p>MIT © 2025 SCN contributors</p>
-      <p className="mx-auto mt-4 max-w-xl text-sm">
-        SCN is the shared engine behind{" "}
-        <a
-          href={NOCAPRO_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-foreground hover:text-primary"
-        >
-          noca.pro
-        </a>{" "}
-        – a zero-friction, Visual Context Engineering platform with an AI-native patch engine.
-      </p>
-    </div>
-  </footer>
-);
-```
-
 ## File: src/components/Header.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -1043,7 +1129,7 @@ import { InlineCode } from "@/components/InlineCode";
 export const contextCostContent = {
   title: "The High Cost of Context",
   subtitle:
-    "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don't scale.",
+    "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don&apos;t scale.",
   cards: [
     {
       icon: Zap,
@@ -1051,7 +1137,7 @@ export const contextCostContent = {
       content: (
         <>
           Context windows are tiny. Pasting <InlineCode>/src</InlineCode>{" "}
-          consumes your entire budget before you've even asked a question.
+          consumes your entire budget before you&apos;ve even asked a question.
         </>
       ),
     },
@@ -1302,91 +1388,6 @@ export const heroContent = {
 };
 ```
 
-## File: src/index.css
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
- 
-@layer base {
-  :root {
-    --background: 0 0% 100%; /* white */
-    --foreground: 224 71.4% 4.1%; /* near-black */
- 
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
- 
-    --primary: 262.1 83.3% 57.8%; /* vivid violet */
-    --primary-foreground: 0 0% 98%; /* near-white */
- 
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
- 
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 263.4 95.2% 66.3%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 0 0% 98%;
- 
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 0 0% 98%;
- 
-    --primary: 263.4 95.2% 66.3%;
-    --primary-foreground: 224 71.4% 4.1%;
- 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263.4 95.2% 66.3%;
-  }
-}
- 
-@layer base {
-  html {
-    @apply scroll-smooth;
-  }
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-}
-```
-
 ## File: src/components/sections/Hero.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -1402,14 +1403,14 @@ import { heroContent } from "@/content/sections.content";
 import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Hero = () => (
-  <section className="grid items-center gap-12 pt-12 pb-24 lg:grid-cols-2 sm:pt-16 sm:pb-32">
+  <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
     <div className="space-y-6 text-center lg:text-left">
-      <h1 className="text-4xl font-extrabold tracking-tighter opacity-0 animate-fade-in md:text-6xl">
-        <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+      <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
+        <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
           {heroContent.title}
         </span>{" "}
         <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
-          <span className="relative text-2xl top-[-0.05em] md:text-4xl">
+          <span className="relative top-[-0.05em] text-2xl md:text-4xl">
             &lt;
           </span>
           {heroContent.highlightedTitle}
@@ -1432,7 +1433,7 @@ export const Hero = () => (
       </div>
     </div>
     <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
-      <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
+      <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
         <CardHeader className="flex-row items-center justify-between p-4">
           <CardTitle className="text-base font-semibold text-muted-foreground">
             {heroContent.before.title}
@@ -1715,7 +1716,7 @@ export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
       <div className="absolute inset-0 -z-10 size-full bg-background">
-        <div className="absolute right-0 top-0 size-[500px] translate-y-[20%] translate-x-[-20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
+        <div className="absolute right-0 top-0 size-[500px] translate-x-[-20%] translate-y-[20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
         <div className="absolute bottom-0 left-0 size-[500px] translate-x-[20%] translate-y-[-10%] rounded-full bg-secondary opacity-50 blur-[80px]"></div>
       </div>
 

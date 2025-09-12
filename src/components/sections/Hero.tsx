@@ -49,7 +49,11 @@ export const Hero = () => (
           <Zap className="size-5 text-destructive" />
         </CardHeader>
         <CardContent className="p-0">
-          <CodeBlock lang="typescript" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+          <CodeBlock
+            lang="typescript"
+            className="rounded-t-none border-0 bg-transparent p-4"
+            rawString={heroContent.before.rawCode}
+          >{heroContent.before.code}</CodeBlock>
         </CardContent>
       </Card>
 
@@ -67,7 +71,11 @@ export const Hero = () => (
           <Zap className="size-5 text-primary" />
         </CardHeader>
         <CardContent className="p-0">
-          <CodeBlock lang="text" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+          <CodeBlock
+            lang="text"
+            className="rounded-t-none border-0 bg-transparent p-4"
+            rawString={heroContent.after.rawCode}
+          >{heroContent.after.code}</CodeBlock>
         </CardContent>
       </Card>
     </div>

@@ -53,6 +53,13 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        syntax: {
+          keyword: "hsl(var(--syntax-keyword))",
+          string: "hsl(var(--syntax-string))",
+          class: "hsl(var(--syntax-class))",
+          number: "hsl(var(--syntax-number))",
+          comment: "hsl(var(--syntax-comment))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -102,6 +109,11 @@ module.exports = {
             transform: "translateY(0)",
           },
         },
+        "background-pan": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -111,6 +123,7 @@ module.exports = {
         "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
         "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+        "background-pan": "background-pan 15s ease-in-out infinite",
       },
     },
   },

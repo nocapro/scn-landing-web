@@ -5,39 +5,44 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
 
 export const CodeBlock = ({
   children,
+  rawString,
   lang = "bash",
   className,
 }: {
-  children: string;
+  children: React.ReactNode;
+  rawString?: string;
   lang?: string;
   className?: string;
 }) => {
   const { isCopied, copyToClipboard } = useCopyToClipboard();
-  const textToCopy = children.trim();
+  const textToCopy = (
+    rawString ?? (typeof children === "string" ? children : "")
+  ).trim();
 
   return (
     <div className="relative">
       <pre
         className={cn(
-          "rounded-lg border bg-secondary p-4 font-mono text-sm whitespace-pre-wrap",
+          "whitespace-pre-wrap rounded-lg border bg-secondary p-4 font-mono text-sm",
           className
         )}
       >
-        <code className={`language-${lang}`}>{textToCopy}</code>
+        <code className={`language-${lang}`}>{children}</code>
       </pre>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-2 top-2 size-8"
-        onClick={() => copyToClipboard(textToCopy)}
-        disabled={!textToCopy}
-      >
-        {isCopied ? (
-          <Check className="size-4 text-green-500" />
-        ) : (
-          <Copy className="size-4" />
-        )}
-      </Button>
+      {textToCopy && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-2 size-8"
+          onClick={() => copyToClipboard(textToCopy)}
+        >
+          {isCopied ? (
+            <Check className="size-4 text-green-500" />
+          ) : (
+            <Copy className="size-4" />
+          )}
+        </Button>
+      )}
     </div>
   );
 };

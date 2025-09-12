@@ -1,0 +1,197 @@
+uuid: 4a25032b-653a-4462-811c-191a8df9e821
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-11T08:20:13.079Z'
+gitCommitMsg: >-
+  feat(seo): Implement comprehensive SEO enhancements
+
+  Applied key SEO strategies based on best practices for 2025. This includes: -
+  Overhauled `index.html` with optimized title, meta description, canonical URL,
+  Open Graph, and Twitter Card tags. - Added JSON-LD schema markup for rich
+  search results. - Created `robots.txt` to guide search engine crawlers. -
+  Added `sitemap.xml` for improved indexability. - Included a `site.webmanifest`
+  file for PWA capabilities and better mobile integration.
+promptSummary: >-
+  Implement SEO best practices from the provided article into the existing
+  project.
+reasoning:
+  - >-
+    Based on the provided article about SEO best practices, I will implement
+    several key improvements to the project. Although the project is a
+    Vite-based React app and not Next.js, the core principles of SEO still
+    apply.
+  - 'My plan is as follows:'
+  - >-
+    1.  **Enhance Metadata in `index.html`**: I will replace the existing
+    `index.html` with an updated version containing a more descriptive title, a
+    meta description, a canonical URL to prevent duplicate content issues, and
+    additional favicon links for better cross-device compatibility.
+  - >-
+    2.  **Implement Social Sharing Tags**: To improve how links are displayed
+    when shared on social media, I will add Open Graph (for Facebook, LinkedIn,
+    etc.) and Twitter Card meta tags to `index.html`.
+  - >-
+    3.  **Add Schema Markup**: I'll embed a JSON-LD script in `index.html` to
+    provide structured data about the application to search engines, which can
+    help in generating rich search results.
+  - >-
+    4.  **Create `robots.txt`**: I will add a `robots.txt` file to the `public`
+    directory to guide search engine crawlers and point them to the sitemap.
+  - >-
+    5.  **Create `sitemap.xml`**: A `sitemap.xml` will be created in the
+    `public` directory to help search engines discover and index the site's
+    content more efficiently.
+  - >-
+    6.  **Create `site.webmanifest`**: I'll add a web app manifest file to
+    improve the user experience on mobile devices, allowing for "Add to Home
+    Screen" functionality.
+  - >-
+    These changes will address the most critical and actionable SEO
+    recommendations from the article.
+  - '### 1. Update `index.html` with enhanced metadata and SEO tags'
+  - >-
+    I'll replace the content of `index.html` to include a rich set of meta tags
+    for SEO, social sharing, and structured data.
+  - '### 2. Create `robots.txt`'
+  - >-
+    This new file will instruct search engine crawlers on how to index the site
+    and provides the sitemap location.
+  - '### 3. Create `sitemap.xml`'
+  - >-
+    A sitemap is crucial for search engines to understand the structure of the
+    website. Since this is a single-page application, the sitemap will contain
+    one entry for the root URL.
+  - '### 4. Create `site.webmanifest`'
+  - >-
+    This manifest file provides information about the application in a JSON text
+    file, necessary for PWAs and the "Add to Homescreen" feature on mobile
+    devices.
+operations:
+  - type: write
+    path: index.html
+    content: |-
+      <!doctype html>
+      <html lang="en" class="dark">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+          <!-- Primary Meta Tags -->
+          <title>SCN-TS | Symbolic Context Notation for TypeScript</title>
+          <meta name="description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+          <link rel="canonical" href="https://www.scn-ts.dev/" />
+
+          <!-- Favicons -->
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <link rel="apple-touch-icon" href="/favicon.svg" />
+          <link rel="manifest" href="/site.webmanifest" />
+
+          <!-- Open Graph / Facebook -->
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://www.scn-ts.dev/" />
+          <meta property="og:title" content="SCN-TS: Understand any TypeScript repo in 400 tokens." />
+          <meta property="og:description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+          <meta property="og:image" content="https://www.scn-ts.dev/og.png" />
+          <meta property="og:site_name" content="SCN-TS" />
+
+          <!-- Twitter -->
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content="https://www.scn-ts.dev/" />
+          <meta property="twitter:title" content="SCN-TS: Understand any TypeScript repo in 400 tokens." />
+          <meta property="twitter:description" content="SCN-TS creates a dense, token-efficient cheat-sheet for your TypeScript/JavaScript projects. Understand any repo in 400 tokens, and help your LLM refactor, review, or port code without ever seeing the source." />
+          <meta property="twitter:image" content="https://www.scn-ts.dev/og.png" />
+
+          <!-- JSON-LD Schema -->
+          <script type="application/ld+json">
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "SCN-TS",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Cross-platform",
+            "description": "A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.",
+            "url": "https://www.scn-ts.dev/",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "author": {
+              "@type": "Organization",
+              "name": "SCN contributors"
+            }
+          }
+          </script>
+        </head>
+        <body>
+          <div id="root"></div>
+          <script type="module" src="/src/main.tsx"></script>
+        </body>
+      </html>
+    patchStrategy: replace
+  - type: write
+    path: public/robots.txt
+    content: |-
+      # https://www.robotstxt.org/robotstxt.html
+      User-agent: *
+      Disallow:
+
+      Sitemap: https://www.scn-ts.dev/sitemap.xml
+    patchStrategy: replace
+  - type: write
+    path: public/sitemap.xml
+    content: |-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <url>
+          <loc>https://www.scn-ts.dev/</loc>
+          <lastmod>2025-01-01</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>1.0</priority>
+        </url>
+      </urlset>
+    patchStrategy: replace
+  - type: write
+    path: public/site.webmanifest
+    content: |-
+      {
+        "name": "SCN-TS",
+        "short_name": "SCN-TS",
+        "description": "Symbolic Context Notation for TypeScript",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#020817",
+        "theme_color": "#8b5cf6",
+        "icons": [
+          {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+          }
+        ]
+      }
+    patchStrategy: replace
+snapshot:
+  public/robots.txt: null
+  public/sitemap.xml: null
+  public/site.webmanifest: null
+  index.html: |-
+    <!doctype html>
+    <html lang="en" class="dark">
+      <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SCN – Symbolic Context Notation for TypeScript</title>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+      </body>
+    </html>
+approved: false
+linesAdded: 77
+linesRemoved: 2
+linesDifference: 79
+gitCommittedAt: null
+status: pending
+id: 18

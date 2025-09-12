@@ -1,0 +1,65 @@
+uuid: d89d136a-2003-4f9e-ac8d-8a21191564f7
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-11T07:52:31.735Z'
+gitCommitMsg: |-
+  feat: add favicon
+  Adds an SVG favicon based on the project logo and links it in index.html.
+promptSummary: Add a favicon to the project.
+reasoning:
+  - >-
+    Based on your request, I will add a favicon to your project. This involves
+    creating a new SVG file for the icon and then linking to it from your
+    `index.html` file.
+  - >-
+    First, I'll create a new `favicon.svg` file inside a new `public` directory.
+    This is standard practice for Vite projects. The favicon will be a simple
+    SVG image of the `◮` symbol used in your site's header, styled with the
+    primary color from your dark theme.
+  - >-
+    Next, I will modify `index.html` to include a link to the newly created
+    favicon in the `<head>` section.
+operations:
+  - type: write
+    path: public/favicon.svg
+    content: |-
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="100" fill="hsl(263.4, 95.2%, 66.3%)">◮</text>
+      </svg>
+    patchStrategy: replace
+  - type: write
+    path: index.html
+    content: |+
+      --- index.html
+      +++ index.html
+      @@ -2,6 +2,7 @@
+       <html lang="en" class="dark">
+         <head>
+           <meta charset="UTF-8" />
+      +    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+           <title>SCN – Symbolic Context Notation for TypeScript</title>
+         </head>
+
+    patchStrategy: standard-diff
+snapshot:
+  public/favicon.svg: null
+  index.html: |-
+    <!doctype html>
+    <html lang="en" class="dark">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SCN – Symbolic Context Notation for TypeScript</title>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+      </body>
+    </html>
+approved: false
+linesAdded: 4
+linesRemoved: 0
+linesDifference: 4
+gitCommittedAt: null
+status: pending
+id: 14

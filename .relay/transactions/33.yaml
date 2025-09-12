@@ -1,0 +1,173 @@
+uuid: 13915f01-5d97-4089-a5c9-26d0df09b431
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T01:25:38.505Z'
+gitCommitMsg: >-
+  fix(lint): resolve tailwindcss linting warnings
+
+  This commit addresses two warnings from the ESLint `tailwindcss` plugin: -
+  Corrects the classname order in `App.tsx` for the animated background. -
+  Replaces `h-4 w-4` with the `size-4` shorthand in `accordion.tsx`.
+promptSummary: The user provided ESLint output showing two warnings that need to be fixed.
+reasoning:
+  - Of course, let's fix those linting issues.
+  - '### 1. Fix Tailwind CSS Class Order'
+  - >-
+    I'll correct the order of the Tailwind CSS classes in `src/App.tsx` to
+    comply with the linter's configuration, moving the animation class to the
+    end.
+  - '### 2. Use Tailwind CSS Shorthand'
+  - >-
+    I'll update the accordion component to use the `size-4` shorthand instead of
+    `h-4 w-4`, as suggested by the linter.
+  - '---'
+operations:
+  - type: write
+    path: src/App.tsx
+    content: >+
+      --- src/App.tsx
+
+      +++ src/App.tsx
+
+      @@ -10,7 +10,7 @@
+         return (
+           <div className="relative min-h-screen w-full overflow-x-hidden">
+             <div className="absolute inset-0 -z-10 size-full bg-background">
+      -        <div className="absolute inset-0 size-full animate-background-pan
+      bg-[200%_200%] bg-gradient-to-tr from-primary/10 via-secondary/10
+      to-primary/10" />
+
+      +        <div className="absolute inset-0 size-full animate-background-pan
+      bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10
+      bg-[200%_200%]" />
+             </div>
+       
+             <Header />
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/ui/accordion.tsx
+    content: >+
+      --- src/components/ui/accordion.tsx
+
+      +++ src/components/ui/accordion.tsx
+
+      @@ -34,7 +34,7 @@
+             {...props}
+           >
+             {children}
+      -      <ChevronDown className="h-4 w-4 shrink-0 transition-transform
+      duration-200" />
+
+      +      <ChevronDown className="size-4 shrink-0 transition-transform
+      duration-200" />
+           </AccordionPrimitive.Trigger>
+         </AccordionPrimitive.Header>
+       ))
+
+    patchStrategy: standard-diff
+snapshot:
+  src/App.tsx: |-
+    import { Contribute } from "./components/sections/Contribute";
+    import { ContextCost } from "./components/sections/ContextCost";
+    import { DesignDecisions } from "./components/sections/DesignDecisions";
+    import { Faq } from "./components/sections/Faq";
+    import { Footer } from "./components/Footer";
+    import { Header } from "./components/Header";
+    import { Hero } from "./components/sections/Hero";
+    import { Playground } from "./components/sections/Playground";
+    import { QuickStart } from "./components/sections/QuickStart";
+    import { Solution } from "./components/sections/Solution";
+    import { TokenEconomics } from "./components/sections/TokenEconomics";
+    import { UseCases } from "./components/sections/UseCases";
+
+    export default function App() {
+      return (
+        <div className="relative min-h-screen w-full overflow-x-hidden">
+          <div className="absolute inset-0 -z-10 size-full bg-background">
+            <div className="absolute inset-0 size-full animate-background-pan bg-[200%_200%] bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10" />
+          </div>
+
+          <Header />
+
+          <main className="container mx-auto max-w-5xl px-4">
+            <Hero />
+            <ContextCost />
+            <Solution />
+            <TokenEconomics />
+            <Playground />
+            <QuickStart />
+            <Faq />
+            <DesignDecisions />
+            <UseCases />
+            <Contribute />
+          </main>
+
+          <Footer />
+        </div>
+      );
+    }
+  src/components/ui/accordion.tsx: |-
+    "use client"
+
+    import * as React from "react"
+    import * as AccordionPrimitive from "@radix-ui/react-accordion"
+    import { ChevronDown } from "lucide-react"
+
+    import { cn } from "@/lib/utils"
+
+    const Accordion = AccordionPrimitive.Root
+
+    const AccordionItem = React.forwardRef<
+      React.ElementRef<typeof AccordionPrimitive.Item>,
+      React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
+    >(({ className, ...props }, ref) => (
+      <AccordionPrimitive.Item
+        ref={ref}
+        className={cn("border-b", className)}
+        {...props}
+      />
+    ))
+    AccordionItem.displayName = "AccordionItem"
+
+    const AccordionTrigger = React.forwardRef<
+      React.ElementRef<typeof AccordionPrimitive.Trigger>,
+      React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+    >(({ className, children, ...props }, ref) => (
+      <AccordionPrimitive.Header className="flex">
+        <AccordionPrimitive.Trigger
+          ref={ref}
+          className={cn(
+            "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+            className
+          )}
+          {...props}
+        >
+          {children}
+          <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+        </AccordionPrimitive.Trigger>
+      </AccordionPrimitive.Header>
+    ))
+    AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
+
+    const AccordionContent = React.forwardRef<
+      React.ElementRef<typeof AccordionPrimitive.Content>,
+      React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+    >(({ className, children, ...props }, ref) => (
+      <AccordionPrimitive.Content
+        ref={ref}
+        className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+        {...props}
+      >
+        <div className={cn("pb-4 pt-0", className)}>{children}</div>
+      </AccordionPrimitive.Content>
+    ))
+    AccordionContent.displayName = AccordionPrimitive.Content.displayName
+
+    export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+approved: false
+linesAdded: 2
+linesRemoved: 2
+linesDifference: 4
+gitCommittedAt: null
+status: pending
+id: 33

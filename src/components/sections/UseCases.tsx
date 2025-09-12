@@ -1,15 +1,13 @@
 import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
 import { useCasesContent } from "@/content/sections.content";
+import { Code2 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export const UseCases = () => (
   <Section id="section-8">
@@ -21,27 +19,24 @@ export const UseCases = () => (
         {useCasesContent.subtitle}
       </p>
     </div>
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-1/3 sm:w-[200px]">Scenario</TableHead>
-              <TableHead>Example Prompt</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {useCasesContent.prompts.map((useCase, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{useCase.scenario}</TableCell>
-                <TableCell>
-                  <InlineCode>{useCase.prompt}</InlineCode>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+    <div className="mx-auto max-w-3xl">
+      <Card>
+        <Accordion type="single" collapsible className="w-full">
+          {useCasesContent.prompts.map((useCase, index) => (
+            <AccordionItem value={`item-${index}`} key={index}>
+              <AccordionTrigger className="px-6 text-left hover:no-underline">
+                <span className="text-lg font-semibold">{useCase.scenario}</span>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="flex items-start gap-4 rounded-md bg-secondary p-4">
+                  <Code2 className="mt-1 size-5 shrink-0 text-primary" />
+                  <code className="font-mono text-sm">{useCase.prompt}</code>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </Card>
+    </div>
   </Section>
 );

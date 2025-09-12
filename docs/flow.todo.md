@@ -1,4 +1,4 @@
-===
+=== DONE
 
 before after widget in hero: add syntax highlighting for before and after code
 just manually colorize no need prism2 thing
@@ -7,22 +7,22 @@ just manually colorize no need prism2 thing
 
 I need animated smoky background for the hero. smoky, not circle or something.
 
-===
+=== DONE
 
 `CLI Quick Start` section
 
 each command should have copy button
 
-===
+=== DONE
 
 animate widgets in `Design Decisions` and `The High Cost of Context` section
 also we need hover animation on items
 
-===
+=== DONE
 
 can you make UI of `Common Use-Cases` section more amazing than just table view?
 
-===
+=== DONE
 
 hero: I want animated glow border on after widget. currently only seen one fixed border at 1 px thick... I think there is overlapping style issue
 

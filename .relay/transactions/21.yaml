@@ -1,0 +1,140 @@
+uuid: d0798ca7-2489-498c-bb0a-42c23cd4ef19
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-11T08:34:16.013Z'
+gitCommitMsg: >-
+  refactor(hero): further refine title emphasis
+
+  - Adjusts the font sizes in the hero title for better visual hierarchy. - The
+  font size of the entire "<1k tokens." pill is now smaller than the main title.
+  - The font size of the "<" symbol is now even smaller relative to the text
+  within the pill, per user feedback.
+promptSummary: Further refine hero title styling to make the `<` symbol smaller.
+reasoning:
+  - >-
+    Of course. My apologies, my previous change wasn't pronounced enough. I've
+    now adjusted the styling to make the `<` symbol significantly smaller and
+    also refined the overall emphasis on the `<1k tokens` part to better match
+    your request.
+  - >-
+    Here is the adjustment to `src/components/sections/Hero.tsx`. I'm making two
+    key changes:
+  - >-
+    1.  I'm reducing the font size of the entire `<1k tokens.` pill to be
+    smaller than the main heading.
+  - >-
+    2.  I'm making the `<` symbol's font size even smaller relative to the text
+    within the pill.
+  - This creates a much clearer and more intentional visual hierarchy.
+operations:
+  - type: write
+    path: src/components/sections/Hero.tsx
+    content: >+
+      --- src/components/sections/Hero.tsx
+
+      +++ src/components/sections/Hero.tsx
+
+      @@ -13,9 +13,9 @@
+               <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+                 {heroContent.title}
+               </span>{" "}
+      -        <span className="inline-block whitespace-nowrap rounded-full
+      bg-primary/10 px-4 py-2 font-medium text-primary align-middle">
+
+      -          <span className="relative -top-[0.05em] text-3xl md:text-5xl">
+
+      +        <span className="inline-block whitespace-nowrap rounded-full
+      bg-primary/10 px-4 py-2 font-medium text-primary align-middle text-3xl
+      md:text-5xl">
+
+      +          <span className="relative -top-[0.05em] text-2xl md:text-4xl">
+                   &lt;
+                 </span>
+                 {heroContent.highlightedTitle}
+
+    patchStrategy: standard-diff
+snapshot:
+  src/components/sections/Hero.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import {
+      Card,
+      CardContent,
+      CardHeader,
+      CardTitle,
+    } from "@/components/ui/card";
+    import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+    import { CodeBlock } from "@/components/CodeBlock";
+    import { heroContent } from "@/content/sections.content";
+    import { PLAYGROUND_URL } from "@/lib/constants";
+
+    export const Hero = () => (
+      <section className="grid lg:grid-cols-2 gap-12 items-center py-24 sm:py-32">
+        <div className="text-center lg:text-left space-y-6">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter opacity-0 animate-fade-in">
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+              {heroContent.title}
+            </span>{" "}
+            <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 font-medium text-primary align-middle">
+              <span className="relative -top-[0.05em] text-3xl md:text-5xl">
+                &lt;
+              </span>
+              {heroContent.highlightedTitle}
+            </span>
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
+            {heroContent.subtitle}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
+            <a href="#section-5">
+              <Button size="lg">
+                {heroContent.getStartedButton}{" "}
+                <Terminal className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+            <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="lg">
+                {heroContent.playgroundButton}{" "}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+          </div>
+        </div>
+        <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
+          <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.before.title}
+              </CardTitle>
+              <Zap className="h-5 w-5 text-destructive" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock lang="typescript" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+            </CardContent>
+          </Card>
+
+          <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
+            <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
+              <ArrowDown className="h-5 w-5" />
+            </div>
+          </div>
+
+          <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.after.title}
+              </CardTitle>
+              <Zap className="h-5 w-5 text-primary" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock lang="text" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    );
+approved: false
+linesAdded: 2
+linesRemoved: 2
+linesDifference: 4
+gitCommittedAt: null
+status: pending
+id: 21

@@ -33,6 +33,12 @@
     --ring: 263.4 95.2% 66.3%;
  
     --radius: 0.5rem;
+
+    --syntax-keyword: 213 94% 68%; /* blue-400 */
+    --syntax-string: 93 54% 54%; /* green-600 */
+    --syntax-class: 44 98% 61%; /* yellow-400 */
+    --syntax-number: 161 67% 53%; /* teal-500 */
+    --syntax-comment: 220 9% 55%; /* slate-500 */
   }
  
   .dark {
@@ -63,6 +69,12 @@
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 263.4 95.2% 66.3%;
+
+    --syntax-keyword: 213 94% 68%; /* blue-400 */
+    --syntax-string: 93 34% 64%; /* green-400 */
+    --syntax-class: 44 98% 61%; /* yellow-400 */
+    --syntax-number: 161 67% 63%; /* teal-400 */
+    --syntax-comment: 220 14% 45%; /* slate-600 */
   }
 }
  

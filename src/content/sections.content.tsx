@@ -106,17 +106,26 @@ export const playgroundContent = {
 export const quickStartContent = {
   title: "CLI Quick Start",
   subtitle: "Get started in under a minute.",
-  code: `# global install
-npm i -g scn            # or yarn/pnpm/bun
-
-# basic
-scn "src/**/*.{ts,tsx}" --output map.scn
-
-# monorepo
-scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
-
-# watch mode
-scn "src/**/*" --watch --preset=minimal`,
+  steps: [
+    {
+      title: "Global Install",
+      command: "npm i -g scn",
+      description: "(or yarn/pnpm/bun)",
+    },
+    {
+      title: "Basic Usage",
+      command: 'scn "src/**/*.{ts,tsx}" --output map.scn',
+    },
+    {
+      title: "Monorepo",
+      command:
+        'scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8',
+    },
+    {
+      title: "Watch Mode",
+      command: 'scn "src/**/*" --watch --preset=minimal',
+    },
+  ],
 };
 
 export const faqContent = {
@@ -251,7 +260,7 @@ export const heroContent = {
   playgroundButton: "Live Playground",
   before: {
     title: "BEFORE: 300+ tokens",
-    code: `export class ApiClient {
+    rawCode: `export class ApiClient {
   constructor(private apiKey: string) {}
 
   async fetchUsers(page: number): Promise<User[]> {
@@ -262,14 +271,89 @@ export const heroContent = {
     return res.json();
   }
 }`,
+    code: (
+      <>
+        <span className="text-syntax-keyword">export</span>{" "}
+        <span className="text-syntax-keyword">class</span>{" "}
+        <span className="text-syntax-class">ApiClient</span> {"{"}
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">constructor</span>
+        (
+        <span className="text-syntax-keyword">private</span> apiKey:{" "}
+        <span className="text-syntax-class">string</span>) {"{}"}
+        {"\n\n"}
+        {"  "}
+        <span className="text-syntax-keyword">async</span>{" "}
+        <span className="text-syntax-function">fetchUsers</span>
+        (page: <span className="text-syntax-class">number</span>
+        ): <span className="text-syntax-class">Promise</span>
+        &lt;
+        <span className="text-syntax-class">User</span>[]&gt; {"{"}
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">const</span> res ={" "}
+        <span className="text-syntax-keyword">await</span>{" "}
+        <span className="text-syntax-function">fetch</span>(
+        <span className="text-syntax-string">
+          {`\`/api/users?page=\${page}\``}
+        </span>
+        , {"{"}
+        {"\n"}
+        {"      "}headers: {"{"}{" "}
+        <span className="text-syntax-string">{`'X-API-KEY'`}</span>:{" "}
+        <span className="text-syntax-keyword">this</span>.apiKey {"}"}
+        {"\n"}
+        {"    "}
+        {"}"});{"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">if</span> (!res.ok){" "}
+        <span className="text-syntax-keyword">throw</span>{" "}
+        <span className="text-syntax-keyword">new</span>{" "}
+        <span className="text-syntax-class">Error</span>(
+        <span className="text-syntax-string">{`"API Error"`}</span>);
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">return</span> res.
+        <span className="text-syntax-function">json</span>();
+        {"\n"}
+        {"  "}
+        {"}"}
+        {"\n"}
+        {"}"}
+      </>
+    ),
   },
   after: {
     title: "AFTER: 38 tokens",
-    code: `§1 src/api.ts
+    rawCode: `§1 src/api.ts
 + ◇ ApiClient
   - @ apiKey: #string
   + o constructor
   + ~ fetchUsers ...!
     > User`,
+    code: (
+      <>
+        <span className="text-syntax-comment">§1 src/api.ts</span>
+        {"\n"}
+        <span className="text-syntax-keyword">+</span> ◇{" "}
+        <span className="text-syntax-class">ApiClient</span>
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">-</span> @ apiKey:{" "}
+        <span className="text-syntax-class">#string</span>
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">+</span> o constructor
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">+</span> ~{" "}
+        <span className="text-syntax-function">fetchUsers</span> ...!
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">{">"}</span>{" "}
+        <span className="text-syntax-class">User</span>
+      </>
+    ),
   },
 };
