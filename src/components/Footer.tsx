@@ -2,9 +2,9 @@ import { NOCAPRO_URL } from "@/lib/constants";
 
 export const Footer = () => (
   <footer className="border-t">
-    <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
+    <div className="container mx-auto max-w-5xl px-4 py-8 text-center text-muted-foreground">
       <p>MIT © 2025 SCN contributors</p>
-      <p className="text-sm mt-4 max-w-xl mx-auto">
+      <p className="mx-auto mt-4 max-w-xl text-sm">
         SCN is the shared engine behind{" "}
         <a
           href={NOCAPRO_URL}

@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 export const TokenEconomics = () => (
   <Section id="section-3">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {tokenEconomicsContent.title}
       </h2>

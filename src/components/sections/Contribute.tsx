@@ -7,11 +7,11 @@ import { GITHUB_URL } from "@/lib/constants";
 
 export const Contribute = () => (
   <Section id="section-9">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+    <Card className="bg-secondary/50 p-8 text-center md:p-12">
       <h2 className="text-3xl font-bold tracking-tight">
         {contributeContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
+      <p className="mx-auto mb-8 mt-2 max-w-2xl text-lg text-muted-foreground">
         {contributeContent.subtitle}
       </p>
       <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">

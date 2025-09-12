@@ -14,11 +14,11 @@ import { solutionContent } from "@/content/sections.content";
 
 export const Solution = () => (
   <Section id="section-2">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {solutionContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
+      <p className="mx-auto mt-2 max-w-3xl text-lg text-muted-foreground">
         {solutionContent.subtitle}
       </p>
     </div>

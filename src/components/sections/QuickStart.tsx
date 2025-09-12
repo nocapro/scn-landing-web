@@ -4,7 +4,7 @@ import { quickStartContent } from "@/content/sections.content";
 
 export const QuickStart = () => (
   <Section id="section-5">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {quickStartContent.title}
       </h2>

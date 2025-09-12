@@ -7,7 +7,7 @@ import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Playground = () => (
   <Section id="section-4">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+    <Card className="bg-secondary/50 p-8 text-center md:p-12">
       <h2 className="text-3xl font-bold tracking-tight">
         {playgroundContent.title}
       </h2>

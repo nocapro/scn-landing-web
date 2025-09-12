@@ -19,7 +19,7 @@ export const CodeBlock = ({
     <div className="relative">
       <pre
         className={cn(
-          "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
+          "rounded-lg border bg-secondary p-4 font-mono text-sm whitespace-pre-wrap",
           className
         )}
       >
@@ -28,7 +28,7 @@ export const CodeBlock = ({
       <Button
         variant="ghost"
         size="icon"
-        className="absolute top-2 right-2 h-8 w-8"
+        className="absolute right-2 top-2 h-8 w-8"
         onClick={() => copyToClipboard(textToCopy)}
         disabled={!textToCopy}
       >

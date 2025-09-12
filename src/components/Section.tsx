@@ -11,7 +11,7 @@ export const Section = ({
 }) => (
   <section
     id={id}
-    className={cn("py-20 sm:py-28 border-t", className)}
+    className={cn("border-t py-20 sm:py-28", className)}
   >
     {children}
   </section>

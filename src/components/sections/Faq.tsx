@@ -3,7 +3,7 @@ import { faqContent } from "@/content/sections.content";
 
 export const Faq = () => (
   <Section id="section-6">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {faqContent.title}
       </h2>

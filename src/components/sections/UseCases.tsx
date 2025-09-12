@@ -13,7 +13,7 @@ import { useCasesContent } from "@/content/sections.content";
 
 export const UseCases = () => (
   <Section id="section-8">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {useCasesContent.title}
       </h2>

@@ -11,23 +11,23 @@ import { heroContent } from "@/content/sections.content";
 import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Hero = () => (
-  <section className="grid lg:grid-cols-2 gap-12 items-center pt-12 pb-24 sm:pt-16 sm:pb-32">
-    <div className="text-center lg:text-left space-y-6">
-      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter opacity-0 animate-fade-in">
+  <section className="grid items-center gap-12 pt-12 pb-24 sm:pt-16 sm:pb-32 lg:grid-cols-2">
+    <div className="space-y-6 text-center lg:text-left">
+      <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
         <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
           {heroContent.title}
         </span>{" "}
-        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 font-medium text-primary align-middle text-3xl md:text-5xl">
+        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
           <span className="relative -top-[0.05em] text-2xl md:text-4xl">
             &lt;
           </span>
           {heroContent.highlightedTitle}
         </span>
       </h1>
-      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
+      <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
         {heroContent.subtitle}
       </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
+      <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
         <a href="#section-5">
           <Button size="lg">
             {heroContent.getStartedButton}{" "}
@@ -42,7 +42,7 @@ export const Hero = () => (
         </a>
       </div>
     </div>
-    <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
+    <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
       <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
         <CardHeader className="flex-row items-center justify-between p-4">
           <CardTitle className="text-base font-semibold text-muted-foreground">
@@ -51,17 +51,17 @@ export const Hero = () => (
           <Zap className="h-5 w-5 text-destructive" />
         </CardHeader>
         <CardContent className="p-0">
-          <CodeBlock lang="typescript" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+          <CodeBlock lang="typescript" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.before.code}</CodeBlock>
         </CardContent>
       </Card>
 
-      <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
-        <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
+      <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+        <div className="flex h-10 w-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
           <ArrowDown className="h-5 w-5" />
         </div>
       </div>
 
-      <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
+      <Card className="animate-glow animate-slide-in-from-bottom border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
         <CardHeader className="flex-row items-center justify-between p-4">
           <CardTitle className="text-base font-semibold text-muted-foreground">
             {heroContent.after.title}
@@ -69,7 +69,7 @@ export const Hero = () => (
           <Zap className="h-5 w-5 text-primary" />
         </CardHeader>
         <CardContent className="p-0">
-          <CodeBlock lang="text" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+          <CodeBlock lang="text" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.after.code}</CodeBlock>
         </CardContent>
       </Card>
     </div>
