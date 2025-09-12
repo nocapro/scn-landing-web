@@ -83,7 +83,7 @@ hero section:
 
 make the before after widget parallax scrollable
 
-so on scroll, the left side of the screen is always visible fix position until before after widget finished bottom viewport
+so on scroll, the left side of the screen is on sticky position until right side of before after widget finished top viewport
 
 === DONE
 

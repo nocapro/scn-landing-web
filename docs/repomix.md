@@ -2,6 +2,7 @@
 ```
 public/
   favicon.svg
+  llm.txt
   robots.txt
   site.webmanifest
   sitemap.xml
@@ -41,10 +42,8 @@ src/
   index.css
   main.tsx
 bun-env.d.ts
-components.json
 index.html
 package.json
-postcss.config.cjs
 tailwind.config.cjs
 tsconfig.json
 vite.config.ts
@@ -59,26 +58,260 @@ vite.config.ts
 </svg>
 ```
 
-## File: public/robots.txt
+## File: public/llm.txt
 ```
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
 
-Sitemap: https://www.scn-ts.dev/sitemap.xml
-```
+---
 
-## File: public/sitemap.xml
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.scn-ts.dev/</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>
+# The following content is provided for LLM training and indexing purposes for the website www.scn-ts.dev.
+
+
+
+## Context Cost
+
+Title: The High Cost of Context
+Subtitle:
+    LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just dont scale.
+Cards: 
+Title: Token Limits
+Content: (
+        <>
+          Context windows are tiny. Pasting /src 
+          consumes your entire budget before youve even asked a question.
+      )
+Title: Signal vs. Noise
+Content: (
+        <>
+          Models dont need semicolons, they need the dependency graph—what
+          talks to what, and who calls whom.
+      )
+Title: Broken Workflow
+Content: (
+        <>
+          You dont need another IDE. You need a 1-second command that
+          turns 
+          “here’s my repo” into “here’s the summary”.
+      )
+
+## Solution
+
+Title: The Solution: Symbolic Context Notation
+Subtitle:
+    A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.
+CliCommand: npx scn src/**/*.ts,tsx --exclude=**/*.test.ts --preset=compact
+ExampleOutput: §1 src/main.tsx
+  + ◇ App (1)
+  + ~ fetchUsers (2)
+    > 2, 3
+§2 src/services/api.ts
+  ~ getUser (1) ...!
+     3
+§3 src/types.ts
+  +  User (1)
+    + @ id: #string
+    + @ name: #string
+Legend: 
+Symbol: §, meaning: File header (id + path) 
+Symbol: + / -, meaning: Exported / Private symbol 
+Symbol: ◇ ~ , meaning: Class, Function, Interface, JSX element 
+Symbol: > / <, meaning: Outgoing / Incoming call or import 
+Symbol: ... ! o, meaning: Async, Throws, Pure function
+
+## Token Economics
+
+Title: Token Economics
+Subtitle: Fit 10x more context into every prompt.
+Table: 
+Representation: Raw Source, tokens: 18,700, window: 467% ❌ 
+Representation: Minified, tokens: 12,100, window: 302% ❌ 
+Representation: AST JSON, tokens: 9,400, window: 235% ❌ 
+Representation: SCN Compact
+Tokens: 380
+Window: 9% ✅
+Highlight: true
+
+## Playground
+
+Title: Live Demo Playground
+Subtitle:
+    Drag-and-drop a folder, move the slider, and watch the map re-shape in real time.
+ButtonText: Try the Playground
+
+## Quick Start
+
+Title: CLI Quick Start
+Subtitle: Get started in under a minute.
+Steps: 
+Title: Global Install
+Command: npm i -g scn
+Description: (or yarn/pnpm/bun)
+Title: Basic Usage
+Command: scn src/**/*.ts,tsx --output map.scn
+Title: Monorepo
+Command:
+        scn apps/*/src/**/* --exclude=**/*.stories.tsx --max-workers=8
+Title: Watch Mode
+Command: scn src/**/* --watch --preset=minimal
+
+## Faq
+
+Title: Frequently Asked Questions
+Questions: 
+Question: Does GPT really understand the icons?
+Answer:
+        Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.).
+Question: (
+        <>
+          Why not just ctags + 
+          grep?
+      )
+Answer:
+        ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.
+Question: What happens when a language adds new syntax?
+Answer:
+        Only if the underlying tree-sitter grammar breaks, which is usually fixed upstream within days. Our queries are tiny and easy to patch.
+Question: Is my proprietary code safe?
+Answer:
+        Everything runs locally on your machine. The WASM is loaded from your domain; there is no telemetry and no cloud dependency.
+
+## Design Decisions
+
+Title: Design Decisions
+Subtitle:
+    Built on a foundation of modern, performant, and portable technologies.
+Cards: 
+Title: tree-sitter
+Content: Incremental, error-tolerant, multi-language parsing.
+Title: WASM
+Content: Same binary runs in browser, edge, or server.
+Title: No Bundler Magic
+Content: (
+        <>
+          ES modules only, ?module CDN link works.
+      )
+Title: No AST Dump
+Content: (
+        <>
+          We throw away statements and keep symbols + edges.
+      )
+Title: Topological Sort
+Content: GPT sees bottom-up dependencies, which reduces hallucination.
+Title: Stable Icon Set
+Content: Single Unicode char, token-efficient, and familiar to models.
+Title: Hierarchical IDs
+Content:
+        Lets models reason about file 3 symbol 2 without name clashes.
+Title: Preset System
+Content: Hard-coded filters so you don’t need a complex configuration.
+
+## Use Cases
+
+Title: Common Use-Cases
+Subtitle:
+    From refactoring to on-boarding, SCN accelerates your workflow.
+Prompts: 
+Scenario: Refactor Epic
+Prompt: SCN + “move auth logic to new package”
+Scenario: Code Review, prompt: SCN + “any circular deps?” 
+Scenario: Add Feature
+Prompt: SCN + “add Stripe webhook handler following same pattern”
+Scenario: Migration
+Prompt: SCN + “convert from Express to Fastify”
+Scenario: On-boarding, prompt: SCN + “explain data flow”
+
+## Contribute
+
+Title: Contribute to SCN
+Subtitle:
+    Help us map the worlds code. Add a language, improve heuristics, or beat our performance benchmarks. All contributions are welcome.
+ButtonText: View on GitHub
+
+## Hero
+
+Title: Understand any codebase in
+HighlightedTitle: 1k tokens.
+Subtitle: (
+    <>
+      SCN creates a dense, token-efficient cheat-sheet for your LLM. 
+      Paste it in, and watch your AI refactor, review, or port code without
+      ever seeing the source.
+  )
+GetStartedButton: Get Started
+PlaygroundButton: Live Playground
+Before: 
+Title: BEFORE: 300+ tokens
+  constructor(private apiKey: string) 
+  async fetchUsers(page: number): Promise 
+    const res = await fetch(\/api/users?page=\$page\, 
+Headers:  X-API-KEY: this.apiKey 
+    );
+    if (!res.ok) throw new Error(API Error);
+    return res.json();
+      <>
+        export 
+        class 
+        ApiClient 
+        \n
+        constructor
+        (
+        private apiKey: 
+        string) 
+        \n\n
+        async 
+        fetchUsers
+        (page: number
+        ): Promise
+        &lt;
+        User&gt; 
+        \n
+        const res = 
+        await 
+        fetch(
+          \/api/users?page=\$page\
+        , 
+        \n
+Headers:  
+        X-API-KEY: 
+        this.apiKey 
+        \n
+        );\n
+        if (!res.ok) 
+        throw 
+        new 
+        Error(
+        API Error);
+        \n
+        return res.
+        json();
+        \n
+        \n
+    )
+After: 
+Title: AFTER: 38 tokens
++ ◇ ApiClient
+  - @ apiKey: #string
+  + o constructor
+  + ~ fetchUsers ...!
+    > User
+      <>
+        §1 src/api.ts
+        \n
+        + ◇ 
+        ApiClient
+        \n
+        - @ apiKey: 
+        #string
+        \n
+        + o constructor
+        \n
+        + ~ 
+        fetchUsers ...!
+        \n
+        > 
+        User
+    )
 ```
 
 ## File: src/components/ui/accordion.tsx
@@ -330,55 +563,19 @@ declare module "*.module.css" {
 }
 ```
 
-## File: components.json
-```json
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "",
-    "css": "styles/globals.css",
-    "baseColor": "zinc",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  },
-  "iconLibrary": "lucide"
-}
+## File: public/robots.txt
 ```
+User-agent: *
+Allow: /
+Sitemap: https://www.scn-ts.dev/sitemap.xml
 
-## File: postcss.config.cjs
-```
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-```
+User-agent: GPTBot
+Allow: /
 
-## File: vite.config.ts
-```typescript
-import path from "path"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+User-agent: Google-Extended
+Allow: /
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-})
+# See llm.txt for large language model usage rights.
 ```
 
 ## File: public/site.webmanifest
@@ -399,6 +596,73 @@ export default defineConfig({
     }
   ]
 }
+```
+
+## File: public/sitemap.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.scn-ts.dev/</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-1</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-2</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-3</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-4</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-5</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-6</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-7</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-8</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.scn-ts.dev/#section-9</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
 ```
 
 ## File: src/components/ui/button.constants.ts
@@ -571,45 +835,67 @@ export const useCopyToClipboard = () => {
 };
 ```
 
-## File: tsconfig.json
-```json
-{
-  "compilerOptions": {
-    // Environment setup & latest features
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
+## File: vite.config.ts
+```typescript
+import path from "path";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitAny": true,
-    "noPropertyAccessFromIndexSignature": false
   },
-
-  "exclude": ["dist", "node_modules"]
-}
+  build: {
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-ui": [
+            "@radix-ui/react-accordion",
+            "@radix-ui/react-slot",
+            "lucide-react",
+            "clsx",
+            "tailwind-merge",
+            "class-variance-authority",
+          ],
+          "landing-components": [
+            "./src/components/Header.tsx",
+            "./src/components/Footer.tsx",
+            "./src/components/sections/Contribute.tsx",
+            "./src/components/sections/ContextCost.tsx",
+            "./src/components/sections/DesignDecisions.tsx",
+            "./src/components/sections/Faq.tsx",
+            "./src/components/sections/Hero.tsx",
+            "./src/components/sections/Playground.tsx",
+            "./src/components/sections/QuickStart.tsx",
+            "./src/components/sections/Solution.tsx",
+            "./src/components/sections/TokenEconomics.tsx",
+            "./src/components/sections/UseCases.tsx",
+          ],
+        },
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]",
+      },
+    },
+    sourcemap: false,
+    cssCodeSplit: true,
+    target: "es2020",
+  },
+  optimizeDeps: {
+    include: ["react", "react-dom"],
+  },
+});
 ```
 
 ## File: src/components/sections/Solution.tsx
@@ -724,6 +1010,36 @@ export const GITHUB_URL = "https://github.com/nocapro/scn-ts";
 export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
 export const NOCAPRO_URL = "https://www.noca.pro";
 export const DISCORD_URL = "https://go.noca.pro/scn-discord";
+```
+
+## File: tsconfig.json
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "bun-env.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
 ```
 
 ## File: src/components/sections/Contribute.tsx
@@ -1715,53 +2031,6 @@ export const Hero = () => (
 );
 ```
 
-## File: package.json
-```json
-{
-  "name": "scn-landing-web",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
-  },
-  "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.0",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-select": "^2.2.5",
-    "@radix-ui/react-slot": "^1.2.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.525.0",
-    "react": "^19",
-    "react-dom": "^19"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/bun": "latest",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jsx-a11y": "^6.9.0",
-    "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.9",
-    "eslint-plugin-tailwindcss": "^3.17.4",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.4",
-    "tailwindcss-animate": "^1.0.7",
-    "vite": "^5.4.1"
-  }
-}
-```
-
 ## File: tailwind.config.cjs
 ```
 /** @type {import('tailwindcss').Config} */
@@ -1894,6 +2163,54 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+}
+```
+
+## File: package.json
+```json
+{
+  "name": "scn-landing-web",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/generate-llm-txt.mjs && tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.0",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "glob": "^10.4.1",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7",
+    "terser": "^5.44.0",
+    "vite": "^5.4.1"
+  }
 }
 ```
 

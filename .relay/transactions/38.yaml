@@ -1,0 +1,223 @@
+uuid: f191b988-c7e4-4a57-b353-066318e8d89e
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T02:50:25.685Z'
+gitCommitMsg: >-
+  fix(hero): improve visibility and animate dot grid background
+
+  Addresses user feedback that the hero section's dot grid was not visible and
+  not animated.
+
+  - In `tailwind.config.cjs`, a new `dot-grid-pan` animation is added to create
+  a slow, looping scroll effect for background images. - In
+  `HeroBackground.tsx`, the dot color is changed from a low-contrast `border`
+  color to a more visible `muted-foreground` with 20% opacity. The new
+  `animate-dot-grid-pan` class is applied to the grid layer.
+
+  These changes result in a subtle but clearly visible animated dot grid in the
+  hero background, enhancing the visual appeal of the landing page.
+promptSummary: >-
+  User requested to fix the hero background's dot grid, which was not visible
+  and not animated.
+reasoning:
+  - >-
+    Of course. The dot grid was barely visible due to low color contrast, and it
+    wasn't animated. I'll fix both issues to make the background more dynamic
+    and visually appealing.
+  - '### Step 1: Add Dot Grid Animation to Tailwind Config'
+  - >-
+    First, I'll add a new keyframe animation to `tailwind.config.cjs`. This
+    `dot-grid-pan` animation will create a slow, continuous scrolling effect for
+    the dot grid, making it feel more alive.
+  - '### Step 2: Update Hero Background Component'
+  - >-
+    Next, I'll update the `HeroBackground` component. I'm swapping the
+    nearly-invisible dot color with a more visible (but still subtle) shade from
+    your theme (`muted-foreground` with 20% opacity). I'll also apply the new
+    `animate-dot-grid-pan` class to bring it to life.
+  - >-
+    These changes will make the dot grid clearly visible and add a gentle,
+    looping animation for a more polished and dynamic hero section.
+operations:
+  - type: write
+    path: tailwind.config.cjs
+    content: |+
+      --- tailwind.config.cjs
+      +++ tailwind.config.cjs
+      @@ -99,6 +99,10 @@
+                 "50%": { backgroundPosition: "100% 50%" },
+                 "100%": { backgroundPosition: "0% 50%" },
+               },
+      +        "dot-grid-pan": {
+      +          "0%": { backgroundPosition: "0 0" },
+      +          "100%": { backgroundPosition: "32px 32px" },
+      +        },
+             },
+             animation: {
+               "accordion-down": "accordion-down 0.2s ease-out",
+      @@ -109,6 +113,7 @@
+               "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+               "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+               "background-pan": "background-pan 15s ease-in-out infinite",
+      +        "dot-grid-pan": "dot-grid-pan 15s linear infinite",
+             },
+           },
+         },
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: |-
+      export const HeroBackground = () => (
+        <div className="absolute inset-0 -z-10 size-full overflow-hidden bg-background">
+          <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+          <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+        </div>
+      );
+    patchStrategy: replace
+snapshot:
+  tailwind.config.cjs: |-
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      darkMode: ["class"],
+      content: [
+        './index.html',
+        './src/**/*.{js,ts,jsx,tsx}',
+      ],
+      prefix: "",
+      theme: {
+        container: {
+          center: true,
+          padding: "2rem",
+          screens: {
+            "2xl": "1400px",
+          },
+        },
+        extend: {
+          fontFamily: {
+            sans: ["-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "Helvetica", "Arial", "sans-serif", "'Apple Color Emoji'", "'Segoe UI Emoji'", "'Segoe UI Symbol'"],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+          },
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: {
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
+            },
+            secondary: {
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
+            },
+            destructive: {
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
+            },
+            muted: {
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
+            },
+            accent: {
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
+            },
+            popover: {
+              DEFAULT: "hsl(var(--popover))",
+              foreground: "hsl(var(--popover-foreground))",
+            },
+            card: {
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
+            },
+            syntax: {
+              keyword: "hsl(var(--syntax-keyword))",
+              string: "hsl(var(--syntax-string))",
+              class: "hsl(var(--syntax-class))",
+              number: "hsl(var(--syntax-number))",
+              comment: "hsl(var(--syntax-comment))",
+            },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+          keyframes: {
+            "accordion-down": {
+              from: { height: "0" },
+              to: { height: "var(--radix-accordion-content-height)" },
+            },
+            "accordion-up": {
+              from: { height: "var(--radix-accordion-content-height)" },
+              to: { height: "0" },
+            },
+            "fade-in": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(10px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+            "glow": {
+              "0%, 100%": { "box-shadow": "0 0 10px -5px hsl(var(--primary))" },
+              "50%": { "box-shadow": "0 0 15px 0px hsl(var(--primary))" }
+            },
+            "slide-in-from-top": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(-20px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+            "slide-in-from-bottom": {
+              "0%": {
+                opacity: "0",
+                transform: "translateY(20px)",
+              },
+              "100%": {
+                opacity: "1",
+                transform: "translateY(0)",
+              },
+            },
+            "background-pan": {
+              "0%": { backgroundPosition: "0% 50%" },
+              "50%": { backgroundPosition: "100% 50%" },
+              "100%": { backgroundPosition: "0% 50%" },
+            },
+          },
+          animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            "fade-in": "fade-in 0.5s ease-out forwards",
+            "glow": "glow 4s ease-in-out infinite",
+            "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
+            "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+            "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+            "background-pan": "background-pan 15s ease-in-out infinite",
+          },
+        },
+      },
+      plugins: [require("tailwindcss-animate")],
+    }
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute inset-0 -z-10 size-full overflow-hidden bg-background">
+        <div className="absolute inset-0 bg-[radial-gradient(hsl(var(--border)/0.5)_1px,transparent_1px)] [background-size:32px_32px]"></div>
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 38

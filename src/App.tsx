@@ -14,13 +14,9 @@ import { UseCases } from "./components/sections/UseCases";
 export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
-      <div className="absolute inset-0 -z-10 size-full bg-background">
-        <div className="absolute inset-0 size-full animate-background-pan bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10 bg-[200%_200%]" />
-      </div>
-
       <Header />
 
-      <main className="container mx-auto max-w-5xl px-4">
+      <main>
         <Hero />
         <ContextCost />
         <Solution />

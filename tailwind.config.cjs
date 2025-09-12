@@ -114,6 +114,10 @@ module.exports = {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
+        "dot-grid-pan": {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "32px 32px" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -124,6 +128,7 @@ module.exports = {
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
         "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
         "background-pan": "background-pan 15s ease-in-out infinite",
+        "dot-grid-pan": "dot-grid-pan 15s linear infinite",
       },
     },
   },

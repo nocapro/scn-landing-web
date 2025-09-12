@@ -1,0 +1,588 @@
+uuid: dac5c898-1582-45e0-a7d1-e6df5bceb83e
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T02:48:17.611Z'
+gitCommitMsg: >-
+  feat(hero): add animated background and refactor layout
+
+  Introduces a new animated background for the hero section, featuring a subtle
+  dot grid and a panning aurora gradient.
+
+  - Refactors the main layout in `App.tsx` and `Section.tsx` to allow the hero
+  section to have a full-width background while other sections remain
+  constrained. - Removes the global animated background from the entire site,
+  focusing the effect on the hero section. - Creates a new `HeroBackground.tsx`
+  component to encapsulate the animation logic. - Updates `Hero.tsx` to use the
+  new background component and adjusts its structure accordingly.
+promptSummary: Add an animated background to the hero section.
+reasoning:
+  - >-
+    Here are the modifications to give your hero section an amazing animated
+    background. I've refactored the layout slightly to allow for a full-width
+    background on the hero while keeping other sections constrained.
+  - '### Step 1: Remove Global Animated Background and Refactor Layout'
+  - >-
+    First, I'll remove the existing full-page animated background from `App.tsx`
+    and take the `container` class off the `main` element. This will allow the
+    `Hero` section to span the full width of the viewport.
+  - '### Step 2: Constrain Content in Standard Sections'
+  - >-
+    Next, I'll update the generic `Section` component to include the `container`
+    class. This ensures all other sections maintain their centered, max-width
+    layout.
+  - '### Step 3: Create the Animated Hero Background Component'
+  - >-
+    I'll create a new `HeroBackground` component. This will render a subtle grid
+    of dots with a beautiful, slowly panning aurora-like gradient.
+  - '### Step 4: Integrate the New Background into the Hero Section'
+  - >-
+    Finally, I'll refactor the `Hero` component. It will now be a full-width
+    `section` containing the new `HeroBackground`. The original content is
+    wrapped in a `container` div to keep it centered, preserving the two-column
+    layout.
+operations:
+  - type: write
+    path: src/App.tsx
+    content: >+
+      --- src/App.tsx
+
+      +++ src/App.tsx
+
+      @@ -12,13 +12,7 @@
+       export default function App() {
+         return (
+           <div className="relative min-h-screen w-full overflow-x-hidden">
+      -      <div className="absolute inset-0 -z-10 size-full bg-background">
+
+      -        <div className="absolute inset-0 size-full animate-background-pan
+      bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10
+      bg-[200%_200%]" />
+
+      -      </div>
+
+      -
+             <Header />
+       
+      -      <main className="container mx-auto max-w-5xl px-4">
+
+      +      <main>
+               <Hero />
+               <ContextCost />
+               <Solution />
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/Section.tsx
+    content: |+
+      --- src/components/Section.tsx
+      +++ src/components/Section.tsx
+      @@ -8,11 +8,9 @@
+         className?: string;
+         children: React.ReactNode;
+       }) => (
+      -  <section
+      -    id={id}
+      -    className={cn("border-t py-20 sm:py-28", className)}
+      -  >
+      -    {children}
+      +  <section id={id} className={cn("border-t py-20 sm:py-28", className)}>
+      +    <div className="container mx-auto max-w-5xl px-4">{children}</div>
+         </section>
+       );
+
+    patchStrategy: standard-diff
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: |-
+      export const HeroBackground = () => (
+        <div className="absolute inset-0 -z-10 size-full overflow-hidden bg-background">
+          <div className="absolute inset-0 bg-[radial-gradient(hsl(var(--border)/0.5)_1px,transparent_1px)] [background-size:32px_32px]"></div>
+          <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+        </div>
+      );
+    patchStrategy: replace
+  - type: write
+    path: src/components/sections/Hero.tsx
+    content: >
+      --- src/components/sections/Hero.tsx
+
+      +++ src/components/sections/Hero.tsx
+
+      @@ -6,62 +6,70 @@
+       import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+       import { CodeBlock } from "@/components/CodeBlock";
+       import { heroContent } from "@/content/sections.content";
+       import { PLAYGROUND_URL } from "@/lib/constants";
+      +import { HeroBackground } from "@/components/HeroBackground";
+       
+       export const Hero = () => (
+      -  <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32
+      sm:pt-16 lg:grid-cols-2">
+
+      -    <div className="space-y-6 text-center lg:text-left">
+
+      -      <h1 className="animate-fade-in text-4xl font-extrabold
+      tracking-tighter opacity-0 md:text-6xl">
+
+      -        <span className="bg-gradient-to-b from-foreground
+      to-foreground/70 bg-clip-text text-transparent">
+
+      -          {heroContent.title}
+
+      -        </span>{" "}
+
+      -        <span className="inline-block whitespace-nowrap rounded-full
+      bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary
+      md:text-5xl">
+
+      -          <span className="relative top-[-0.05em] text-2xl md:text-4xl">
+
+      -            &lt;
+
+      -          </span>
+
+      -          {heroContent.highlightedTitle}
+
+      -        </span>
+
+      -      </h1>
+
+      -      <p className="mx-auto max-w-2xl animate-fade-in text-lg
+      text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl
+      lg:mx-0">
+
+      -        {heroContent.subtitle}
+
+      -      </p>
+
+      -      <div className="flex animate-fade-in flex-col justify-center gap-4
+      opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+
+      -        <a href="#section-5">
+
+      -          <Button size="lg">
+
+      -            {heroContent.getStartedButton} <Terminal className="ml-2
+      size-4" />
+
+      -          </Button>
+
+      -        </a>
+
+      -        <a href={PLAYGROUND_URL} target="_blank" rel="noopener
+      noreferrer">
+
+      -          <Button variant="secondary" size="lg">
+
+      -            {heroContent.playgroundButton} <ArrowRight className="ml-2
+      size-4" />
+
+      -          </Button>
+
+      -        </a>
+
+      +  <section className="relative border-b">
+
+      +    <HeroBackground />
+
+      +    <div className="container mx-auto grid max-w-5xl items-center gap-12
+      px-4 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
+
+      +      <div className="space-y-6 text-center lg:text-left">
+
+      +        <h1 className="animate-fade-in text-4xl font-extrabold
+      tracking-tighter opacity-0 md:text-6xl">
+
+      +          <span className="bg-gradient-to-b from-foreground
+      to-foreground/70 bg-clip-text text-transparent">
+
+      +            {heroContent.title}
+
+      +          </span>{" "}
+
+      +          <span className="inline-block whitespace-nowrap rounded-full
+      bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary
+      md:text-5xl">
+
+      +            <span className="relative top-[-0.05em] text-2xl
+      md:text-4xl">
+
+      +              &lt;
+
+      +            </span>
+
+      +            {heroContent.highlightedTitle}
+
+      +          </span>
+
+      +        </h1>
+
+      +        <p className="mx-auto max-w-2xl animate-fade-in text-lg
+      text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl
+      lg:mx-0">
+
+      +          {heroContent.subtitle}
+
+      +        </p>
+
+      +        <div className="flex animate-fade-in flex-col justify-center
+      gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+
+      +          <a href="#section-5">
+
+      +            <Button size="lg">
+
+      +              {heroContent.getStartedButton} <Terminal className="ml-2
+      size-4" />
+
+      +            </Button>
+
+      +          </a>
+
+      +          <a href={PLAYGROUND_URL} target="_blank" rel="noopener
+      noreferrer">
+
+      +            <Button variant="secondary" size="lg">
+
+      +              {heroContent.playgroundButton}{" "}
+
+      +              <ArrowRight className="ml-2 size-4" />
+
+      +            </Button>
+
+      +          </a>
+
+      +        </div>
+             </div>
+      -    </div>
+
+      -    <div className="relative rounded-xl border bg-gradient-to-b
+      from-secondary/30 to-background p-4 lg:p-6">
+
+      -      <Card className="animate-slide-in-from-top bg-background/50
+      opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+
+      -        <CardHeader className="flex-row items-center justify-between
+      p-4">
+
+      -          <CardTitle className="text-base font-semibold
+      text-muted-foreground">
+
+      -            {heroContent.before.title}
+
+      -          </CardTitle>
+
+      -          <Zap className="size-5 text-destructive" />
+
+      -        </CardHeader>
+
+      -        <CardContent className="p-0">
+
+      -          <CodeBlock
+
+      -            lang="typescript"
+
+      -            className="rounded-t-none border-0 bg-transparent p-4"
+
+      -            rawString={heroContent.before.rawCode}
+
+      -          >{heroContent.before.code}</CodeBlock>
+
+      -        </CardContent>
+
+      -      </Card>
+
+      -
+
+      -      <div className="my-6 flex animate-fade-in justify-center opacity-0
+      [animation-delay:0.7s]">
+
+      -        <div className="flex size-10 animate-pulse items-center
+      justify-center rounded-full bg-primary text-primary-foreground">
+
+      -          <ArrowDown className="size-5" />
+
+      +      <div className="relative rounded-xl border bg-gradient-to-b
+      from-secondary/30 to-background p-4 lg:p-6">
+
+      +        <Card className="animate-slide-in-from-top bg-background/50
+      opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+
+      +          <CardHeader className="flex-row items-center justify-between
+      p-4">
+
+      +            <CardTitle className="text-base font-semibold
+      text-muted-foreground">
+
+      +              {heroContent.before.title}
+
+      +            </CardTitle>
+
+      +            <Zap className="size-5 text-destructive" />
+
+      +          </CardHeader>
+
+      +          <CardContent className="p-0">
+
+      +            <CodeBlock
+
+      +              lang="typescript"
+
+      +              className="rounded-t-none border-0 bg-transparent p-4"
+
+      +              rawString={heroContent.before.rawCode}
+
+      +            >
+
+      +              {heroContent.before.code}
+
+      +            </CodeBlock>
+
+      +          </CardContent>
+
+      +        </Card>
+
+      +
+
+      +        <div className="my-6 flex animate-fade-in justify-center
+      opacity-0 [animation-delay:0.7s]">
+
+      +          <div className="flex size-10 animate-pulse items-center
+      justify-center rounded-full bg-primary text-primary-foreground">
+
+      +            <ArrowDown className="size-5" />
+
+      +          </div>
+               </div>
+      -      </div>
+
+      -
+
+      -      <Card className="animate-slide-in-bottom-glow border-primary/50
+      bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+
+      -        <CardHeader className="flex-row items-center justify-between
+      p-4">
+
+      -          <CardTitle className="text-base font-semibold
+      text-muted-foreground">
+
+      -            {heroContent.after.title}
+
+      -          </CardTitle>
+
+      -          <Zap className="size-5 text-primary" />
+
+      -        </CardHeader>
+
+      -        <CardContent className="p-0">
+
+      -          <CodeBlock
+
+      -            lang="text"
+
+      -            className="rounded-t-none border-0 bg-transparent p-4"
+
+      -            rawString={heroContent.after.rawCode}
+
+      -          >{heroContent.after.code}</CodeBlock>
+
+      -        </CardContent>
+
+      -      </Card>
+
+      +
+
+      +        <Card className="animate-slide-in-bottom-glow border-primary/50
+      bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+
+      +          <CardHeader className="flex-row items-center justify-between
+      p-4">
+
+      +            <CardTitle className="text-base font-semibold
+      text-muted-foreground">
+
+      +              {heroContent.after.title}
+
+      +            </CardTitle>
+
+      +            <Zap className="size-5 text-primary" />
+
+      +          </CardHeader>
+
+      +          <CardContent className="p-0">
+
+      +            <CodeBlock
+
+      +              lang="text"
+
+      +              className="rounded-t-none border-0 bg-transparent p-4"
+
+      +              rawString={heroContent.after.rawCode}
+
+      +            >
+
+      +              {heroContent.after.code}
+
+      +            </CodeBlock>
+
+      +          </CardContent>
+
+      +        </Card>
+
+      +      </div>
+           </div>
+         </section>
+       );
+    patchStrategy: standard-diff
+snapshot:
+  src/components/HeroBackground.tsx: null
+  src/components/Section.tsx: |-
+    import { cn } from "@/lib/utils";
+
+    export const Section = ({
+      id,
+      className,
+      children,
+    }: {
+      id: string;
+      className?: string;
+      children: React.ReactNode;
+    }) => (
+      <section
+        id={id}
+        className={cn("border-t py-20 sm:py-28", className)}
+      >
+        {children}
+      </section>
+    );
+  src/App.tsx: |-
+    import { Contribute } from "./components/sections/Contribute";
+    import { ContextCost } from "./components/sections/ContextCost";
+    import { DesignDecisions } from "./components/sections/DesignDecisions";
+    import { Faq } from "./components/sections/Faq";
+    import { Footer } from "./components/Footer";
+    import { Header } from "./components/Header";
+    import { Hero } from "./components/sections/Hero";
+    import { Playground } from "./components/sections/Playground";
+    import { QuickStart } from "./components/sections/QuickStart";
+    import { Solution } from "./components/sections/Solution";
+    import { TokenEconomics } from "./components/sections/TokenEconomics";
+    import { UseCases } from "./components/sections/UseCases";
+
+    export default function App() {
+      return (
+        <div className="relative min-h-screen w-full overflow-x-hidden">
+          <div className="absolute inset-0 -z-10 size-full bg-background">
+            <div className="absolute inset-0 size-full animate-background-pan bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10 bg-[200%_200%]" />
+          </div>
+
+          <Header />
+
+          <main className="container mx-auto max-w-5xl px-4">
+            <Hero />
+            <ContextCost />
+            <Solution />
+            <TokenEconomics />
+            <Playground />
+            <QuickStart />
+            <Faq />
+            <DesignDecisions />
+            <UseCases />
+            <Contribute />
+          </main>
+
+          <Footer />
+        </div>
+      );
+    }
+  src/components/sections/Hero.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import {
+      Card,
+      CardContent,
+      CardHeader,
+      CardTitle,
+    } from "@/components/ui/card";
+    import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+    import { CodeBlock } from "@/components/CodeBlock";
+    import { heroContent } from "@/content/sections.content";
+    import { PLAYGROUND_URL } from "@/lib/constants";
+
+    export const Hero = () => (
+      <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
+        <div className="space-y-6 text-center lg:text-left">
+          <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
+            <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+              {heroContent.title}
+            </span>{" "}
+            <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
+              <span className="relative top-[-0.05em] text-2xl md:text-4xl">
+                &lt;
+              </span>
+              {heroContent.highlightedTitle}
+            </span>
+          </h1>
+          <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
+            {heroContent.subtitle}
+          </p>
+          <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+            <a href="#section-5">
+              <Button size="lg">
+                {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
+              </Button>
+            </a>
+            <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="lg">
+                {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
+              </Button>
+            </a>
+          </div>
+        </div>
+        <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
+          <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.before.title}
+              </CardTitle>
+              <Zap className="size-5 text-destructive" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock
+                lang="typescript"
+                className="rounded-t-none border-0 bg-transparent p-4"
+                rawString={heroContent.before.rawCode}
+              >{heroContent.before.code}</CodeBlock>
+            </CardContent>
+          </Card>
+
+          <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+            <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <ArrowDown className="size-5" />
+            </div>
+          </div>
+
+          <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+            <CardHeader className="flex-row items-center justify-between p-4">
+              <CardTitle className="text-base font-semibold text-muted-foreground">
+                {heroContent.after.title}
+              </CardTitle>
+              <Zap className="size-5 text-primary" />
+            </CardHeader>
+            <CardContent className="p-0">
+              <CodeBlock
+                lang="text"
+                className="rounded-t-none border-0 bg-transparent p-4"
+                rawString={heroContent.after.rawCode}
+              >{heroContent.after.code}</CodeBlock>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 37
