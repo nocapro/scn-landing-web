@@ -29,12 +29,14 @@ src/
     CodeBlock.tsx
     Footer.tsx
     Header.tsx
+    HeroBackground.tsx
     InlineCode.tsx
     Section.tsx
   content/
     sections.content.tsx
   hooks/
     useCopyToClipboard.hook.ts
+    useScroll.hook.ts
   lib/
     constants.ts
     utils.ts
@@ -50,6 +52,28 @@ vite.config.ts
 ```
 
 # Files
+
+## File: src/hooks/useScroll.hook.ts
+```typescript
+import { useState, useEffect } from "react";
+
+export const useScroll = (threshold = 10) => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > threshold);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [threshold]);
+
+  return scrolled;
+};
+```
 
 ## File: public/favicon.svg
 ```
@@ -509,6 +533,16 @@ export {
 }
 ```
 
+## File: src/components/HeroBackground.tsx
+```typescript
+export const HeroBackground = () => (
+  <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10 size-full animate-fade-in overflow-hidden opacity-0">
+    <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+    <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+  </div>
+);
+```
+
 ## File: src/components/InlineCode.tsx
 ```typescript
 export const InlineCode = ({ children }: { children: string }) => (
@@ -784,28 +818,6 @@ CardFooter.displayName = "CardFooter"
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 ```
 
-## File: src/components/Section.tsx
-```typescript
-import { cn } from "@/lib/utils";
-
-export const Section = ({
-  id,
-  className,
-  children,
-}: {
-  id: string;
-  className?: string;
-  children: React.ReactNode;
-}) => (
-  <section
-    id={id}
-    className={cn("border-t py-20 sm:py-28", className)}
-  >
-    {children}
-  </section>
-);
-```
-
 ## File: src/hooks/useCopyToClipboard.hook.ts
 ```typescript
 import { useState, useCallback, useEffect } from "react";
@@ -1004,6 +1016,25 @@ export const Footer = () => (
 );
 ```
 
+## File: src/components/Section.tsx
+```typescript
+import { cn } from "@/lib/utils";
+
+export const Section = ({
+  id,
+  className,
+  children,
+}: {
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <section id={id} className={cn("border-t py-20 sm:py-28", className)}>
+    <div className="container mx-auto max-w-5xl px-4">{children}</div>
+  </section>
+);
+```
+
 ## File: src/lib/constants.ts
 ```typescript
 export const GITHUB_URL = "https://github.com/nocapro/scn-ts";
@@ -1181,34 +1212,48 @@ export const TokenEconomics = () => (
 import { Button } from "@/components/ui/button";
 import { Github, MessageSquare } from "lucide-react";
 import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
+import { useScroll } from "@/hooks/useScroll.hook";
+import { cn } from "@/lib/utils";
 
-export const Header = () => (
-  <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
-      <a href="/" className="flex items-center space-x-2.5">
-        <span className="-translate-y-0.5 text-2xl font-black text-primary">◮</span>
-        <span className="font-bold">SCN</span>
-        <span className="rounded-full border border-primary/50 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-          Open Source
-        </span>
-      </a>
-      <div className="flex items-center gap-2">
-        <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm">
-            <MessageSquare className="mr-2 size-4" />
-            Discord
-          </Button>
+export const Header = () => {
+  const scrolled = useScroll();
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled
+          ? "border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          : "border-b border-transparent",
+      )}
+    >
+      <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
+        <a href="/" className="group flex items-center space-x-2.5">
+          <span className="-translate-y-0.5 text-2xl font-black text-primary transition-transform duration-300 group-hover:rotate-180">
+            ◮
+          </span>
+          <span className="font-bold">SCN</span>
+          <span className="rounded-full border border-primary/50 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+            Open Source
+          </span>
         </a>
-        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm">
-            <Github className="mr-2 size-4" />
-            GitHub
-          </Button>
-        </a>
+        <div className="flex items-center gap-2">
+          <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm">
+              <MessageSquare className="mr-2 size-4" />
+              Discord
+            </Button>
+          </a>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm">
+              <Github className="mr-2 size-4" />
+              GitHub
+            </Button>
+          </a>
+        </div>
       </div>
-    </div>
-  </header>
-);
+    </header>
+  );
+};
 ```
 
 ## File: src/index.css
@@ -1957,78 +2002,135 @@ import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 import { heroContent } from "@/content/sections.content";
 import { PLAYGROUND_URL } from "@/lib/constants";
+import { HeroBackground } from "@/components/HeroBackground";
 
 export const Hero = () => (
-  <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
-    <div className="space-y-6 text-center lg:text-left">
-      <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
-        <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
-          {heroContent.title}
-        </span>{" "}
-        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
-          <span className="relative top-[-0.05em] text-2xl md:text-4xl">
-            &lt;
+  <section className="relative border-b">
+    <HeroBackground />
+    <div className="container mx-auto grid max-w-5xl items-center gap-12 px-4 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
+      <div className="space-y-6 text-center lg:text-left">
+        <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
+          <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+            {heroContent.title}
+          </span>{" "}
+          <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
+            <span className="relative top-[-0.05em] text-2xl md:text-4xl">
+              &lt;
+            </span>
+            {heroContent.highlightedTitle}
           </span>
-          {heroContent.highlightedTitle}
-        </span>
-      </h1>
-      <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
-        {heroContent.subtitle}
-      </p>
-      <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
-        <a href="#section-5">
-          <Button size="lg">
-            {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
-          </Button>
-        </a>
-        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
-          <Button variant="secondary" size="lg">
-            {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
-          </Button>
-        </a>
-      </div>
-    </div>
-    <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
-      <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.before.title}
-          </CardTitle>
-          <Zap className="size-5 text-destructive" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock
-            lang="typescript"
-            className="rounded-t-none border-0 bg-transparent p-4"
-            rawString={heroContent.before.rawCode}
-          >{heroContent.before.code}</CodeBlock>
-        </CardContent>
-      </Card>
-
-      <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
-        <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <ArrowDown className="size-5" />
+        </h1>
+        <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
+          {heroContent.subtitle}
+        </p>
+        <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+          <a href="#section-5">
+            <Button size="lg">
+              {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
+            </Button>
+          </a>
+          <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+            <Button variant="secondary" size="lg">
+              {heroContent.playgroundButton}{" "}
+              <ArrowRight className="ml-2 size-4" />
+            </Button>
+          </a>
         </div>
       </div>
+      <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
+        <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+          <CardHeader className="flex-row items-center justify-between p-4">
+            <CardTitle className="text-base font-semibold text-muted-foreground">
+              {heroContent.before.title}
+            </CardTitle>
+            <Zap className="size-5 text-destructive" />
+          </CardHeader>
+          <CardContent className="p-0">
+            <CodeBlock
+              lang="typescript"
+              className="rounded-t-none border-0 bg-transparent p-4"
+              rawString={heroContent.before.rawCode}
+            >
+              {heroContent.before.code}
+            </CodeBlock>
+          </CardContent>
+        </Card>
 
-      <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.after.title}
-          </CardTitle>
-          <Zap className="size-5 text-primary" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock
-            lang="text"
-            className="rounded-t-none border-0 bg-transparent p-4"
-            rawString={heroContent.after.rawCode}
-          >{heroContent.after.code}</CodeBlock>
-        </CardContent>
-      </Card>
+        <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+          <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <ArrowDown className="size-5" />
+          </div>
+        </div>
+
+        <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+          <CardHeader className="flex-row items-center justify-between p-4">
+            <CardTitle className="text-base font-semibold text-muted-foreground">
+              {heroContent.after.title}
+            </CardTitle>
+            <Zap className="size-5 text-primary" />
+          </CardHeader>
+          <CardContent className="p-0">
+            <CodeBlock
+              lang="text"
+              className="rounded-t-none border-0 bg-transparent p-4"
+              rawString={heroContent.after.rawCode}
+            >
+              {heroContent.after.code}
+            </CodeBlock>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   </section>
 );
+```
+
+## File: package.json
+```json
+{
+  "name": "scn-landing-web",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/generate-llm-txt.mjs && tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.0",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "glob": "^10.4.1",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7",
+    "terser": "^5.44.0",
+    "vite": "^5.4.1"
+  }
+}
 ```
 
 ## File: tailwind.config.cjs
@@ -2149,6 +2251,10 @@ module.exports = {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
+        "dot-grid-pan": {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "32px 32px" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -2159,58 +2265,11 @@ module.exports = {
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
         "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
         "background-pan": "background-pan 15s ease-in-out infinite",
+        "dot-grid-pan": "dot-grid-pan 15s linear infinite",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
-```
-
-## File: package.json
-```json
-{
-  "name": "scn-landing-web",
-  "version": "0.1.0",
-  "private": false,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "node scripts/generate-llm-txt.mjs && tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
-  },
-  "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.0",
-    "@radix-ui/react-slot": "^1.2.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.525.0",
-    "react": "^19",
-    "react-dom": "^19",
-    "tailwind-merge": "^3.3.1"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jsx-a11y": "^6.9.0",
-    "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.9",
-    "eslint-plugin-tailwindcss": "^3.17.4",
-    "glob": "^10.4.1",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.4",
-    "tailwindcss-animate": "^1.0.7",
-    "terser": "^5.44.0",
-    "vite": "^5.4.1"
-  }
 }
 ```
 
@@ -2232,13 +2291,9 @@ import { UseCases } from "./components/sections/UseCases";
 export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
-      <div className="absolute inset-0 -z-10 size-full bg-background">
-        <div className="absolute inset-0 size-full animate-background-pan bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10 bg-[200%_200%]" />
-      </div>
-
       <Header />
 
-      <main className="container mx-auto max-w-5xl px-4">
+      <main>
         <Hero />
         <ContextCost />
         <Solution />

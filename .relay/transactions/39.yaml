@@ -1,0 +1,167 @@
+uuid: d03c20c0-63bd-4775-b91c-99c71c4c9e83
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T03:15:09.020Z'
+gitCommitMsg: >-
+  feat(ui): add scroll-based header transparency and animations
+
+  - Implemented a `useScroll` hook to detect scroll position. - Updated the
+  header to be transparent at the top and semi-transparent on scroll. - Added a
+  hover animation to the site logo in the header. - Added a fade-in entrance
+  animation to the hero section background.
+promptSummary: >-
+  Update styling for header transparency, logo animation, and hero background
+  animation.
+reasoning:
+  - >-
+    This is an excellent set of visual improvements. I'll implement them by
+    creating a new `useScroll` hook for the header, updating the header
+    component to be semi-transparent on scroll and to animate the logo, and
+    adding an entrance animation to the hero background.
+  - >-
+    First, I'll create a new `useScroll` hook to track the page scroll position.
+    This will help in making the header change its appearance dynamically.
+  - >-
+    Next, I'll update the `Header` component. It will now use the `useScroll`
+    hook to become semi-transparent only after the user scrolls down. I'll also
+    add a hover animation to the logo.
+  - >-
+    Finally, I'll add an entrance animation to the hero section's background to
+    make the page load more engaging.
+  - >-
+    These changes will enhance the visual appeal and user experience of the
+    landing page.
+operations:
+  - type: write
+    path: src/hooks/useScroll.hook.ts
+    content: |-
+      import { useState, useEffect } from "react";
+
+      export const useScroll = (threshold = 10) => {
+        const [scrolled, setScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setScrolled(window.scrollY > threshold);
+          };
+
+          window.addEventListener("scroll", handleScroll, { passive: true });
+          handleScroll();
+
+          return () => window.removeEventListener("scroll", handleScroll);
+        }, [threshold]);
+
+        return scrolled;
+      };
+    patchStrategy: replace
+  - type: write
+    path: src/components/Header.tsx
+    content: |-
+      import { Button } from "@/components/ui/button";
+      import { Github, MessageSquare } from "lucide-react";
+      import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
+      import { useScroll } from "@/hooks/useScroll.hook";
+      import { cn } from "@/lib/utils";
+
+      export const Header = () => {
+        const scrolled = useScroll();
+        return (
+          <header
+            className={cn(
+              "sticky top-0 z-50 w-full transition-all duration-300",
+              scrolled
+                ? "border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                : "border-b border-transparent",
+            )}
+          >
+            <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
+              <a href="/" className="group flex items-center space-x-2.5">
+                <span className="-translate-y-0.5 text-2xl font-black text-primary transition-transform duration-300 group-hover:rotate-180">
+                  ◮
+                </span>
+                <span className="font-bold">SCN</span>
+                <span className="rounded-full border border-primary/50 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  Open Source
+                </span>
+              </a>
+              <div className="flex items-center gap-2">
+                <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">
+                    <MessageSquare className="mr-2 size-4" />
+                    Discord
+                  </Button>
+                </a>
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">
+                    <Github className="mr-2 size-4" />
+                    GitHub
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </header>
+        );
+      };
+    patchStrategy: replace
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: >
+      <<<<<<< SEARCH
+
+      <div className="absolute inset-0 -z-10 size-full overflow-hidden
+      bg-background">
+
+      =======
+
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in
+      overflow-hidden bg-background opacity-0">
+
+      >>>>>>> REPLACE
+    patchStrategy: search-replace
+snapshot:
+  src/hooks/useScroll.hook.ts: null
+  src/components/Header.tsx: |-
+    import { Button } from "@/components/ui/button";
+    import { Github, MessageSquare } from "lucide-react";
+    import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
+
+    export const Header = () => (
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
+          <a href="/" className="flex items-center space-x-2.5">
+            <span className="-translate-y-0.5 text-2xl font-black text-primary">◮</span>
+            <span className="font-bold">SCN</span>
+            <span className="rounded-full border border-primary/50 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+              Open Source
+            </span>
+          </a>
+          <div className="flex items-center gap-2">
+            <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <MessageSquare className="mr-2 size-4" />
+                Discord
+              </Button>
+            </a>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <Github className="mr-2 size-4" />
+                GitHub
+              </Button>
+            </a>
+          </div>
+        </div>
+      </header>
+    );
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute inset-0 -z-10 size-full overflow-hidden bg-background">
+        <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 39

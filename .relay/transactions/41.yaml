@@ -1,0 +1,75 @@
+uuid: d8fc2b72-00f7-418f-a90a-a5c71c77f0a9
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T03:20:55.333Z'
+gitCommitMsg: >-
+  fix(ui): ensure header background is transparent at page top
+
+  Reverted the positioning of the HeroBackground component to be contained
+  within the Hero section. This change ensures the header has no visible
+  background when the page is scrolled to the top, resolving the issue of an
+  unwanted background on initial load. The hero background now appears behind
+  the header only upon scrolling.
+promptSummary: >-
+  Revert hero background positioning to make the header background transparent
+  on initial page load.
+reasoning:
+  - >-
+    You are right, seeing the implementation has revealed a new preference. The
+    previous change extended the hero background behind the header, which made
+    the header's background visible from the very start. The new request is to
+    make that background "disappear" when the page is scrolled to the top.
+  - >-
+    The visual phenomenon you're describing as the background "disappearing"
+    when you scroll back up is likely due to the complex interaction of layered
+    transparent elements and animations.
+  - >-
+    To achieve the desired effect of a clean, background-free header on initial
+    load, I will revert the change to the `HeroBackground` component. This will
+    contain the hero's dot-grid background within the hero section itself,
+    rather than extending it up behind the header.
+  - 'Here is the plan:'
+  - 1.  I will modify `src/components/HeroBackground.tsx`.
+  - >-
+    2.  I will restore its positioning to `inset-0`, which will confine it to
+    its parent `<section>`.
+  - >-
+    This means on page load, the header will be transparent against the base
+    page background. As you scroll down, the hero section with its dot-grid
+    background will slide underneath the sticky header, creating a nice parallax
+    effect, just before the header's own semi-transparent background fades in.
+  - 'Here is the code change to accomplish this:'
+  - >-
+    This change reverts the hero background positioning, which will make the
+    header's background appear "completely disappeared" on initial load as
+    requested.
+operations:
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: >
+      <<<<<<< SEARCH
+
+      <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10
+      animate-fade-in overflow-hidden bg-background opacity-0">
+
+      =======
+
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in
+      overflow-hidden bg-background opacity-0">
+
+      >>>>>>> REPLACE
+    patchStrategy: search-replace
+snapshot:
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10 animate-fade-in overflow-hidden bg-background opacity-0">
+        <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 41

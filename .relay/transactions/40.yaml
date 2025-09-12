@@ -1,0 +1,53 @@
+uuid: 4a3e792c-0e86-42d6-bb4d-4560d5b4e3f4
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T03:17:49.140Z'
+gitCommitMsg: >-
+  fix(ui): extend hero background behind header
+
+  Adjusted the positioning of the HeroBackground component to extend it upwards.
+  This ensures the dot-grid pattern is visible behind the semi-transparent
+  header, improving the visual effect on scroll.
+promptSummary: Extend hero background to be visible behind the header.
+reasoning:
+  - >-
+    Of course. To ensure the hero section's dot background is visible behind the
+    semi-transparent header, I'll adjust the `HeroBackground` component. By
+    extending its top edge upwards by the height of the header, it will cover
+    the area behind the header, providing the desired visual effect as you
+    scroll.
+  - 'Here''s the change:'
+  - >-
+    This single line change adjusts the positioning of the background element to
+    extend it upwards by `4rem` (the height of the header), achieving the
+    requested effect without altering the page structure.
+operations:
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: >
+      <<<<<<< SEARCH
+
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in
+      overflow-hidden bg-background opacity-0">
+
+      =======
+
+      <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10
+      animate-fade-in overflow-hidden bg-background opacity-0">
+
+      >>>>>>> REPLACE
+    patchStrategy: search-replace
+snapshot:
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in overflow-hidden bg-background opacity-0">
+        <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 40

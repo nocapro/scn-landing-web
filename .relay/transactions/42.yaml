@@ -1,0 +1,73 @@
+uuid: 180373ab-f75a-4952-b91c-9602052b0051
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T03:23:47.539Z'
+gitCommitMsg: >-
+  feat(ui): create immersive hero with transparent header
+
+  - Extended the HeroBackground component to be positioned behind the header. -
+  Removed the solid background color from the HeroBackground container.
+
+  This creates an immersive effect where the animated hero background is visible
+  through a transparent header on page load. The header's own semi-transparent
+  background now correctly appears only on scroll.
+promptSummary: >-
+  Make the hero background extend behind the header for an immersive feel, while
+  ensuring the header area is transparent on page load.
+reasoning:
+  - >-
+    Understood. You want the immersive hero effect where the dotted background
+    is visible behind the header at the top of the page, but without the header
+    having its own solid background.
+  - >-
+    The issue you saw was caused by the hero's background container having its
+    own solid background color, which became visible when I extended it behind
+    the header.
+  - >-
+    I will now fix this by making two adjustments to the `HeroBackground`
+    component:
+  - >-
+    1.  Extend the background container upwards to sit behind the header,
+    restoring the immersive feel.
+  - >-
+    2.  Remove the solid background color from that same container, so only the
+    animated dot-grid and gradient are visible.
+  - >-
+    This will result in a fully transparent header on page load, with its
+    content appearing directly over the animated hero background. The header's
+    own semi-transparent background will only fade in when you start scrolling,
+    as intended.
+  - 'Here is the code change:'
+  - >-
+    This single change achieves the desired immersive effect while fixing the
+    background issue.
+operations:
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: >
+      <<<<<<< SEARCH
+
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in
+      overflow-hidden bg-background opacity-0">
+
+      =======
+
+      <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10
+      size-full animate-fade-in overflow-hidden opacity-0">
+
+      >>>>>>> REPLACE
+    patchStrategy: search-replace
+snapshot:
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute inset-0 -z-10 size-full animate-fade-in overflow-hidden bg-background opacity-0">
+        <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 42

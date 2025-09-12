@@ -1,0 +1,70 @@
+uuid: f19d6594-e0c1-4096-8571-08573229b48c
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T03:27:05.701Z'
+gitCommitMsg: >-
+  fix(ui): correct hero background height
+
+  The hero background was not extending to the bottom of the hero section due to
+  conflicting `top`, `bottom`, and `height` properties. By removing the
+  `size-full` (`height: 100%`) class, the element now correctly stretches
+  between the specified `top` and `bottom` values, covering the entire hero
+  section as intended.
+promptSummary: >-
+  Adjust the height of the hero section's dot-grid background to extend to the
+  top of the next section.
+reasoning:
+  - >-
+    Based on your request, it seems there's an issue with the hero section's
+    background not extending to the bottom of the hero container. This is likely
+    due to a CSS conflict on the `HeroBackground` component.
+  - >-
+    Currently, the main `div` in `HeroBackground` has `top`, `bottom`, and
+    `size-full` (which sets `height: 100%`) classes. When an absolutely
+    positioned element has `top`, `bottom`, and `height` all set, most browsers
+    will ignore the `bottom` property. This results in the background ending
+    higher than intended.
+  - >-
+    To fix this, I will remove the `size-full` class. This will allow the
+    `top-[-4rem]` and `bottom-0` classes to work together, stretching the
+    background to fill the entire height of the parent `Hero` component (and
+    extend 4rem above it), ensuring its bottom edge aligns perfectly with the
+    top divider of the `ContextCost` section below it.
+  - 'Here is the change:'
+  - >-
+    This single change will correct the background's height without affecting
+    any other part of the layout.
+operations:
+  - type: write
+    path: src/components/HeroBackground.tsx
+    content: >+
+      --- src/components/HeroBackground.tsx
+
+      +++ src/components/HeroBackground.tsx
+
+      @@ -1,5 +1,5 @@
+       export const HeroBackground = () => (
+      -  <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10
+      size-full animate-fade-in overflow-hidden opacity-0">
+
+      +  <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10
+      animate-fade-in overflow-hidden opacity-0">
+           <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+           <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+         </div>
+
+    patchStrategy: standard-diff
+snapshot:
+  src/components/HeroBackground.tsx: |-
+    export const HeroBackground = () => (
+      <div className="absolute bottom-0 left-0 right-0 top-[-4rem] -z-10 size-full animate-fade-in overflow-hidden opacity-0">
+        <div className="absolute inset-0 animate-dot-grid-pan bg-[radial-gradient(hsl(var(--muted-foreground)/0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute size-full animate-background-pan bg-gradient-to-br from-primary/10 via-transparent to-primary/10 bg-[400%_400%]" />
+      </div>
+    );
+approved: true
+linesAdded: null
+linesRemoved: null
+linesDifference: null
+gitCommittedAt: null
+status: committed
+id: 43
