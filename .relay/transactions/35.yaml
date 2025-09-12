@@ -1,0 +1,161 @@
+uuid: 44b7d344-934d-4447-987d-4560d2b6b0b5
+projectId: scn-landing-web-gemini
+createdAt: '2025-09-12T01:50:37.034Z'
+gitCommitMsg: >-
+  chore: set build target to ES2020
+
+  Updated both the TypeScript and Vite configurations to target ES2020. This
+  provides a stable, modern JavaScript feature set that is widely supported by
+  browsers, improving the application's production robustness and compatibility
+  over the more fluid `ESNext` target.
+promptSummary: >-
+  The user suggested changing the target ECMAScript version to ES2020 for better
+  maturity and browser compatibility.
+reasoning:
+  - >-
+    You are absolutely right. Targeting `ES2020` is a more mature and robust
+    choice for a production build than `ESNext`. It provides a stable feature
+    set that is widely supported by modern browsers, striking a great balance
+    between modern JavaScript features and compatibility.
+  - >-
+    I will update both the TypeScript configuration and the Vite build
+    configuration to target `ES2020`.
+  - >-
+    First, I'll update `tsconfig.json` to specify `ES2020` for the target and
+    library.
+  - >-
+    Next, I'll adjust the Vite build configuration to also target `es2020`,
+    ensuring the final code output is consistent with the TypeScript settings.
+  - >-
+    These changes ensure the project's compiled JavaScript is compatible with a
+    broad range of browsers from the last few years, making the application more
+    robust and production-ready.
+operations:
+  - type: write
+    path: tsconfig.json
+    content: |+
+      --- tsconfig.json
+      +++ tsconfig.json
+      @@ -1,7 +1,7 @@
+       {
+         "compilerOptions": {
+      -    "target": "ESNext",
+      -    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+      +    "target": "ES2020",
+      +    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+           "module": "ESNext",
+           "jsx": "react-jsx",
+           "moduleResolution": "bundler",
+
+    patchStrategy: standard-diff
+  - type: write
+    path: vite.config.ts
+    content: |+
+      --- vite.config.ts
+      +++ vite.config.ts
+      @@ -41,7 +41,7 @@
+           },
+           sourcemap: false,
+           cssCodeSplit: true,
+      -    target: "esnext",
+      +    target: "es2020",
+         },
+         optimizeDeps: {
+           include: ["react", "react-dom"],
+
+    patchStrategy: standard-diff
+snapshot:
+  tsconfig.json: |-
+    {
+      "compilerOptions": {
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "jsx": "react-jsx",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "verbatimModuleSyntax": true,
+        "baseUrl": ".",
+        "paths": {
+          "@/*": ["./src/*"]
+        }
+      },
+      "include": ["src", "bun-env.d.ts"],
+      "references": [{ "path": "./tsconfig.node.json" }]
+    }
+  vite.config.ts: |-
+    import path from "path";
+    import react from "@vitejs/plugin-react";
+    import { defineConfig } from "vite";
+
+    export default defineConfig({
+      plugins: [react()],
+      resolve: {
+        alias: {
+          "@": path.resolve(__dirname, "./src"),
+        },
+      },
+      build: {
+        minify: "terser",
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+          },
+        },
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              "vendor-react": ["react", "react-dom"],
+              "vendor-ui": [
+                "@radix-ui/react-accordion",
+                "@radix-ui/react-slot",
+                "lucide-react",
+                "clsx",
+                "tailwind-merge",
+                "class-variance-authority",
+              ],
+              "landing-components": [
+                "./src/components/Header.tsx",
+                "./src/components/Footer.tsx",
+                "./src/components/sections/Contribute.tsx",
+                "./src/components/sections/ContextCost.tsx",
+                "./src/components/sections/DesignDecisions.tsx",
+                "./src/components/sections/Faq.tsx",
+                "./src/components/sections/Hero.tsx",
+                "./src/components/sections/Playground.tsx",
+                "./src/components/sections/QuickStart.tsx",
+                "./src/components/sections/Solution.tsx",
+                "./src/components/sections/TokenEconomics.tsx",
+                "./src/components/sections/UseCases.tsx",
+              ],
+            },
+            chunkFileNames: "assets/[name]-[hash].js",
+            assetFileNames: "assets/[name]-[hash].[ext]",
+          },
+        },
+        sourcemap: false,
+        cssCodeSplit: true,
+        target: "esnext",
+      },
+      optimizeDeps: {
+        include: ["react", "react-dom"],
+      },
+    });
+approved: false
+linesAdded: 3
+linesRemoved: 3
+linesDifference: 6
+gitCommittedAt: null
+status: pending
+id: 35

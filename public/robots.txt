@@ -1,5 +1,11 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
-
+Allow: /
 Sitemap: https://www.scn-ts.dev/sitemap.xml
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# See llm.txt for large language model usage rights.

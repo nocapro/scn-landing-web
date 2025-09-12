@@ -1,3 +1,7 @@
+== DONE
+
+relay-landing-web is so mature seo ready and cloudflare page deploy ready. now make scn-landing-web also mature
+
 === DONE
 
 before after widget in hero: add syntax highlighting for before and after code

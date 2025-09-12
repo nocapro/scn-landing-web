@@ -19,6 +19,7 @@ src/
       TokenEconomics.tsx
       UseCases.tsx
     ui/
+      accordion.tsx
       button.constants.ts
       button.tsx
       button.types.ts
@@ -78,6 +79,67 @@ Sitemap: https://www.scn-ts.dev/sitemap.xml
     <priority>1.0</priority>
   </url>
 </urlset>
+```
+
+## File: src/components/ui/accordion.tsx
+```typescript
+"use client"
+
+import * as React from "react"
+import * as AccordionPrimitive from "@radix-ui/react-accordion"
+import { ChevronDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+const Accordion = AccordionPrimitive.Root
+
+const AccordionItem = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
+>(({ className, ...props }, ref) => (
+  <AccordionPrimitive.Item
+    ref={ref}
+    className={cn("border-b", className)}
+    {...props}
+  />
+))
+AccordionItem.displayName = "AccordionItem"
+
+const AccordionTrigger = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <ChevronDown className="size-4 shrink-0 transition-transform duration-200" />
+    </AccordionPrimitive.Trigger>
+  </AccordionPrimitive.Header>
+))
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
+
+const AccordionContent = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Content
+    ref={ref}
+    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    {...props}
+  >
+    <div className={cn("pb-4 pt-0", className)}>{children}</div>
+  </AccordionPrimitive.Content>
+))
+AccordionContent.displayName = AccordionPrimitive.Content.displayName
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
 ```
 
 ## File: src/components/ui/button.types.ts
@@ -509,14 +571,6 @@ export const useCopyToClipboard = () => {
 };
 ```
 
-## File: src/lib/constants.ts
-```typescript
-export const GITHUB_URL = "https://github.com/nocapro/scn";
-export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
-export const NOCAPRO_URL = "https://www.noca.pro";
-export const DISCORD_URL = "https://discord.gg/your-invite";
-```
-
 ## File: tsconfig.json
 ```json
 {
@@ -664,125 +718,12 @@ export const Footer = () => (
 );
 ```
 
-## File: src/index.css
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
- 
-@layer base {
-  :root {
-    --background: 0 0% 100%; /* white */
-    --foreground: 224 71.4% 4.1%; /* near-black */
- 
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
- 
-    --primary: 262.1 83.3% 57.8%; /* vivid violet */
-    --primary-foreground: 0 0% 98%; /* near-white */
- 
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
- 
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 263.4 95.2% 66.3%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 0 0% 98%;
- 
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 0 0% 98%;
- 
-    --primary: 263.4 95.2% 66.3%;
-    --primary-foreground: 224 71.4% 4.1%;
- 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263.4 95.2% 66.3%;
-  }
-}
- 
-@layer base {
-  html {
-    @apply scroll-smooth;
-  }
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-}
-```
-
-## File: src/components/sections/ContextCost.tsx
+## File: src/lib/constants.ts
 ```typescript
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Section } from "@/components/Section";
-import { contextCostContent } from "@/content/sections.content";
-
-export const ContextCost = () => (
-  <Section id="section-1">
-    <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold tracking-tight">
-        {contextCostContent.title}
-      </h2>
-      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
-        {contextCostContent.subtitle}
-      </p>
-    </div>
-    <div className="grid gap-8 md:grid-cols-3">
-      {contextCostContent.cards.map((card, index) => (
-        <Card key={index}>
-          <CardHeader>
-            <card.icon className="mb-2 size-8 text-primary" />
-            <CardTitle>{card.title}</CardTitle>
-          </CardHeader>
-          <CardContent>{card.content}</CardContent>
-        </Card>
-      ))}
-    </div>
-  </Section>
-);
+export const GITHUB_URL = "https://github.com/nocapro/scn-ts";
+export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
+export const NOCAPRO_URL = "https://www.noca.pro";
+export const DISCORD_URL = "https://go.noca.pro/scn-discord";
 ```
 
 ## File: src/components/sections/Contribute.tsx
@@ -809,42 +750,6 @@ export const Contribute = () => (
         </Button>
       </a>
     </Card>
-  </Section>
-);
-```
-
-## File: src/components/sections/DesignDecisions.tsx
-```typescript
-import { Section } from "@/components/Section";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { designDecisionsContent } from "@/content/sections.content";
-
-export const DesignDecisions = () => (
-  <Section id="section-7">
-    <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold tracking-tight">
-        {designDecisionsContent.title}
-      </h2>
-      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
-        {designDecisionsContent.subtitle}
-      </p>
-    </div>
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-      {designDecisionsContent.cards.map((card, index) => (
-        <Card key={index}>
-          <CardHeader>
-            <card.icon className="mb-2 size-8 text-primary" />
-            <CardTitle>{card.title}</CardTitle>
-          </CardHeader>
-          <CardContent>{card.content}</CardContent>
-        </Card>
-      ))}
-    </div>
   </Section>
 );
 ```
@@ -897,27 +802,6 @@ export const Playground = () => (
         </Button>
       </a>
     </Card>
-  </Section>
-);
-```
-
-## File: src/components/sections/QuickStart.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { CodeBlock } from "@/components/CodeBlock";
-import { quickStartContent } from "@/content/sections.content";
-
-export const QuickStart = () => (
-  <Section id="section-5">
-    <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold tracking-tight">
-        {quickStartContent.title}
-      </h2>
-      <p className="mt-2 text-lg text-muted-foreground">
-        {quickStartContent.subtitle}
-      </p>
-    </div>
-    <CodeBlock>{quickStartContent.code}</CodeBlock>
   </Section>
 );
 ```
@@ -976,104 +860,6 @@ export const TokenEconomics = () => (
 );
 ```
 
-## File: src/components/sections/UseCases.tsx
-```typescript
-import { Section } from "@/components/Section";
-import { InlineCode } from "@/components/InlineCode";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useCasesContent } from "@/content/sections.content";
-
-export const UseCases = () => (
-  <Section id="section-8">
-    <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold tracking-tight">
-        {useCasesContent.title}
-      </h2>
-      <p className="mt-2 text-lg text-muted-foreground">
-        {useCasesContent.subtitle}
-      </p>
-    </div>
-    <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-1/3 sm:w-[200px]">Scenario</TableHead>
-              <TableHead>Example Prompt</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {useCasesContent.prompts.map((useCase, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{useCase.scenario}</TableCell>
-                <TableCell>
-                  <InlineCode>{useCase.prompt}</InlineCode>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  </Section>
-);
-```
-
-## File: src/components/CodeBlock.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Check, Copy } from "lucide-react";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
-
-export const CodeBlock = ({
-  children,
-  lang = "bash",
-  className,
-}: {
-  children: string;
-  lang?: string;
-  className?: string;
-}) => {
-  const { isCopied, copyToClipboard } = useCopyToClipboard();
-  const textToCopy = children.trim();
-
-  return (
-    <div className="relative">
-      <pre
-        className={cn(
-          "rounded-lg border bg-secondary p-4 font-mono text-sm whitespace-pre-wrap",
-          className
-        )}
-      >
-        <code className={`language-${lang}`}>{textToCopy}</code>
-      </pre>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-2 top-2 size-8"
-        onClick={() => copyToClipboard(textToCopy)}
-        disabled={!textToCopy}
-      >
-        {isCopied ? (
-          <Check className="size-4 text-green-500" />
-        ) : (
-          <Copy className="size-4" />
-        )}
-      </Button>
-    </div>
-  );
-};
-```
-
 ## File: src/components/Header.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -1107,6 +893,314 @@ export const Header = () => (
     </div>
   </header>
 );
+```
+
+## File: src/index.css
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* white */
+    --foreground: 224 71.4% 4.1%; /* near-black */
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+ 
+    --primary: 262.1 83.3% 57.8%; /* vivid violet */
+    --primary-foreground: 0 0% 98%; /* near-white */
+ 
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+ 
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 263.4 95.2% 66.3%;
+ 
+    --radius: 0.5rem;
+
+    --syntax-keyword: 213 94% 68%; /* blue-400 */
+    --syntax-string: 93 54% 54%; /* green-600 */
+    --syntax-class: 44 98% 61%; /* yellow-400 */
+    --syntax-number: 161 67% 53%; /* teal-500 */
+    --syntax-comment: 220 9% 55%; /* slate-500 */
+  }
+ 
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 263.4 95.2% 66.3%;
+    --primary-foreground: 224 71.4% 4.1%;
+ 
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 95.2% 66.3%;
+
+    --syntax-keyword: 213 94% 68%; /* blue-400 */
+    --syntax-string: 93 34% 64%; /* green-400 */
+    --syntax-class: 44 98% 61%; /* yellow-400 */
+    --syntax-number: 161 67% 63%; /* teal-400 */
+    --syntax-comment: 220 14% 45%; /* slate-600 */
+  }
+}
+ 
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+```
+
+## File: src/components/sections/ContextCost.tsx
+```typescript
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Section } from "@/components/Section";
+import { contextCostContent } from "@/content/sections.content";
+
+export const ContextCost = () => (
+  <Section id="section-1">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {contextCostContent.title}
+      </h2>
+      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
+        {contextCostContent.subtitle}
+      </p>
+    </div>
+    <div className="grid gap-8 md:grid-cols-3">
+      {contextCostContent.cards.map((card, index) => (
+        <Card
+          key={index}
+          className="animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+          style={{ animationDelay: `${index * 150}ms` }}
+        >
+          <CardHeader>
+            <card.icon className="mb-2 size-8 text-primary" />
+            <CardTitle>{card.title}</CardTitle>
+          </CardHeader>
+          <CardContent>{card.content}</CardContent>
+        </Card>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/DesignDecisions.tsx
+```typescript
+import { Section } from "@/components/Section";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { designDecisionsContent } from "@/content/sections.content";
+
+export const DesignDecisions = () => (
+  <Section id="section-7">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {designDecisionsContent.title}
+      </h2>
+      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
+        {designDecisionsContent.subtitle}
+      </p>
+    </div>
+    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      {designDecisionsContent.cards.map((card, index) => (
+        <Card
+          key={index}
+          className="animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:border-primary/50 hover:shadow-lg"
+          style={{ animationDelay: `${index * 150}ms` }}
+        >
+          <CardHeader>
+            <card.icon className="mb-2 size-8 text-primary" />
+            <CardTitle>{card.title}</CardTitle>
+          </CardHeader>
+          <CardContent>{card.content}</CardContent>
+        </Card>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/QuickStart.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { CodeBlock } from "@/components/CodeBlock";
+import { quickStartContent } from "@/content/sections.content";
+
+export const QuickStart = () => (
+  <Section id="section-5">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {quickStartContent.title}
+      </h2>
+      <p className="mt-2 text-lg text-muted-foreground">
+        {quickStartContent.subtitle}
+      </p>
+    </div>
+    <div className="grid gap-8 md:grid-cols-2">
+      {quickStartContent.steps.map((step) => (
+        <div key={step.title}>
+          <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
+          <CodeBlock>{step.command}</CodeBlock>
+          {step.description && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {step.description}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/sections/UseCases.tsx
+```typescript
+import { Section } from "@/components/Section";
+import { Card } from "@/components/ui/card";
+import { useCasesContent } from "@/content/sections.content";
+import { Code2 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+export const UseCases = () => (
+  <Section id="section-8">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight">
+        {useCasesContent.title}
+      </h2>
+      <p className="mt-2 text-lg text-muted-foreground">
+        {useCasesContent.subtitle}
+      </p>
+    </div>
+    <div className="mx-auto max-w-3xl">
+      <Card>
+        <Accordion type="single" collapsible className="w-full">
+          {useCasesContent.prompts.map((useCase, index) => (
+            <AccordionItem value={`item-${index}`} key={index}>
+              <AccordionTrigger className="px-6 text-left hover:no-underline">
+                <span className="text-lg font-semibold">{useCase.scenario}</span>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="flex items-start gap-4 rounded-md bg-secondary p-4">
+                  <Code2 className="mt-1 size-5 shrink-0 text-primary" />
+                  <code className="font-mono text-sm">{useCase.prompt}</code>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </Card>
+    </div>
+  </Section>
+);
+```
+
+## File: src/components/CodeBlock.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Check, Copy } from "lucide-react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard.hook";
+
+export const CodeBlock = ({
+  children,
+  rawString,
+  lang = "bash",
+  className,
+}: {
+  children: React.ReactNode;
+  rawString?: string;
+  lang?: string;
+  className?: string;
+}) => {
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
+  const textToCopy = (
+    rawString ?? (typeof children === "string" ? children : "")
+  ).trim();
+
+  return (
+    <div className="relative">
+      <pre
+        className={cn(
+          "whitespace-pre-wrap rounded-lg border bg-secondary p-4 font-mono text-sm",
+          className
+        )}
+      >
+        <code className={`language-${lang}`}>{children}</code>
+      </pre>
+      {textToCopy && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-2 size-8"
+          onClick={() => copyToClipboard(textToCopy)}
+        >
+          {isCopied ? (
+            <Check className="size-4 text-green-500" />
+          ) : (
+            <Copy className="size-4" />
+          )}
+        </Button>
+      )}
+    </div>
+  );
+};
 ```
 
 ## File: src/content/sections.content.tsx
@@ -1219,17 +1313,26 @@ export const playgroundContent = {
 export const quickStartContent = {
   title: "CLI Quick Start",
   subtitle: "Get started in under a minute.",
-  code: `# global install
-npm i -g scn            # or yarn/pnpm/bun
-
-# basic
-scn "src/**/*.{ts,tsx}" --output map.scn
-
-# monorepo
-scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8
-
-# watch mode
-scn "src/**/*" --watch --preset=minimal`,
+  steps: [
+    {
+      title: "Global Install",
+      command: "npm i -g scn",
+      description: "(or yarn/pnpm/bun)",
+    },
+    {
+      title: "Basic Usage",
+      command: 'scn "src/**/*.{ts,tsx}" --output map.scn',
+    },
+    {
+      title: "Monorepo",
+      command:
+        'scn "apps/*/src/**/*" --exclude="**/*.stories.tsx" --max-workers=8',
+    },
+    {
+      title: "Watch Mode",
+      command: 'scn "src/**/*" --watch --preset=minimal',
+    },
+  ],
 };
 
 export const faqContent = {
@@ -1364,7 +1467,7 @@ export const heroContent = {
   playgroundButton: "Live Playground",
   before: {
     title: "BEFORE: 300+ tokens",
-    code: `export class ApiClient {
+    rawCode: `export class ApiClient {
   constructor(private apiKey: string) {}
 
   async fetchUsers(page: number): Promise<User[]> {
@@ -1375,96 +1478,92 @@ export const heroContent = {
     return res.json();
   }
 }`,
+    code: (
+      <>
+        <span className="text-syntax-keyword">export</span>{" "}
+        <span className="text-syntax-keyword">class</span>{" "}
+        <span className="text-syntax-class">ApiClient</span> {"{"}
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">constructor</span>
+        (
+        <span className="text-syntax-keyword">private</span> apiKey:{" "}
+        <span className="text-syntax-class">string</span>) {"{}"}
+        {"\n\n"}
+        {"  "}
+        <span className="text-syntax-keyword">async</span>{" "}
+        <span className="text-syntax-function">fetchUsers</span>
+        (page: <span className="text-syntax-class">number</span>
+        ): <span className="text-syntax-class">Promise</span>
+        &lt;
+        <span className="text-syntax-class">User</span>[]&gt; {"{"}
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">const</span> res ={" "}
+        <span className="text-syntax-keyword">await</span>{" "}
+        <span className="text-syntax-function">fetch</span>(
+        <span className="text-syntax-string">
+          {`\`/api/users?page=\${page}\``}
+        </span>
+        , {"{"}
+        {"\n"}
+        {"      "}headers: {"{"}{" "}
+        <span className="text-syntax-string">{`'X-API-KEY'`}</span>:{" "}
+        <span className="text-syntax-keyword">this</span>.apiKey {"}"}
+        {"\n"}
+        {"    "}
+        {"}"});{"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">if</span> (!res.ok){" "}
+        <span className="text-syntax-keyword">throw</span>{" "}
+        <span className="text-syntax-keyword">new</span>{" "}
+        <span className="text-syntax-class">Error</span>(
+        <span className="text-syntax-string">{`"API Error"`}</span>);
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">return</span> res.
+        <span className="text-syntax-function">json</span>();
+        {"\n"}
+        {"  "}
+        {"}"}
+        {"\n"}
+        {"}"}
+      </>
+    ),
   },
   after: {
     title: "AFTER: 38 tokens",
-    code: `§1 src/api.ts
+    rawCode: `§1 src/api.ts
 + ◇ ApiClient
   - @ apiKey: #string
   + o constructor
   + ~ fetchUsers ...!
     > User`,
+    code: (
+      <>
+        <span className="text-syntax-comment">§1 src/api.ts</span>
+        {"\n"}
+        <span className="text-syntax-keyword">+</span> ◇{" "}
+        <span className="text-syntax-class">ApiClient</span>
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">-</span> @ apiKey:{" "}
+        <span className="text-syntax-class">#string</span>
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">+</span> o constructor
+        {"\n"}
+        {"  "}
+        <span className="text-syntax-keyword">+</span> ~{" "}
+        <span className="text-syntax-function">fetchUsers</span> ...!
+        {"\n"}
+        {"    "}
+        <span className="text-syntax-keyword">{">"}</span>{" "}
+        <span className="text-syntax-class">User</span>
+      </>
+    ),
   },
 };
-```
-
-## File: src/components/sections/Hero.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
-import { CodeBlock } from "@/components/CodeBlock";
-import { heroContent } from "@/content/sections.content";
-import { PLAYGROUND_URL } from "@/lib/constants";
-
-export const Hero = () => (
-  <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
-    <div className="space-y-6 text-center lg:text-left">
-      <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
-        <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
-          {heroContent.title}
-        </span>{" "}
-        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
-          <span className="relative top-[-0.05em] text-2xl md:text-4xl">
-            &lt;
-          </span>
-          {heroContent.highlightedTitle}
-        </span>
-      </h1>
-      <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
-        {heroContent.subtitle}
-      </p>
-      <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
-        <a href="#section-5">
-          <Button size="lg">
-            {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
-          </Button>
-        </a>
-        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
-          <Button variant="secondary" size="lg">
-            {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
-          </Button>
-        </a>
-      </div>
-    </div>
-    <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
-      <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.before.title}
-          </CardTitle>
-          <Zap className="size-5 text-destructive" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock lang="typescript" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.before.code}</CodeBlock>
-        </CardContent>
-      </Card>
-
-      <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
-        <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <ArrowDown className="size-5" />
-        </div>
-      </div>
-
-      <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.after.title}
-          </CardTitle>
-          <Zap className="size-5 text-primary" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock lang="text" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.after.code}</CodeBlock>
-        </CardContent>
-      </Card>
-    </div>
-  </section>
-);
 ```
 
 ## File: index.html
@@ -1529,6 +1628,93 @@ export const Hero = () => (
 </html>
 ```
 
+## File: src/components/sections/Hero.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
+import { heroContent } from "@/content/sections.content";
+import { PLAYGROUND_URL } from "@/lib/constants";
+
+export const Hero = () => (
+  <section className="grid items-center gap-12 pb-24 pt-12 sm:pb-32 sm:pt-16 lg:grid-cols-2">
+    <div className="space-y-6 text-center lg:text-left">
+      <h1 className="animate-fade-in text-4xl font-extrabold tracking-tighter opacity-0 md:text-6xl">
+        <span className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+          {heroContent.title}
+        </span>{" "}
+        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
+          <span className="relative top-[-0.05em] text-2xl md:text-4xl">
+            &lt;
+          </span>
+          {heroContent.highlightedTitle}
+        </span>
+      </h1>
+      <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
+        {heroContent.subtitle}
+      </p>
+      <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+        <a href="#section-5">
+          <Button size="lg">
+            {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
+          </Button>
+        </a>
+        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+          <Button variant="secondary" size="lg">
+            {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
+          </Button>
+        </a>
+      </div>
+    </div>
+    <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
+      <Card className="animate-slide-in-from-top bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.5s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.before.title}
+          </CardTitle>
+          <Zap className="size-5 text-destructive" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock
+            lang="typescript"
+            className="rounded-t-none border-0 bg-transparent p-4"
+            rawString={heroContent.before.rawCode}
+          >{heroContent.before.code}</CodeBlock>
+        </CardContent>
+      </Card>
+
+      <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+        <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <ArrowDown className="size-5" />
+        </div>
+      </div>
+
+      <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.after.title}
+          </CardTitle>
+          <Zap className="size-5 text-primary" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock
+            lang="text"
+            className="rounded-t-none border-0 bg-transparent p-4"
+            rawString={heroContent.after.rawCode}
+          >{heroContent.after.code}</CodeBlock>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+);
+```
+
 ## File: package.json
 ```json
 {
@@ -1543,6 +1729,7 @@ export const Hero = () => (
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",
@@ -1632,6 +1819,13 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        syntax: {
+          keyword: "hsl(var(--syntax-keyword))",
+          string: "hsl(var(--syntax-string))",
+          class: "hsl(var(--syntax-class))",
+          number: "hsl(var(--syntax-number))",
+          comment: "hsl(var(--syntax-comment))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -1681,6 +1875,11 @@ module.exports = {
             transform: "translateY(0)",
           },
         },
+        "background-pan": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -1690,6 +1889,7 @@ module.exports = {
         "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
         "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
+        "background-pan": "background-pan 15s ease-in-out infinite",
       },
     },
   },
@@ -1716,8 +1916,7 @@ export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
       <div className="absolute inset-0 -z-10 size-full bg-background">
-        <div className="absolute right-0 top-0 size-[500px] translate-x-[-20%] translate-y-[20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
-        <div className="absolute bottom-0 left-0 size-[500px] translate-x-[20%] translate-y-[-10%] rounded-full bg-secondary opacity-50 blur-[80px]"></div>
+        <div className="absolute inset-0 size-full animate-background-pan bg-gradient-to-tr from-primary/10 via-secondary/10 to-primary/10 bg-[200%_200%]" />
       </div>
 
       <Header />
