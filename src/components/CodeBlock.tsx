@@ -28,14 +28,14 @@ export const CodeBlock = ({
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-2 top-2 h-8 w-8"
+        className="absolute right-2 top-2 size-8"
         onClick={() => copyToClipboard(textToCopy)}
         disabled={!textToCopy}
       >
         {isCopied ? (
-          <Check className="h-4 w-4 text-green-500" />
+          <Check className="size-4 text-green-500" />
         ) : (
-          <Copy className="h-4 w-4" />
+          <Copy className="size-4" />
         )}
       </Button>
     </div>

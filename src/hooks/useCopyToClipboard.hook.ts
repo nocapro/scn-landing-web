@@ -7,7 +7,7 @@ export const useCopyToClipboard = () => {
     if (!text) {
       return;
     }
-    navigator.clipboard.writeText(text).then(() => {
+    void navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
     });
   }, []);

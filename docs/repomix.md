@@ -103,7 +103,7 @@ export const buttonVariants = cva(
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        icon: "size-10",
       },
     },
     defaultVariants: {
@@ -163,7 +163,7 @@ CardHeader.displayName = "CardHeader"
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
@@ -171,8 +171,10 @@ const CardTitle = React.forwardRef<
       className
     )}
     {...props}
-  />
-))
+  >
+    {children}
+  </h3>
+));
 CardTitle.displayName = "CardTitle"
 
 const CardDescription = React.forwardRef<
@@ -340,28 +342,6 @@ export const InlineCode = ({ children }: { children: string }) => (
 );
 ```
 
-## File: src/components/Section.tsx
-```typescript
-import { cn } from "@/lib/utils";
-
-export const Section = ({
-  id,
-  className,
-  children,
-}: {
-  id: string;
-  className?: string;
-  children: React.ReactNode;
-}) => (
-  <section
-    id={id}
-    className={cn("py-20 sm:py-28 border-t", className)}
-  >
-    {children}
-  </section>
-);
-```
-
 ## File: src/hooks/useCopyToClipboard.hook.ts
 ```typescript
 import { useState, useCallback, useEffect } from "react";
@@ -373,7 +353,7 @@ export const useCopyToClipboard = () => {
     if (!text) {
       return;
     }
-    navigator.clipboard.writeText(text).then(() => {
+    void navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
     });
   }, []);
@@ -547,6 +527,61 @@ export default defineConfig({
 }
 ```
 
+## File: src/components/ui/button.tsx
+```typescript
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "./button.constants"
+import type { ButtonProps } from "./button.types"
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button }
+```
+
+## File: src/components/Section.tsx
+```typescript
+import { cn } from "@/lib/utils";
+
+export const Section = ({
+  id,
+  className,
+  children,
+}: {
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <section
+    id={id}
+    className={cn("border-t py-20 sm:py-28", className)}
+  >
+    {children}
+  </section>
+);
+```
+
+## File: src/lib/constants.ts
+```typescript
+export const GITHUB_URL = "https://github.com/nocapro/scn";
+export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
+export const NOCAPRO_URL = "https://www.noca.pro";
+export const DISCORD_URL = "https://discord.gg/your-invite";
+```
+
 ## File: src/components/sections/ContextCost.tsx
 ```typescript
 import {
@@ -560,19 +595,19 @@ import { contextCostContent } from "@/content/sections.content";
 
 export const ContextCost = () => (
   <Section id="section-1">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {contextCostContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
         {contextCostContent.subtitle}
       </p>
     </div>
-    <div className="grid md:grid-cols-3 gap-8">
+    <div className="grid gap-8 md:grid-cols-3">
       {contextCostContent.cards.map((card, index) => (
         <Card key={index}>
           <CardHeader>
-            <card.icon className="h-8 w-8 text-primary mb-2" />
+            <card.icon className="mb-2 size-8 text-primary" />
             <CardTitle>{card.title}</CardTitle>
           </CardHeader>
           <CardContent>{card.content}</CardContent>
@@ -594,16 +629,16 @@ import { GITHUB_URL } from "@/lib/constants";
 
 export const Contribute = () => (
   <Section id="section-9">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+    <Card className="bg-secondary/50 p-8 text-center md:p-12">
       <h2 className="text-3xl font-bold tracking-tight">
         {contributeContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8 max-w-2xl mx-auto">
+      <p className="mx-auto mb-8 mt-2 max-w-2xl text-lg text-muted-foreground">
         {contributeContent.subtitle}
       </p>
       <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
         <Button size="lg" variant="secondary">
-          <Github className="mr-2 h-4 w-4" /> {contributeContent.buttonText}
+          <Github className="mr-2 size-4" /> {contributeContent.buttonText}
         </Button>
       </a>
     </Card>
@@ -624,19 +659,19 @@ import { designDecisionsContent } from "@/content/sections.content";
 
 export const DesignDecisions = () => (
   <Section id="section-7">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {designDecisionsContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+      <p className="mx-auto mt-2 max-w-2xl text-lg text-muted-foreground">
         {designDecisionsContent.subtitle}
       </p>
     </div>
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       {designDecisionsContent.cards.map((card, index) => (
         <Card key={index}>
           <CardHeader>
-            <card.icon className="h-8 w-8 text-primary mb-2" />
+            <card.icon className="mb-2 size-8 text-primary" />
             <CardTitle>{card.title}</CardTitle>
           </CardHeader>
           <CardContent>{card.content}</CardContent>
@@ -654,16 +689,16 @@ import { faqContent } from "@/content/sections.content";
 
 export const Faq = () => (
   <Section id="section-6">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {faqContent.title}
       </h2>
     </div>
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8">
       {faqContent.questions.map((faq, index) => (
         <div className="border-t pt-4" key={index}>
-          <p className="font-semibold text-lg">{faq.question}</p>
-          <p className="text-muted-foreground mt-1">{faq.answer}</p>
+          <p className="text-lg font-semibold">{faq.question}</p>
+          <p className="mt-1 text-muted-foreground">{faq.answer}</p>
         </div>
       ))}
     </div>
@@ -682,7 +717,7 @@ import { PLAYGROUND_URL } from "@/lib/constants";
 
 export const Playground = () => (
   <Section id="section-4">
-    <Card className="text-center p-8 md:p-12 bg-secondary/50">
+    <Card className="p-8 text-center bg-secondary/50 md:p-12">
       <h2 className="text-3xl font-bold tracking-tight">
         {playgroundContent.title}
       </h2>
@@ -691,8 +726,7 @@ export const Playground = () => (
       </p>
       <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
         <Button size="lg">
-          {playgroundContent.buttonText}{" "}
-          <ArrowRight className="ml-2 h-4 w-4" />
+          {playgroundContent.buttonText} <ArrowRight className="ml-2 size-4" />
         </Button>
       </a>
     </Card>
@@ -708,11 +742,11 @@ import { quickStartContent } from "@/content/sections.content";
 
 export const QuickStart = () => (
   <Section id="section-5">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {quickStartContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {quickStartContent.subtitle}
       </p>
     </div>
@@ -739,11 +773,11 @@ import { solutionContent } from "@/content/sections.content";
 
 export const Solution = () => (
   <Section id="section-2">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {solutionContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 max-w-3xl mx-auto">
+      <p className="mx-auto mt-2 max-w-3xl text-lg text-muted-foreground">
         {solutionContent.subtitle}
       </p>
     </div>
@@ -794,11 +828,11 @@ import { cn } from "@/lib/utils";
 
 export const TokenEconomics = () => (
   <Section id="section-3">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {tokenEconomicsContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {tokenEconomicsContent.subtitle}
       </p>
     </div>
@@ -848,11 +882,11 @@ import { useCasesContent } from "@/content/sections.content";
 
 export const UseCases = () => (
   <Section id="section-8">
-    <div className="text-center mb-12">
+    <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold tracking-tight">
         {useCasesContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {useCasesContent.subtitle}
       </p>
     </div>
@@ -882,31 +916,6 @@ export const UseCases = () => (
 );
 ```
 
-## File: src/components/ui/button.tsx
-```typescript
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "./button.constants"
-import type { ButtonProps } from "./button.types"
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = "Button"
-
-export { Button, buttonVariants }
-```
-
 ## File: src/components/CodeBlock.tsx
 ```typescript
 import { Button } from "@/components/ui/button";
@@ -930,7 +939,7 @@ export const CodeBlock = ({
     <div className="relative">
       <pre
         className={cn(
-          "bg-secondary p-4 rounded-lg text-sm font-mono border whitespace-pre-wrap",
+          "rounded-lg border bg-secondary p-4 font-mono text-sm whitespace-pre-wrap",
           className
         )}
       >
@@ -939,14 +948,14 @@ export const CodeBlock = ({
       <Button
         variant="ghost"
         size="icon"
-        className="absolute top-2 right-2 h-8 w-8"
+        className="absolute right-2 top-2 size-8"
         onClick={() => copyToClipboard(textToCopy)}
         disabled={!textToCopy}
       >
         {isCopied ? (
-          <Check className="h-4 w-4 text-green-500" />
+          <Check className="size-4 text-green-500" />
         ) : (
-          <Copy className="h-4 w-4" />
+          <Copy className="size-4" />
         )}
       </Button>
     </div>
@@ -960,9 +969,9 @@ import { NOCAPRO_URL } from "@/lib/constants";
 
 export const Footer = () => (
   <footer className="border-t">
-    <div className="container max-w-5xl mx-auto px-4 py-8 text-center text-muted-foreground">
+    <div className="container mx-auto max-w-5xl px-4 py-8 text-center text-muted-foreground">
       <p>MIT © 2025 SCN contributors</p>
-      <p className="text-sm mt-4 max-w-xl mx-auto">
+      <p className="mx-auto mt-4 max-w-xl text-sm">
         SCN is the shared engine behind{" "}
         <a
           href={NOCAPRO_URL}
@@ -988,118 +997,29 @@ import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
 export const Header = () => (
   <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
-      <a href="#" className="flex items-center space-x-2.5">
-        <span className="text-2xl text-primary font-black -translate-y-0.5">◮</span>
+      <a href="/" className="flex items-center space-x-2.5">
+        <span className="-translate-y-0.5 text-2xl font-black text-primary">◮</span>
         <span className="font-bold">SCN</span>
-        <span className="text-xs font-medium border rounded-full px-2 py-0.5 border-primary/50 text-primary bg-primary/10">
+        <span className="rounded-full border border-primary/50 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
           Open Source
         </span>
       </a>
       <div className="flex items-center gap-2">
         <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
           <Button variant="outline" size="sm">
-            <MessageSquare className="h-4 w-4 mr-2" />
+            <MessageSquare className="mr-2 size-4" />
             Discord
           </Button>
         </a>
         <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
           <Button variant="outline" size="sm">
-            <Github className="h-4 w-4 mr-2" />
+            <Github className="mr-2 size-4" />
             GitHub
           </Button>
         </a>
       </div>
     </div>
   </header>
-);
-```
-
-## File: src/lib/constants.ts
-```typescript
-export const GITHUB_URL = "https://github.com/nocapro/scn";
-export const PLAYGROUND_URL = "https://pg.scn.noca.pro";
-export const NOCAPRO_URL = "https://www.noca.pro";
-export const DISCORD_URL = "https://discord.gg/your-invite";
-```
-
-## File: src/components/sections/Hero.tsx
-```typescript
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
-import { CodeBlock } from "@/components/CodeBlock";
-import { heroContent } from "@/content/sections.content";
-import { PLAYGROUND_URL } from "@/lib/constants";
-
-export const Hero = () => (
-  <section className="grid lg:grid-cols-2 gap-12 items-center pt-12 pb-24 sm:pt-16 sm:pb-32">
-    <div className="text-center lg:text-left space-y-6">
-      <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter opacity-0 animate-fade-in">
-        <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
-          {heroContent.title}
-        </span>{" "}
-        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 font-medium text-primary align-middle text-3xl md:text-5xl">
-          <span className="relative -top-[0.05em] text-2xl md:text-4xl">
-            &lt;
-          </span>
-          {heroContent.highlightedTitle}
-        </span>
-      </h1>
-      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 opacity-0 animate-fade-in [animation-delay:0.2s]">
-        {heroContent.subtitle}
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in [animation-delay:0.3s]">
-        <a href="#section-5">
-          <Button size="lg">
-            {heroContent.getStartedButton}{" "}
-            <Terminal className="ml-2 h-4 w-4" />
-          </Button>
-        </a>
-        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
-          <Button variant="secondary" size="lg">
-            {heroContent.playgroundButton}{" "}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </a>
-      </div>
-    </div>
-    <div className="relative rounded-xl border p-4 lg:p-6 bg-gradient-to-b from-secondary/30 to-background">
-      <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.before.title}
-          </CardTitle>
-          <Zap className="h-5 w-5 text-destructive" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock lang="typescript" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.before.code}</CodeBlock>
-        </CardContent>
-      </Card>
-
-      <div className="my-6 flex justify-center opacity-0 animate-fade-in [animation-delay:0.7s]">
-        <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground animate-pulse">
-          <ArrowDown className="h-5 w-5" />
-        </div>
-      </div>
-
-      <Card className="border-primary/50 bg-background/50 backdrop-blur-sm animate-glow opacity-0 animate-slide-in-from-bottom [animation-delay:0.9s]">
-        <CardHeader className="flex-row items-center justify-between p-4">
-          <CardTitle className="text-base font-semibold text-muted-foreground">
-            {heroContent.after.title}
-          </CardTitle>
-          <Zap className="h-5 w-5 text-primary" />
-        </CardHeader>
-        <CardContent className="p-0">
-          <CodeBlock lang="text" className="border-0 rounded-t-none bg-transparent p-4">{heroContent.after.code}</CodeBlock>
-        </CardContent>
-      </Card>
-    </div>
-  </section>
 );
 ```
 
@@ -1138,15 +1058,20 @@ export const contextCostContent = {
     {
       icon: BrainCircuit,
       title: "Signal vs. Noise",
-      content:
-        "Models don't need semicolons, they need the dependency graph—what talks to what, and who calls whom.",
+      content: (
+        <>
+          Models don&apos;t need semicolons, they need the dependency graph—what
+          talks to what, and who calls whom.
+        </>
+      ),
     },
     {
       icon: Workflow,
       title: "Broken Workflow",
       content: (
         <>
-          You don't need another IDE. You need a 1-second command that turns{" "}
+          You don&apos;t need another IDE. You need a 1-second command that
+          turns{" "}
           <em>“here’s my repo”</em> into <em>“here’s the summary”</em>.
         </>
       ),
@@ -1360,7 +1285,7 @@ export const heroContent = {
     const res = await fetch(\`/api/users?page=\${page}\`, {
       headers: { 'X-API-KEY': this.apiKey }
     });
-    if (!res.ok) throw new Error('API Error');
+    if (!res.ok) throw new Error("API Error");
     return res.json();
   }
 }`,
@@ -1462,40 +1387,83 @@ export const heroContent = {
 }
 ```
 
-## File: package.json
-```json
-{
-  "name": "scn-landing-web",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-select": "^2.2.5",
-    "@radix-ui/react-slot": "^1.2.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.525.0",
-    "react": "^19",
-    "react-dom": "^19"
-  },
-  "devDependencies": {
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/bun": "latest",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.4",
-    "tailwindcss-animate": "^1.0.7",
-    "vite": "^5.4.1"
-  }
-}
+## File: src/components/sections/Hero.tsx
+```typescript
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowDown, ArrowRight, Terminal, Zap } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
+import { heroContent } from "@/content/sections.content";
+import { PLAYGROUND_URL } from "@/lib/constants";
+
+export const Hero = () => (
+  <section className="grid items-center gap-12 pt-12 pb-24 lg:grid-cols-2 sm:pt-16 sm:pb-32">
+    <div className="space-y-6 text-center lg:text-left">
+      <h1 className="text-4xl font-extrabold tracking-tighter opacity-0 animate-fade-in md:text-6xl">
+        <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+          {heroContent.title}
+        </span>{" "}
+        <span className="inline-block whitespace-nowrap rounded-full bg-primary/10 px-4 py-2 align-middle text-3xl font-medium text-primary md:text-5xl">
+          <span className="relative text-2xl top-[-0.05em] md:text-4xl">
+            &lt;
+          </span>
+          {heroContent.highlightedTitle}
+        </span>
+      </h1>
+      <p className="mx-auto max-w-2xl animate-fade-in text-lg text-muted-foreground opacity-0 [animation-delay:0.2s] md:text-xl lg:mx-0">
+        {heroContent.subtitle}
+      </p>
+      <div className="flex animate-fade-in flex-col justify-center gap-4 opacity-0 [animation-delay:0.3s] sm:flex-row lg:justify-start">
+        <a href="#section-5">
+          <Button size="lg">
+            {heroContent.getStartedButton} <Terminal className="ml-2 size-4" />
+          </Button>
+        </a>
+        <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
+          <Button variant="secondary" size="lg">
+            {heroContent.playgroundButton} <ArrowRight className="ml-2 size-4" />
+          </Button>
+        </a>
+      </div>
+    </div>
+    <div className="relative rounded-xl border bg-gradient-to-b from-secondary/30 to-background p-4 lg:p-6">
+      <Card className="bg-background/50 backdrop-blur-sm opacity-0 animate-slide-in-from-top [animation-delay:0.5s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.before.title}
+          </CardTitle>
+          <Zap className="size-5 text-destructive" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock lang="typescript" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.before.code}</CodeBlock>
+        </CardContent>
+      </Card>
+
+      <div className="my-6 flex animate-fade-in justify-center opacity-0 [animation-delay:0.7s]">
+        <div className="flex size-10 animate-pulse items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <ArrowDown className="size-5" />
+        </div>
+      </div>
+
+      <Card className="animate-slide-in-bottom-glow border-primary/50 bg-background/50 opacity-0 backdrop-blur-sm [animation-delay:0.9s]">
+        <CardHeader className="flex-row items-center justify-between p-4">
+          <CardTitle className="text-base font-semibold text-muted-foreground">
+            {heroContent.after.title}
+          </CardTitle>
+          <Zap className="size-5 text-primary" />
+        </CardHeader>
+        <CardContent className="p-0">
+          <CodeBlock lang="text" className="rounded-t-none border-0 bg-transparent p-4">{heroContent.after.code}</CodeBlock>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+);
 ```
 
 ## File: index.html
@@ -1558,6 +1526,52 @@ export const heroContent = {
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+```
+
+## File: package.json
+```json
+{
+  "name": "scn-landing-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/bun": "latest",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "^5.4.1"
+  }
+}
 ```
 
 ## File: tailwind.config.cjs
@@ -1674,6 +1688,7 @@ module.exports = {
         "glow": "glow 4s ease-in-out infinite",
         "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+        "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
       },
     },
   },
@@ -1699,14 +1714,14 @@ import { UseCases } from "./components/sections/UseCases";
 export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden">
-      <div className="absolute top-0 left-0 -z-10 h-full w-full bg-background">
-        <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[20%] translate-y-[20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
-        <div className="absolute bottom-0 right-auto left-0 top-auto h-[500px] w-[500px] translate-x-[20%] -translate-y-[10%] rounded-full bg-secondary opacity-50 blur-[80px]"></div>
+      <div className="absolute inset-0 -z-10 size-full bg-background">
+        <div className="absolute right-0 top-0 size-[500px] translate-y-[20%] translate-x-[-20%] rounded-full bg-primary/20 opacity-50 blur-[80px]"></div>
+        <div className="absolute bottom-0 left-0 size-[500px] translate-x-[20%] translate-y-[-10%] rounded-full bg-secondary opacity-50 blur-[80px]"></div>
       </div>
 
       <Header />
 
-      <main className="container max-w-5xl mx-auto px-4">
+      <main className="container mx-auto max-w-5xl px-4">
         <Hero />
         <ContextCost />
         <Solution />

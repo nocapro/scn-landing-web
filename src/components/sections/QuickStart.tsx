@@ -8,7 +8,7 @@ export const QuickStart = () => (
       <h2 className="text-3xl font-bold tracking-tight">
         {quickStartContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {quickStartContent.subtitle}
       </p>
     </div>

@@ -26,7 +26,7 @@ can you make UI of `Common Use-Cases` section more amazing than just table view?
 
 hero: I want animated glow border on after widget. currently only seen one fixed border at 1 px thick... I think there is overlapping style issue
 
-===
+=== DONE
 
 implement eslint, make sure its react strict capturing something like ```'animate-glow' applies the same CSS properties as 'animate-slide-in-from-bottom'. (cssConflict)``` and else
 

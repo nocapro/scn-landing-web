@@ -16,7 +16,7 @@ import { InlineCode } from "@/components/InlineCode";
 export const contextCostContent = {
   title: "The High Cost of Context",
   subtitle:
-    "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don't scale.",
+    "LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just don&apos;t scale.",
   cards: [
     {
       icon: Zap,
@@ -24,22 +24,27 @@ export const contextCostContent = {
       content: (
         <>
           Context windows are tiny. Pasting <InlineCode>/src</InlineCode>{" "}
-          consumes your entire budget before you've even asked a question.
+          consumes your entire budget before you&apos;ve even asked a question.
         </>
       ),
     },
     {
       icon: BrainCircuit,
       title: "Signal vs. Noise",
-      content:
-        "Models don't need semicolons, they need the dependency graph—what talks to what, and who calls whom.",
+      content: (
+        <>
+          Models don&apos;t need semicolons, they need the dependency graph—what
+          talks to what, and who calls whom.
+        </>
+      ),
     },
     {
       icon: Workflow,
       title: "Broken Workflow",
       content: (
         <>
-          You don't need another IDE. You need a 1-second command that turns{" "}
+          You don&apos;t need another IDE. You need a 1-second command that
+          turns{" "}
           <em>“here’s my repo”</em> into <em>“here’s the summary”</em>.
         </>
       ),
@@ -253,7 +258,7 @@ export const heroContent = {
     const res = await fetch(\`/api/users?page=\${page}\`, {
       headers: { 'X-API-KEY': this.apiKey }
     });
-    if (!res.ok) throw new Error('API Error');
+    if (!res.ok) throw new Error("API Error");
     return res.json();
   }
 }`,

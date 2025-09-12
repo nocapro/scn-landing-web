@@ -17,7 +17,7 @@ export const TokenEconomics = () => (
       <h2 className="text-3xl font-bold tracking-tight">
         {tokenEconomicsContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {tokenEconomicsContent.subtitle}
       </p>
     </div>

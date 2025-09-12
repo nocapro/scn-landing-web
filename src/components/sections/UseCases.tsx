@@ -17,7 +17,7 @@ export const UseCases = () => (
       <h2 className="text-3xl font-bold tracking-tight">
         {useCasesContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2">
+      <p className="mt-2 text-lg text-muted-foreground">
         {useCasesContent.subtitle}
       </p>
     </div>

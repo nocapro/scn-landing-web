@@ -16,7 +16,7 @@ export const Contribute = () => (
       </p>
       <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
         <Button size="lg" variant="secondary">
-          <Github className="mr-2 h-4 w-4" /> {contributeContent.buttonText}
+          <Github className="mr-2 size-4" /> {contributeContent.buttonText}
         </Button>
       </a>
     </Card>

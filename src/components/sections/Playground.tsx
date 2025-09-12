@@ -11,13 +11,12 @@ export const Playground = () => (
       <h2 className="text-3xl font-bold tracking-tight">
         {playgroundContent.title}
       </h2>
-      <p className="text-lg text-muted-foreground mt-2 mb-8">
+      <p className="mb-8 mt-2 text-lg text-muted-foreground">
         {playgroundContent.subtitle}
       </p>
       <a href={PLAYGROUND_URL} target="_blank" rel="noopener noreferrer">
         <Button size="lg">
-          {playgroundContent.buttonText}{" "}
-          <ArrowRight className="ml-2 h-4 w-4" />
+          {playgroundContent.buttonText} <ArrowRight className="ml-2 size-4" />
         </Button>
       </a>
     </Card>

@@ -17,11 +17,11 @@ export const DesignDecisions = () => (
         {designDecisionsContent.subtitle}
       </p>
     </div>
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       {designDecisionsContent.cards.map((card, index) => (
         <Card key={index}>
           <CardHeader>
-            <card.icon className="mb-2 h-8 w-8 text-primary" />
+            <card.icon className="mb-2 size-8 text-primary" />
             <CardTitle>{card.title}</CardTitle>
           </CardHeader>
           <CardContent>{card.content}</CardContent>

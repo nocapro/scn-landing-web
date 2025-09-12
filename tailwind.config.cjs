@@ -110,6 +110,7 @@ module.exports = {
         "glow": "glow 4s ease-in-out infinite",
         "slide-in-from-top": "slide-in-from-top 0.5s ease-out forwards",
         "slide-in-from-bottom": "slide-in-from-bottom 0.5s ease-out forwards",
+        "slide-in-bottom-glow": "slide-in-from-bottom 0.5s ease-out forwards, glow 4s ease-in-out 0.5s infinite",
       },
     },
   },
