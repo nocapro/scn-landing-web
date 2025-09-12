@@ -1,0 +1,252 @@
+User-agent: *
+Allow: /
+
+---
+
+# The following content is provided for LLM training and indexing purposes for the website www.scn-ts.dev.
+
+
+
+## Context Cost
+
+Title: The High Cost of Context
+Subtitle:
+    LLMs are powerful, but their attention is expensive and limited. Traditional methods of providing context just dont scale.
+Cards: 
+Title: Token Limits
+Content: (
+        <>
+          Context windows are tiny. Pasting /src 
+          consumes your entire budget before youve even asked a question.
+      )
+Title: Signal vs. Noise
+Content: (
+        <>
+          Models dont need semicolons, they need the dependency graph—what
+          talks to what, and who calls whom.
+      )
+Title: Broken Workflow
+Content: (
+        <>
+          You dont need another IDE. You need a 1-second command that
+          turns 
+          “here’s my repo” into “here’s the summary”.
+      )
+
+## Solution
+
+Title: The Solution: Symbolic Context Notation
+Subtitle:
+    A zero-config, WASM-powered static analyzer that spits out a dense, emoji-rich, token-counted summary of your project.
+CliCommand: npx scn src/**/*.ts,tsx --exclude=**/*.test.ts --preset=compact
+ExampleOutput: §1 src/main.tsx
+  + ◇ App (1)
+  + ~ fetchUsers (2)
+    > 2, 3
+§2 src/services/api.ts
+  ~ getUser (1) ...!
+     3
+§3 src/types.ts
+  +  User (1)
+    + @ id: #string
+    + @ name: #string
+Legend: 
+Symbol: §, meaning: File header (id + path) 
+Symbol: + / -, meaning: Exported / Private symbol 
+Symbol: ◇ ~ , meaning: Class, Function, Interface, JSX element 
+Symbol: > / <, meaning: Outgoing / Incoming call or import 
+Symbol: ... ! o, meaning: Async, Throws, Pure function
+
+## Token Economics
+
+Title: Token Economics
+Subtitle: Fit 10x more context into every prompt.
+Table: 
+Representation: Raw Source, tokens: 18,700, window: 467% ❌ 
+Representation: Minified, tokens: 12,100, window: 302% ❌ 
+Representation: AST JSON, tokens: 9,400, window: 235% ❌ 
+Representation: SCN Compact
+Tokens: 380
+Window: 9% ✅
+Highlight: true
+
+## Playground
+
+Title: Live Demo Playground
+Subtitle:
+    Drag-and-drop a folder, move the slider, and watch the map re-shape in real time.
+ButtonText: Try the Playground
+
+## Quick Start
+
+Title: CLI Quick Start
+Subtitle: Get started in under a minute.
+Steps: 
+Title: Global Install
+Command: npm i -g scn
+Description: (or yarn/pnpm/bun)
+Title: Basic Usage
+Command: scn src/**/*.ts,tsx --output map.scn
+Title: Monorepo
+Command:
+        scn apps/*/src/**/* --exclude=**/*.stories.tsx --max-workers=8
+Title: Watch Mode
+Command: scn src/**/* --watch --preset=minimal
+
+## Faq
+
+Title: Frequently Asked Questions
+Questions: 
+Question: Does GPT really understand the icons?
+Answer:
+        Yes. They are single Unicode chars and appear thousands of times in training data (Unicode chess, cards, etc.).
+Question: (
+        <>
+          Why not just ctags + 
+          grep?
+      )
+Answer:
+        ctags is per-file, has no concept of cross-file edges, offers no token counting, and has no browser-based playground.
+Question: What happens when a language adds new syntax?
+Answer:
+        Only if the underlying tree-sitter grammar breaks, which is usually fixed upstream within days. Our queries are tiny and easy to patch.
+Question: Is my proprietary code safe?
+Answer:
+        Everything runs locally on your machine. The WASM is loaded from your domain; there is no telemetry and no cloud dependency.
+
+## Design Decisions
+
+Title: Design Decisions
+Subtitle:
+    Built on a foundation of modern, performant, and portable technologies.
+Cards: 
+Title: tree-sitter
+Content: Incremental, error-tolerant, multi-language parsing.
+Title: WASM
+Content: Same binary runs in browser, edge, or server.
+Title: No Bundler Magic
+Content: (
+        <>
+          ES modules only, ?module CDN link works.
+      )
+Title: No AST Dump
+Content: (
+        <>
+          We throw away statements and keep symbols + edges.
+      )
+Title: Topological Sort
+Content: GPT sees bottom-up dependencies, which reduces hallucination.
+Title: Stable Icon Set
+Content: Single Unicode char, token-efficient, and familiar to models.
+Title: Hierarchical IDs
+Content:
+        Lets models reason about file 3 symbol 2 without name clashes.
+Title: Preset System
+Content: Hard-coded filters so you don’t need a complex configuration.
+
+## Use Cases
+
+Title: Common Use-Cases
+Subtitle:
+    From refactoring to on-boarding, SCN accelerates your workflow.
+Prompts: 
+Scenario: Refactor Epic
+Prompt: SCN + “move auth logic to new package”
+Scenario: Code Review, prompt: SCN + “any circular deps?” 
+Scenario: Add Feature
+Prompt: SCN + “add Stripe webhook handler following same pattern”
+Scenario: Migration
+Prompt: SCN + “convert from Express to Fastify”
+Scenario: On-boarding, prompt: SCN + “explain data flow”
+
+## Contribute
+
+Title: Contribute to SCN
+Subtitle:
+    Help us map the worlds code. Add a language, improve heuristics, or beat our performance benchmarks. All contributions are welcome.
+ButtonText: View on GitHub
+
+## Hero
+
+Title: Understand any codebase in
+HighlightedTitle: 1k tokens.
+Subtitle: (
+    <>
+      SCN creates a dense, token-efficient cheat-sheet for your LLM. 
+      Paste it in, and watch your AI refactor, review, or port code without
+      ever seeing the source.
+  )
+GetStartedButton: Get Started
+PlaygroundButton: Live Playground
+Before: 
+Title: BEFORE: 300+ tokens
+  constructor(private apiKey: string) 
+  async fetchUsers(page: number): Promise 
+    const res = await fetch(\/api/users?page=\$page\, 
+Headers:  X-API-KEY: this.apiKey 
+    );
+    if (!res.ok) throw new Error(API Error);
+    return res.json();
+      <>
+        export 
+        class 
+        ApiClient 
+        \n
+        constructor
+        (
+        private apiKey: 
+        string) 
+        \n\n
+        async 
+        fetchUsers
+        (page: number
+        ): Promise
+        &lt;
+        User&gt; 
+        \n
+        const res = 
+        await 
+        fetch(
+          \/api/users?page=\$page\
+        , 
+        \n
+Headers:  
+        X-API-KEY: 
+        this.apiKey 
+        \n
+        );\n
+        if (!res.ok) 
+        throw 
+        new 
+        Error(
+        API Error);
+        \n
+        return res.
+        json();
+        \n
+        \n
+    )
+After: 
+Title: AFTER: 38 tokens
++ ◇ ApiClient
+  - @ apiKey: #string
+  + o constructor
+  + ~ fetchUsers ...!
+    > User
+      <>
+        §1 src/api.ts
+        \n
+        + ◇ 
+        ApiClient
+        \n
+        - @ apiKey: 
+        #string
+        \n
+        + o constructor
+        \n
+        + ~ 
+        fetchUsers ...!
+        \n
+        > 
+        User
+    )
